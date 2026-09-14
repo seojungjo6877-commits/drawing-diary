@@ -160,12 +160,6 @@ textarea {
 
   cursor: grab;
 
-  /*
-     중요:
-     transform을 사용하지 않음.
-     따라서 빙글빙글 도는 현상이 없음.
-  */
-
   transition:
     opacity 0.25s ease;
 }
@@ -471,20 +465,13 @@ id="resumeButton">
 </div>
 
 
-<!-- 저장 -->
-
-<button
-id="save">
-
-저장
-
-</button>
-
+<!-- 기존 저장 버튼 삭제 -->
+<!-- 갤러리에 저장 기능을 저장 버튼으로 통합 -->
 
 <button
 id="gallerySave">
 
-갤러리에 저장
+저장
 
 </button>
 
@@ -530,10 +517,6 @@ const diaryInput =
 document.getElementById("diary");
 
 
-const saveButton =
-document.getElementById("save");
-
-
 titleInput.value =
 localStorage.getItem(
 "diary-title"
@@ -544,25 +527,6 @@ diaryInput.value =
 localStorage.getItem(
 "diary-text"
 ) || "";
-
-
-saveButton.addEventListener(
-"click",
-function() {
-
-localStorage.setItem(
-"diary-title",
-titleInput.value
-);
-
-localStorage.setItem(
-"diary-text",
-diaryInput.value
-);
-
-alert("저장했어요!");
-
-});
 
 
 
@@ -758,7 +722,6 @@ enableDragging(actor);
 */
 
 chooseNewAction(actor);
-
 
 updateStatus();
 
@@ -1088,7 +1051,6 @@ newX;
 
 actor.y =
 newY;
-
 
 actor.targetX =
 newX;
@@ -1974,14 +1936,12 @@ b.state =
 a.targetX =
 a.x;
 
-
 a.targetY =
 a.y;
 
 
 b.targetX =
 b.x;
-
 
 b.targetY =
 b.y;
@@ -2120,7 +2080,9 @@ updateActors
 
 
 /* =================================================
-   갤러리 저장
+   저장
+   기존 저장 버튼을 삭제하고
+   이 버튼 하나로 일기 + 캐릭터 전체 저장
 ================================================= */
 
 const gallerySave =
@@ -2133,11 +2095,138 @@ gallerySave.addEventListener(
 "click",
 async function() {
 
+try {
 
-const canvas =
-document.createElement(
-"canvas"
+
+/*
+   ===============================================
+   저장용 캔버스 설정
+
+   화면을 억지로 가로/세로로 찌그러뜨리지 않고
+   실제 화면의 비율을 그대로 유지합니다.
+   ===============================================
+*/
+
+const canvasWidth = 900;
+
+
+/*
+   실제 스테이지의 가로/세로 비율
+*/
+
+const stageScale =
+canvasWidth /
+stage.clientWidth;
+
+
+/*
+   캐릭터 영역도 화면과 같은 비율로 확대
+*/
+
+const savedStageWidth =
+stage.clientWidth *
+stageScale;
+
+
+const savedStageHeight =
+stage.clientHeight *
+stageScale;
+
+
+/*
+   여백
+*/
+
+const margin = 60;
+
+
+/*
+   제목 영역
+*/
+
+const dateHeight = 45;
+
+const titleHeight = 65;
+
+const diaryStartY =
+margin +
+dateHeight +
+35;
+
+
+/*
+   일기 내용의 줄을
+   실제 저장 이미지에 맞게 계산
+*/
+
+const diaryFontSize = 26;
+
+const diaryLineHeight = 42;
+
+const diaryMaxWidth =
+canvasWidth -
+margin * 2;
+
+
+const diaryLines =
+getWrappedLines(
+diaryInput.value || "",
+diaryMaxWidth,
+diaryFontSize,
+"26px sans-serif"
 );
+
+
+/*
+   일기 높이
+*/
+
+const diaryHeight =
+Math.max(
+diaryLineHeight,
+diaryLines.length *
+diaryLineHeight
+);
+
+
+/*
+   캐릭터 영역 시작 위치
+
+   일기 내용이 길어져도
+   캐릭터 칸이 겹치지 않도록 자동으로 아래로 이동
+*/
+
+const stageY =
+diaryStartY +
+diaryHeight +
+45;
+
+
+/*
+   아래 여백
+*/
+
+const bottomMargin = 60;
+
+
+/*
+   최종 캔버스 높이
+
+   제목 + 일기 + 캐릭터 칸까지
+   전부 들어가도록 자동 계산
+*/
+
+const canvasHeight =
+stageY +
+savedStageHeight +
+bottomMargin;
+
+
+canvas.width =
+canvasWidth;
+
+canvas.height =
+canvasHeight;
 
 
 const ctx =
@@ -2146,20 +2235,10 @@ canvas.getContext(
 );
 
 
-const width = 900;
-
-const height = 1100;
-
-
-canvas.width =
-width;
-
-canvas.height =
-height;
-
-
 /*
-   배경
+   ===============================================
+   흰색 배경
+   ===============================================
 */
 
 ctx.fillStyle =
@@ -2168,13 +2247,16 @@ ctx.fillStyle =
 ctx.fillRect(
 0,
 0,
-width,
-height
+canvasWidth,
+canvasHeight
 );
 
 
+
 /*
+   ===============================================
    날짜
+   ===============================================
 */
 
 ctx.fillStyle =
@@ -2183,16 +2265,22 @@ ctx.fillStyle =
 ctx.font =
 "24px sans-serif";
 
+ctx.textBaseline =
+"alphabetic";
+
 
 ctx.fillText(
 dateElement.textContent,
-60,
-55
+margin,
+margin + 25
 );
 
 
+
 /*
+   ===============================================
    제목
+   ===============================================
 */
 
 ctx.font =
@@ -2202,58 +2290,98 @@ ctx.font =
 ctx.fillText(
 titleInput.value ||
 "오늘의 일기",
-60,
-110
+margin,
+margin +
+dateHeight +
+25
 );
 
 
+
 /*
+   ===============================================
    일기
+   ===============================================
 */
 
 ctx.font =
 "26px sans-serif";
 
 
-drawText(
-ctx,
-diaryInput.value || "",
-60,
-175,
-780,
-42
+let diaryY =
+diaryStartY;
+
+
+for (
+const line of diaryLines
+) {
+
+ctx.fillText(
+line,
+margin,
+diaryY
 );
+
+diaryY +=
+diaryLineHeight;
+
+}
+
 
 
 /*
+   ===============================================
    캐릭터 공간
+
+   실제 stage와 동일한 가로세로 비율
+   ===============================================
 */
 
-const stageX = 60;
+ctx.save();
 
-const stageY = 500;
 
-const stageW = 780;
+/*
+   둥근 사각형 모양의 캐릭터 칸
+*/
 
-const stageH = 400;
+roundRectPath(
+ctx,
+margin,
+stageY,
+savedStageWidth,
+savedStageHeight,
+18
+);
+
+
+ctx.fillStyle =
+"#fafafa";
+
+ctx.fill();
 
 
 ctx.strokeStyle =
 "#ddd";
 
-ctx.lineWidth = 2;
+ctx.lineWidth =
+2;
 
-
-ctx.strokeRect(
-stageX,
-stageY,
-stageW,
-stageH
-);
+ctx.stroke();
 
 
 /*
-   캐릭터 저장
+   캐릭터가 칸 밖으로 나가지 않도록
+   실제 stage처럼 잘라냄
+*/
+
+ctx.clip();
+
+
+/*
+   stage 좌표 → 저장 이미지 좌표
+
+   X와 Y 모두 같은 scale을 사용합니다.
+   따라서 캐릭터가 절대로 짜부되지 않습니다.
 */
 
 for (
@@ -2268,37 +2396,55 @@ actor.element.src
 );
 
 
-const scaleX =
-stageW /
-stage.clientWidth;
+/*
+   실제 캐릭터의 현재 표시 크기
+
+   90x90으로 강제로 그리지 않고
+   현재 element의 실제 width/height를 사용합니다.
+*/
+
+const actualWidth =
+actor.element.getBoundingClientRect().width;
 
 
-const scaleY =
-stageH /
-stage.clientHeight;
+const actualHeight =
+actor.element.getBoundingClientRect().height;
 
+
+/*
+   X/Y 위치도 같은 비율로 변환
+*/
 
 const x =
-stageX +
+margin +
 actor.x *
-scaleX;
+stageScale;
 
 
 const y =
 stageY +
 actor.y *
-scaleY;
+stageScale;
 
+
+/*
+   가로와 세로를 각각 따로 늘리지 않고
+   동일한 scale 사용
+*/
 
 const w =
-actor.element.offsetWidth *
-scaleX;
+actualWidth *
+stageScale;
 
 
 const h =
-actor.element.offsetHeight *
-scaleY;
+actualHeight *
+stageScale;
 
+
+/*
+   이미지 원래 비율을 유지해서 저장
+*/
 
 ctx.drawImage(
 image,
@@ -2322,8 +2468,14 @@ error
 }
 
 
+ctx.restore();
+
+
+
 /*
+   ===============================================
    PNG 생성
+   ===============================================
 */
 
 canvas.toBlob(
@@ -2350,6 +2502,11 @@ type:
 }
 );
 
+
+/*
+   아이폰/iPad에서
+   공유 메뉴를 통해 사진 앱에 저장 가능
+*/
 
 if (
 navigator.share &&
@@ -2391,7 +2548,7 @@ return;
 
 
 /*
-   공유 불가능
+   공유 기능이 없는 환경
 */
 
 const url =
@@ -2409,41 +2566,93 @@ url,
 "image/png"
 );
 
+
+/*
+   ===============================================
+   일기 내용도 자동 저장
+   ===============================================
+*/
+
+localStorage.setItem(
+"diary-title",
+titleInput.value
+);
+
+localStorage.setItem(
+"diary-text",
+diaryInput.value
+);
+
+
+}
+
+catch(error) {
+
+console.error(error);
+
+alert(
+"저장하는 중 문제가 생겼어요."
+);
+
+}
+
 });
 
 
 
 /* =================================================
-   긴 글 줄바꿈
+   긴 글 줄바꿈 계산
 ================================================= */
 
-function drawText(
-ctx,
+function getWrappedLines(
 text,
-x,
-y,
 maxWidth,
-lineHeight
+fontSize,
+font
 ) {
 
-const lines =
+const tempCanvas =
+document.createElement(
+"canvas"
+);
+
+
+const tempCtx =
+tempCanvas.getContext(
+"2d"
+);
+
+
+tempCtx.font =
+font;
+
+
+const lines = [];
+
+const paragraphs =
 String(text).split("\n");
 
 
-let currentY =
-y;
-
-
 for (
-const line of lines
+const paragraph of paragraphs
 ) {
 
-let currentLine =
-"";
+if (
+paragraph.length === 0
+) {
+
+lines.push("");
+
+continue;
+
+}
+
+
+let currentLine = "";
 
 
 for (
-const char of line
+const char of paragraph
 ) {
 
 const testLine =
@@ -2452,7 +2661,7 @@ char;
 
 
 const width =
-ctx.measureText(
+tempCtx.measureText(
 testLine
 ).width;
 
@@ -2462,15 +2671,9 @@ width > maxWidth &&
 currentLine
 ) {
 
-ctx.fillText(
-currentLine,
-x,
-currentY
+lines.push(
+currentLine
 );
-
-
-currentY +=
-lineHeight;
 
 
 currentLine =
@@ -2488,17 +2691,98 @@ testLine;
 }
 
 
-ctx.fillText(
-currentLine,
+lines.push(
+currentLine
+);
+
+}
+
+
+return lines;
+
+}
+
+
+
+/* =================================================
+   캔버스 둥근 사각형
+================================================= */
+
+function roundRectPath(
+ctx,
 x,
-currentY
+y,
+width,
+height,
+radius
+) {
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+x + radius,
+y
 );
 
 
-currentY +=
-lineHeight;
+ctx.lineTo(
+x + width - radius,
+y
+);
 
-}
+
+ctx.quadraticCurveTo(
+x + width,
+y,
+x + width,
+y + radius
+);
+
+
+ctx.lineTo(
+x + width,
+y + height - radius
+);
+
+
+ctx.quadraticCurveTo(
+x + width,
+y + height,
+x + width - radius,
+y + height
+);
+
+
+ctx.lineTo(
+x + radius,
+y + height
+);
+
+
+ctx.quadraticCurveTo(
+x,
+y + height,
+x,
+y + height - radius
+);
+
+
+ctx.lineTo(
+x,
+y + radius
+);
+
+
+ctx.quadraticCurveTo(
+x,
+y,
+x + radius,
+y
+);
+
+
+ctx.closePath();
 
 }
 
