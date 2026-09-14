@@ -172,7 +172,6 @@ textarea {
   cursor: grabbing;
 
   transition: none;
-
 }
 
 
@@ -194,7 +193,6 @@ textarea {
 .actor.sleeping {
 
   opacity: 0.65;
-
 }
 
 
@@ -203,7 +201,6 @@ textarea {
 .actor.running {
 
   opacity: 1;
-
 }
 
 
@@ -212,7 +209,6 @@ textarea {
 .actor.together {
 
   opacity: 0.9;
-
 }
 
 
@@ -465,11 +461,10 @@ id="resumeButton">
 </div>
 
 
-<!-- 기존 저장 버튼 삭제 -->
-<!-- 갤러리에 저장 기능을 저장 버튼으로 통합 -->
+<!-- 저장 버튼 하나만 존재 -->
 
 <button
-id="gallerySave">
+id="save">
 
 저장
 
@@ -558,6 +553,10 @@ const resumeButton =
 document.getElementById("resumeButton");
 
 
+const saveButton =
+document.getElementById("save");
+
+
 /*
    캐릭터 배열
 */
@@ -596,7 +595,6 @@ new FileReader();
 
 reader.onload =
 function(e) {
-
 
 const img =
 document.createElement("img");
@@ -710,18 +708,11 @@ actors.push(actor);
 stage.appendChild(img);
 
 
-/*
-   손가락 드래그
-*/
-
 enableDragging(actor);
 
 
-/*
-   첫 행동
-*/
-
 chooseNewAction(actor);
+
 
 updateStatus();
 
@@ -749,8 +740,6 @@ function createPersonality() {
 
 const types = [
 
-/* 느긋 */
-
 {
 speed:
 0.5 +
@@ -766,9 +755,6 @@ sleepChance:
 runChance:
 0.10
 },
-
-
-/* 활발 */
 
 {
 speed:
@@ -786,9 +772,6 @@ runChance:
 0.45
 },
 
-
-/* 잠꾸러기 */
-
 {
 speed:
 0.55 +
@@ -804,9 +787,6 @@ sleepChance:
 runChance:
 0.08
 },
-
-
-/* 분주 */
 
 {
 speed:
@@ -839,44 +819,28 @@ types.length
 
 
 /* =================================================
-   드래그 기능
+   드래그
 ================================================= */
 
 function enableDragging(actor) {
 
-
 const element =
 actor.element;
 
-
 let pointerOffsetX = 0;
-
 let pointerOffsetY = 0;
 
-
-/*
-   손가락을 누름
-*/
 
 element.addEventListener(
 "pointerdown",
 function(e) {
 
 e.preventDefault();
-
 e.stopPropagation();
 
 
-/*
-   선택
-*/
-
 selectActor(actor);
 
-
-/*
-   드래그 상태
-*/
 
 actor.dragging =
 true;
@@ -885,11 +849,6 @@ true;
 element.classList
 .add("dragging");
 
-
-/*
-   브라우저가 포인터를
-   계속 이 캐릭터에게 전달하도록 함
-*/
 
 try {
 
@@ -900,21 +859,8 @@ e.pointerId
 } catch(error) {}
 
 
-/*
-   손가락이 캐릭터의
-   어느 위치를 눌렀는지 계산
-*/
-
 const rect =
 stage.getBoundingClientRect();
-
-
-const actorLeft =
-actor.x;
-
-
-const actorTop =
-actor.y;
 
 
 const pointerX =
@@ -929,18 +875,13 @@ rect.top;
 
 pointerOffsetX =
 pointerX -
-actorLeft;
+actor.x;
 
 
 pointerOffsetY =
 pointerY -
-actorTop;
+actor.y;
 
-
-/*
-   드래그하는 동안
-   자동 이동 목표를 현재 위치로 고정
-*/
 
 actor.targetX =
 actor.x;
@@ -949,26 +890,18 @@ actor.targetY =
 actor.y;
 
 
-/*
-   같이 있던 상태 해제
-*/
-
 if (actor.partner) {
 
 actor.partner.partner =
 null;
 
-actor.partner = null;
+actor.partner =
+null;
 
 }
 
 });
 
-
-
-/*
-   손가락 이동
-*/
 
 element.addEventListener(
 "pointermove",
@@ -986,10 +919,6 @@ const rect =
 stage.getBoundingClientRect();
 
 
-/*
-   스테이지 기준 좌표
-*/
-
 let newX =
 e.clientX -
 rect.left -
@@ -1001,10 +930,6 @@ e.clientY -
 rect.top -
 pointerOffsetY;
 
-
-/*
-   화면 밖 방지
-*/
 
 const maxX =
 Math.max(
@@ -1042,10 +967,6 @@ maxY
 );
 
 
-/*
-   실제 위치
-*/
-
 actor.x =
 newX;
 
@@ -1068,11 +989,6 @@ newY + "px";
 });
 
 
-
-/*
-   손가락 놓기
-*/
-
 element.addEventListener(
 "pointerup",
 function(e) {
@@ -1084,10 +1000,6 @@ e
 
 });
 
-
-/*
-   손가락이 화면 밖으로 나감
-*/
 
 element.addEventListener(
 "pointercancel",
@@ -1135,11 +1047,6 @@ e.pointerId
 } catch(error) {}
 
 
-/*
-   손으로 옮긴 위치에서
-   새로운 목적지를 정함
-*/
-
 if (!actor.paused) {
 
 actor.nextAction =
@@ -1147,14 +1054,6 @@ Date.now() +
 500 +
 Math.random() * 1200;
 
-}
-
-
-/*
-   다시 행동
-*/
-
-if (!actor.paused) {
 
 chooseNewAction(actor);
 
@@ -1173,7 +1072,6 @@ updateStatus();
 
 function selectActor(actor) {
 
-
 if (selectedActor) {
 
 selectedActor.element
@@ -1182,11 +1080,6 @@ selectedActor.element
 
 }
 
-
-/*
-   같은 캐릭터를 다시 누르면
-   선택 해제
-*/
 
 if (selectedActor === actor) {
 
@@ -1314,10 +1207,6 @@ return;
 }
 
 
-/*
-   다른 캐릭터와 함께 있는 중
-*/
-
 if (
 actor.partner &&
 Date.now() <
@@ -1395,10 +1284,6 @@ actor.targetY =
 actor.y;
 
 
-/*
-   2~6초
-*/
-
 actor.nextAction =
 Date.now() +
 2000 +
@@ -1437,10 +1322,6 @@ actor.element.classList
 setRandomTarget(actor);
 
 
-/*
-   2.5~6초
-*/
-
 actor.nextAction =
 Date.now() +
 2500 +
@@ -1478,10 +1359,6 @@ actor.element.classList
 
 setRandomTarget(actor);
 
-
-/*
-   1.5~3.7초
-*/
 
 actor.nextAction =
 Date.now() +
@@ -1541,11 +1418,6 @@ for (
 const actor of actors
 ) {
 
-
-/*
-   멈춤
-*/
-
 if (
 actor.paused
 ) {
@@ -1553,20 +1425,12 @@ continue;
 }
 
 
-/*
-   직접 드래그 중
-*/
-
 if (
 actor.dragging
 ) {
 continue;
 }
 
-
-/*
-   상호작용 중
-*/
 
 if (
 actor.partner &&
@@ -1578,10 +1442,6 @@ continue;
 
 }
 
-
-/*
-   상호작용 종료
-*/
 
 if (
 actor.partner &&
@@ -1614,10 +1474,6 @@ actor.element.classList
 }
 
 
-/*
-   다음 행동
-*/
-
 if (
 currentTime >=
 actor.nextAction
@@ -1628,10 +1484,6 @@ chooseNewAction(actor);
 }
 
 
-/*
-   졸기
-*/
-
 if (
 actor.state ===
 "sleeping"
@@ -1641,10 +1493,6 @@ continue;
 
 }
 
-
-/*
-   이동 계산
-*/
 
 const dx =
 actor.targetX -
@@ -1672,10 +1520,6 @@ continue;
 }
 
 
-/*
-   속도
-*/
-
 let speed =
 actor.speed;
 
@@ -1690,10 +1534,6 @@ actor.runSpeed;
 
 }
 
-
-/*
-   너무 크게 이동하지 않음
-*/
 
 const step =
 Math.min(
@@ -1711,10 +1551,6 @@ actor.y +=
 (dy / distance) *
 step;
 
-
-/*
-   화면 안에 고정
-*/
 
 const maxX =
 Math.max(
@@ -1752,10 +1588,6 @@ maxY
 );
 
 
-/*
-   위치 적용
-*/
-
 actor.element.style.left =
 actor.x + "px";
 
@@ -1766,11 +1598,10 @@ actor.y + "px";
 }
 
 
-/*
-   캐릭터 상호작용
-*/
-
 checkInteractions();
+
+
+updateStatus();
 
 
 requestAnimationFrame(
@@ -1851,18 +1682,9 @@ dy * dy
 );
 
 
-/*
-   너무 가까워졌을 때
-*/
-
 if (
 distance < 65
 ) {
-
-
-/*
-   낮은 확률로 상호작용
-*/
 
 if (
 Math.random() <
@@ -1876,7 +1698,6 @@ currentTime
 );
 
 }
-
 
 }
 
@@ -1904,10 +1725,6 @@ b;
 b.partner =
 a;
 
-
-/*
-   2~4초
-*/
 
 const duration =
 2500 +
@@ -2059,127 +1876,369 @@ return "쉬고 있어요";
 
 
 /* =================================================
-   상태 갱신
+   저장용 줄바꿈
 ================================================= */
 
-setInterval(
-updateStatus,
-300
-);
+function getWrappedLines(
+ctx,
+text,
+maxWidth
+) {
+
+const result = [];
+
+const paragraphs =
+String(text).split("\n");
+
+
+for (
+const paragraph of paragraphs
+) {
+
+if (
+paragraph.length === 0
+) {
+
+result.push("");
+
+continue;
+
+}
+
+
+let line = "";
+
+
+for (
+const char of paragraph
+) {
+
+const test =
+line + char;
+
+
+if (
+ctx.measureText(test).width >
+maxWidth &&
+line
+) {
+
+result.push(line);
+
+line =
+char;
+
+}
+
+else {
+
+line =
+test;
+
+}
+
+}
+
+
+result.push(line);
+
+}
+
+
+return result;
+
+}
 
 
 
 /* =================================================
-   자동 움직임 시작
+   둥근 사각형
 ================================================= */
 
-requestAnimationFrame(
-updateActors
+function roundedRect(
+ctx,
+x,
+y,
+w,
+h,
+r
+) {
+
+ctx.beginPath();
+
+ctx.moveTo(
+x + r,
+y
 );
+
+ctx.lineTo(
+x + w - r,
+y
+);
+
+ctx.quadraticCurveTo(
+x + w,
+y,
+x + w,
+y + r
+);
+
+ctx.lineTo(
+x + w,
+y + h - r
+);
+
+ctx.quadraticCurveTo(
+x + w,
+y + h,
+x + w - r,
+y + h
+);
+
+ctx.lineTo(
+x + r,
+y + h
+);
+
+ctx.quadraticCurveTo(
+x,
+y + h,
+x,
+y + h - r
+);
+
+ctx.lineTo(
+x,
+y + r
+);
+
+ctx.quadraticCurveTo(
+x,
+y,
+x + r,
+y
+);
+
+ctx.closePath();
+
+}
+
+
+
+/* =================================================
+   이미지 불러오기
+================================================= */
+
+function loadImage(src) {
+
+return new Promise(
+function(resolve, reject) {
+
+const image =
+new Image();
+
+
+image.onload =
+function() {
+
+resolve(image);
+
+};
+
+
+image.onerror =
+function() {
+
+reject(
+new Error(
+"이미지를 불러오지 못했습니다."
+)
+);
+
+};
+
+
+image.src =
+src;
+
+});
+
+}
+
+
+
+/* =================================================
+   Blob 만들기
+================================================= */
+
+function canvasToBlob(
+canvas
+) {
+
+return new Promise(
+function(resolve, reject) {
+
+canvas.toBlob(
+function(blob) {
+
+if (blob) {
+
+resolve(blob);
+
+}
+
+else {
+
+reject(
+new Error(
+"PNG 생성 실패"
+)
+);
+
+}
+
+},
+"image/png"
+);
+
+});
+
+}
 
 
 
 /* =================================================
    저장
-   기존 저장 버튼을 삭제하고
-   이 버튼 하나로 일기 + 캐릭터 전체 저장
+=================================================
+
+   iPhone/iPad에서는 웹페이지가 사진 앱에
+   직접 파일을 넣는 것을 허용하지 않습니다.
+
+   그래서 이미지 파일을 만든 뒤
+   iOS 공유 메뉴를 열고
+
+   "이미지 저장"
+
+   을 누르면 사진 앱에 저장됩니다.
+
 ================================================= */
 
-const gallerySave =
-document.getElementById(
-"gallerySave"
-);
-
-
-gallerySave.addEventListener(
+saveButton.addEventListener(
 "click",
 async function() {
+
+saveButton.disabled =
+true;
+
+const oldText =
+saveButton.textContent;
+
+saveButton.textContent =
+"이미지 만드는 중...";
+
 
 try {
 
 
 /*
    ===============================================
-   저장용 캔버스 설정
-
-   화면을 억지로 가로/세로로 찌그러뜨리지 않고
-   실제 화면의 비율을 그대로 유지합니다.
+   현재 화면 크기
    ===============================================
 */
 
-const canvasWidth = 900;
-
-
-/*
-   실제 스테이지의 가로/세로 비율
-*/
-
-const stageScale =
-canvasWidth /
+const stageWidth =
 stage.clientWidth;
 
 
-/*
-   캐릭터 영역도 화면과 같은 비율로 확대
-*/
-
-const savedStageWidth =
-stage.clientWidth *
-stageScale;
-
-
-const savedStageHeight =
-stage.clientHeight *
-stageScale;
+const stageHeight =
+stage.clientHeight;
 
 
 /*
-   여백
+   저장 이미지 가로 크기
 */
 
-const margin = 60;
+const outputWidth =
+900;
 
 
 /*
-   제목 영역
+   화면과 저장 이미지의
+   동일한 비율
 */
 
-const dateHeight = 45;
-
-const titleHeight = 65;
-
-const diaryStartY =
-margin +
-dateHeight +
-35;
+const scale =
+outputWidth /
+stageWidth;
 
 
 /*
-   일기 내용의 줄을
-   실제 저장 이미지에 맞게 계산
+   캐릭터 영역 크기
 */
 
-const diaryFontSize = 26;
+const outputStageWidth =
+stageWidth *
+scale;
 
-const diaryLineHeight = 42;
+
+const outputStageHeight =
+stageHeight *
+scale;
+
+
+/*
+   좌우 여백
+*/
+
+const margin =
+60;
+
+
+/*
+   기본 폰트
+*/
+
+const normalFont =
+"26px sans-serif";
+
+
+/*
+   임시 캔버스에서
+   일기 줄 수 계산
+*/
+
+const measureCanvas =
+document.createElement(
+"canvas"
+);
+
+
+const measureCtx =
+measureCanvas.getContext(
+"2d"
+);
+
+
+measureCtx.font =
+normalFont;
+
 
 const diaryMaxWidth =
-canvasWidth -
+outputWidth -
 margin * 2;
 
 
 const diaryLines =
 getWrappedLines(
+measureCtx,
 diaryInput.value || "",
-diaryMaxWidth,
-diaryFontSize,
-"26px sans-serif"
+diaryMaxWidth
 );
 
 
-/*
-   일기 높이
-*/
+const diaryLineHeight =
+42;
+
 
 const diaryHeight =
 Math.max(
@@ -2190,43 +2249,57 @@ diaryLineHeight
 
 
 /*
-   캐릭터 영역 시작 위치
-
-   일기 내용이 길어져도
-   캐릭터 칸이 겹치지 않도록 자동으로 아래로 이동
+   저장 이미지 배치
 */
 
+const dateY =
+55;
+
+
+const titleY =
+115;
+
+
+const diaryY =
+175;
+
+
 const stageY =
-diaryStartY +
+diaryY +
 diaryHeight +
 45;
 
 
 /*
-   아래 여백
+   최종 이미지 높이
 */
 
-const bottomMargin = 60;
+const outputHeight =
+stageY +
+outputStageHeight +
+60;
 
 
 /*
-   최종 캔버스 높이
-
-   제목 + 일기 + 캐릭터 칸까지
-   전부 들어가도록 자동 계산
+   실제 캔버스
 */
 
-const canvasHeight =
-stageY +
-savedStageHeight +
-bottomMargin;
+const canvas =
+document.createElement(
+"canvas"
+);
 
 
 canvas.width =
-canvasWidth;
+Math.ceil(
+outputWidth
+);
+
 
 canvas.height =
-canvasHeight;
+Math.ceil(
+outputHeight
+);
 
 
 const ctx =
@@ -2237,9 +2310,8 @@ canvas.getContext(
 
 /*
    ===============================================
-   흰색 배경
-   ===============================================
-*/
+   배경
+================================================= */
 
 ctx.fillStyle =
 "#fff";
@@ -2247,17 +2319,15 @@ ctx.fillStyle =
 ctx.fillRect(
 0,
 0,
-canvasWidth,
-canvasHeight
+canvas.width,
+canvas.height
 );
-
 
 
 /*
    ===============================================
    날짜
-   ===============================================
-*/
+================================================= */
 
 ctx.fillStyle =
 "#111";
@@ -2272,16 +2342,14 @@ ctx.textBaseline =
 ctx.fillText(
 dateElement.textContent,
 margin,
-margin + 25
+dateY
 );
-
 
 
 /*
    ===============================================
    제목
-   ===============================================
-*/
+================================================= */
 
 ctx.font =
 "bold 42px sans-serif";
@@ -2291,25 +2359,21 @@ ctx.fillText(
 titleInput.value ||
 "오늘의 일기",
 margin,
-margin +
-dateHeight +
-25
+titleY
 );
-
 
 
 /*
    ===============================================
    일기
-   ===============================================
-*/
+================================================= */
 
 ctx.font =
-"26px sans-serif";
+normalFont;
 
 
-let diaryY =
-diaryStartY;
+let currentDiaryY =
+diaryY;
 
 
 for (
@@ -2319,37 +2383,29 @@ const line of diaryLines
 ctx.fillText(
 line,
 margin,
-diaryY
+currentDiaryY
 );
 
-diaryY +=
+currentDiaryY +=
 diaryLineHeight;
 
 }
 
 
-
 /*
    ===============================================
-   캐릭터 공간
-
-   실제 stage와 동일한 가로세로 비율
-   ===============================================
-*/
+   캐릭터 칸
+================================================= */
 
 ctx.save();
 
 
-/*
-   둥근 사각형 모양의 캐릭터 칸
-*/
-
-roundRectPath(
+roundedRect(
 ctx,
 margin,
 stageY,
-savedStageWidth,
-savedStageHeight,
+outputStageWidth,
+outputStageHeight,
 18
 );
 
@@ -2370,18 +2426,22 @@ ctx.stroke();
 
 
 /*
-   캐릭터가 칸 밖으로 나가지 않도록
-   실제 stage처럼 잘라냄
+   캐릭터 칸 안에서만 그리기
 */
 
 ctx.clip();
 
 
 /*
-   stage 좌표 → 저장 이미지 좌표
+   ===============================================
+   캐릭터 저장
 
-   X와 Y 모두 같은 scale을 사용합니다.
-   따라서 캐릭터가 절대로 짜부되지 않습니다.
+   핵심:
+   X와 Y에 똑같은 scale을 적용합니다.
+
+   따라서 90x90으로 강제로 변형하거나
+   가로/세로를 서로 다른 비율로 늘리지 않습니다.
+   ===============================================
 */
 
 for (
@@ -2397,69 +2457,71 @@ actor.element.src
 
 
 /*
-   실제 캐릭터의 현재 표시 크기
-
-   90x90으로 강제로 그리지 않고
-   현재 element의 실제 width/height를 사용합니다.
+   현재 캐릭터의 실제 표시 크기
 */
 
-const actualWidth =
-actor.element.getBoundingClientRect().width;
+const rect =
+actor.element.getBoundingClientRect();
 
 
-const actualHeight =
-actor.element.getBoundingClientRect().height;
+const actorWidth =
+rect.width;
+
+
+const actorHeight =
+rect.height;
 
 
 /*
-   X/Y 위치도 같은 비율로 변환
+   화면 좌표 → 저장 이미지 좌표
 */
 
 const x =
 margin +
 actor.x *
-stageScale;
+scale;
 
 
 const y =
 stageY +
 actor.y *
-stageScale;
+scale;
 
 
 /*
-   가로와 세로를 각각 따로 늘리지 않고
-   동일한 scale 사용
+   현재 크기를 같은 배율로 확대
 */
 
-const w =
-actualWidth *
-stageScale;
+const width =
+actorWidth *
+scale;
 
 
-const h =
-actualHeight *
-stageScale;
+const height =
+actorHeight *
+scale;
 
 
 /*
-   이미지 원래 비율을 유지해서 저장
+   이미지 자체의 비율은
+   object-fit: contain으로 유지된 상태이므로
+   그대로 저장
 */
 
 ctx.drawImage(
 image,
 x,
 y,
-w,
-h
+width,
+height
 );
 
 }
 
 catch(error) {
 
-console.log(
-"캐릭터 저장 실패",
+console.error(
+"캐릭터 이미지 저장 실패:",
 error
 );
 
@@ -2468,28 +2530,48 @@ error
 }
 
 
+/*
+   캐릭터 칸 테두리 다시 표시
+*/
+
+ctx.restore();
+
+
+ctx.save();
+
+
+roundedRect(
+ctx,
+margin,
+stageY,
+outputStageWidth,
+outputStageHeight,
+18
+);
+
+
+ctx.strokeStyle =
+"#ddd";
+
+ctx.lineWidth =
+2;
+
+ctx.stroke();
+
+
 ctx.restore();
 
 
 
 /*
    ===============================================
-   PNG 생성
-   ===============================================
-*/
+   PNG 파일 생성
+================================================= */
 
-canvas.toBlob(
-async function(blob) {
-
-if (!blob) {
-
-alert(
-"이미지를 만들지 못했어요."
+const blob =
+await canvasToBlob(
+canvas
 );
-
-return;
-
-}
 
 
 const file =
@@ -2504,74 +2586,9 @@ type:
 
 
 /*
-   아이폰/iPad에서
-   공유 메뉴를 통해 사진 앱에 저장 가능
-*/
-
-if (
-navigator.share &&
-navigator.canShare &&
-navigator.canShare({
-files: [file]
-})
-) {
-
-try {
-
-await navigator.share({
-
-files: [file],
-
-title:
-"그림일기"
-
-});
-
-return;
-
-}
-
-catch(error) {
-
-if (
-error.name ===
-"AbortError"
-) {
-
-return;
-
-}
-
-}
-
-}
-
-
-/*
-   공유 기능이 없는 환경
-*/
-
-const url =
-URL.createObjectURL(
-blob
-);
-
-
-window.open(
-url,
-"_blank"
-);
-
-},
-"image/png"
-);
-
-
-/*
    ===============================================
-   일기 내용도 자동 저장
-   ===============================================
-*/
+   일기 내용 저장
+================================================= */
 
 localStorage.setItem(
 "diary-title",
@@ -2584,15 +2601,132 @@ diaryInput.value
 );
 
 
+
+/*
+   ===============================================
+   iPhone / iPad
+   공유 메뉴 열기
+================================================= */
+
+if (
+navigator.share &&
+navigator.canShare
+) {
+
+let canShareFile =
+false;
+
+
+try {
+
+canShareFile =
+navigator.canShare({
+files: [file]
+});
+
 }
 
 catch(error) {
 
-console.error(error);
+canShareFile =
+false;
+
+}
+
+
+if (canShareFile) {
+
+await navigator.share({
+
+files: [file],
+
+title:
+"그림일기",
+
+text:
+"그림일기"
+
+});
+
+
+return;
+
+}
+
+}
+
+
+/*
+   ===============================================
+   공유 기능이 없는 브라우저용
+================================================= */
+
+const url =
+URL.createObjectURL(
+blob
+);
+
+
+const link =
+document.createElement(
+"a"
+);
+
+
+link.href =
+url;
+
+
+link.download =
+"그림일기.png";
+
+
+document.body.appendChild(
+link
+);
+
+
+link.click();
+
+
+document.body.removeChild(
+link
+);
+
+
+setTimeout(
+function() {
+
+URL.revokeObjectURL(
+url
+);
+
+},
+1000
+);
+
+
+}
+catch(error) {
+
+console.error(
+"저장 오류:",
+error
+);
+
 
 alert(
-"저장하는 중 문제가 생겼어요."
+"저장하지 못했어요. 다시 눌러주세요."
 );
+
+}
+finally {
+
+saveButton.disabled =
+false;
+
+saveButton.textContent =
+oldText;
 
 }
 
@@ -2601,232 +2735,12 @@ alert(
 
 
 /* =================================================
-   긴 글 줄바꿈 계산
+   자동 움직임 시작
 ================================================= */
 
-function getWrappedLines(
-text,
-maxWidth,
-fontSize,
-font
-) {
-
-const tempCanvas =
-document.createElement(
-"canvas"
+requestAnimationFrame(
+updateActors
 );
-
-
-const tempCtx =
-tempCanvas.getContext(
-"2d"
-);
-
-
-tempCtx.font =
-font;
-
-
-const lines = [];
-
-const paragraphs =
-String(text).split("\n");
-
-
-for (
-const paragraph of paragraphs
-) {
-
-if (
-paragraph.length === 0
-) {
-
-lines.push("");
-
-continue;
-
-}
-
-
-let currentLine = "";
-
-
-for (
-const char of paragraph
-) {
-
-const testLine =
-currentLine +
-char;
-
-
-const width =
-tempCtx.measureText(
-testLine
-).width;
-
-
-if (
-width > maxWidth &&
-currentLine
-) {
-
-lines.push(
-currentLine
-);
-
-
-currentLine =
-char;
-
-}
-
-else {
-
-currentLine =
-testLine;
-
-}
-
-}
-
-
-lines.push(
-currentLine
-);
-
-}
-
-
-return lines;
-
-}
-
-
-
-/* =================================================
-   캔버스 둥근 사각형
-================================================= */
-
-function roundRectPath(
-ctx,
-x,
-y,
-width,
-height,
-radius
-) {
-
-ctx.beginPath();
-
-
-ctx.moveTo(
-x + radius,
-y
-);
-
-
-ctx.lineTo(
-x + width - radius,
-y
-);
-
-
-ctx.quadraticCurveTo(
-x + width,
-y,
-x + width,
-y + radius
-);
-
-
-ctx.lineTo(
-x + width,
-y + height - radius
-);
-
-
-ctx.quadraticCurveTo(
-x + width,
-y + height,
-x + width - radius,
-y + height
-);
-
-
-ctx.lineTo(
-x + radius,
-y + height
-);
-
-
-ctx.quadraticCurveTo(
-x,
-y + height,
-x,
-y + height - radius
-);
-
-
-ctx.lineTo(
-x,
-y + radius
-);
-
-
-ctx.quadraticCurveTo(
-x,
-y,
-x + radius,
-y
-);
-
-
-ctx.closePath();
-
-}
-
-
-
-/* =================================================
-   이미지 불러오기
-================================================= */
-
-function loadImage(src) {
-
-return new Promise(
-function(resolve, reject) {
-
-const img =
-new Image();
-
-
-img.onload =
-function() {
-
-resolve(img);
-
-};
-
-
-img.onerror =
-function() {
-
-reject(
-new Error(
-"이미지를 불러올 수 없습니다."
-)
-);
-
-};
-
-
-img.src =
-src;
-
-});
-
-}
 
 </script>
 
