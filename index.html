@@ -183,11 +183,32 @@ button:disabled {
   margin-bottom: 5px;
 }
 
+.size-control {
+  margin-top: 12px;
+}
+
+.size-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+#sizeSlider {
+  width: 100%;
+  margin: 0;
+  accent-color: #777;
+}
+
 .help {
   margin-top: 8px;
   text-align: center;
   font-size: 12px;
   color: #888;
+}
+
+/* 전체 삭제 */
+#clearAll {
+  margin-top: 10px;
 }
 
 </style>
@@ -257,6 +278,27 @@ id="controlBox"
 ▶ 다시 움직이기
 </button>
 
+<button id="deleteActorButton">
+🗑 이 캐릭터 삭제
+</button>
+
+<div class="size-control">
+
+<div class="size-label">
+크기
+</div>
+
+<input
+type="range"
+id="sizeSlider"
+min="50"
+max="200"
+value="100"
+step="1"
+>
+
+</div>
+
 </div>
 
 <div class="help">
@@ -265,6 +307,10 @@ id="controlBox"
 
 <button id="save">
 저장
+</button>
+
+<button id="clearAll">
+전체 삭제
 </button>
 
 </div>
@@ -303,8 +349,17 @@ document.getElementById("pauseButton");
 const resumeButton =
 document.getElementById("resumeButton");
 
+const deleteActorButton =
+document.getElementById("deleteActorButton");
+
+const sizeSlider =
+document.getElementById("sizeSlider");
+
 const saveButton =
 document.getElementById("save");
+
+const clearAllButton =
+document.getElementById("clearAll");
 
 
 /* =================================================
@@ -396,23 +451,26 @@ img.className =
 img.src =
 e.target.result;
 
+
+const baseSize = 90;
+
 img.style.width =
-"90px";
+baseSize + "px";
 
 img.style.height =
-"90px";
+baseSize + "px";
 
 
 const maxX =
 Math.max(
 0,
-stage.clientWidth - 90
+stage.clientWidth - baseSize
 );
 
 const maxY =
 Math.max(
 0,
-stage.clientHeight - 90
+stage.clientHeight - baseSize
 );
 
 
@@ -443,6 +501,8 @@ y: startY,
 
 targetX: startX,
 targetY: startY,
+
+size: 100,
 
 speed:
 personality.speed,
@@ -577,15 +637,123 @@ Math.random() * types.length
 
 
 /* =================================================
+   캐릭터 크기 적용
+================================================= */
+
+function applyActorSize(actor) {
+
+const scale =
+actor.size / 100;
+
+const baseSize =
+90;
+
+const newSize =
+baseSize * scale;
+
+
+const centerX =
+actor.x +
+actor.element.offsetWidth / 2;
+
+const centerY =
+actor.y +
+actor.element.offsetHeight / 2;
+
+
+actor.element.style.width =
+newSize + "px";
+
+actor.element.style.height =
+newSize + "px";
+
+
+actor.x =
+centerX -
+newSize / 2;
+
+actor.y =
+centerY -
+newSize / 2;
+
+
+const maxX =
+Math.max(
+0,
+stage.clientWidth - newSize
+);
+
+const maxY =
+Math.max(
+0,
+stage.clientHeight - newSize
+);
+
+
+actor.x =
+Math.max(
+0,
+Math.min(
+actor.x,
+maxX
+)
+);
+
+actor.y =
+Math.max(
+0,
+Math.min(
+actor.y,
+maxY
+)
+);
+
+
+actor.targetX =
+actor.x;
+
+actor.targetY =
+actor.y;
+
+
+actor.element.style.left =
+actor.x + "px";
+
+actor.element.style.top =
+actor.y + "px";
+
+}
+
+
+/* =================================================
+   크기 슬라이더
+================================================= */
+
+sizeSlider.addEventListener(
+"input",
+function() {
+
+if (!selectedActor) {
+return;
+}
+
+selectedActor.size =
+Number(
+sizeSlider.value
+);
+
+applyActorSize(
+selectedActor
+);
+
+});
+
+
+/* =================================================
    캐릭터 선택 / 선택 취소
 ================================================= */
 
 function selectActor(actor) {
-
-/*
-  같은 캐릭터를 다시 누르면
-  선택 취소
-*/
 
 if (
 selectedActor === actor
@@ -603,13 +771,10 @@ controlBox.classList.remove(
 
 updateStatus();
 
-return;
+return false;
+
 }
 
-
-/*
-  다른 캐릭터 선택 해제
-*/
 
 if (selectedActor) {
 
@@ -619,10 +784,6 @@ selectedActor.element.classList.remove(
 
 }
 
-
-/*
-  새 캐릭터 선택
-*/
 
 selectedActor = actor;
 
@@ -634,7 +795,12 @@ controlBox.classList.add(
 "show"
 );
 
+sizeSlider.value =
+actor.size;
+
 updateStatus();
+
+return true;
 
 }
 
@@ -659,7 +825,25 @@ function(e) {
 e.preventDefault();
 e.stopPropagation();
 
+
+const wasSelected =
+selectedActor === actor;
+
+const selectionResult =
 selectActor(actor);
+
+
+if (
+wasSelected &&
+!selectionResult
+) {
+
+actor.dragging = false;
+
+return;
+
+}
+
 
 actor.dragging = true;
 
@@ -921,6 +1105,121 @@ actor.nextAction =
 Date.now() + 300;
 
 chooseNewAction(actor);
+
+updateStatus();
+
+});
+
+
+/* =================================================
+   선택한 캐릭터 삭제
+================================================= */
+
+deleteActorButton.addEventListener(
+"click",
+function(e) {
+
+e.preventDefault();
+e.stopPropagation();
+
+if (!selectedActor) {
+return;
+}
+
+
+const actor =
+selectedActor;
+
+
+/* 화면에서 삭제 */
+
+actor.element.remove();
+
+
+/* 배열에서 삭제 */
+
+const index =
+actors.indexOf(actor);
+
+if (index !== -1) {
+
+actors.splice(
+index,
+1
+);
+
+}
+
+
+/* 선택 해제 */
+
+selectedActor = null;
+
+controlBox.classList.remove(
+"show"
+);
+
+updateStatus();
+
+});
+
+
+/* =================================================
+   전체 삭제
+================================================= */
+
+clearAllButton.addEventListener(
+"click",
+function(e) {
+
+e.preventDefault();
+e.stopPropagation();
+
+
+/* 제목 / 일기 삭제 */
+
+titleInput.value = "";
+
+diaryInput.value = "";
+
+localStorage.removeItem(
+"diary-title"
+);
+
+localStorage.removeItem(
+"diary-text"
+);
+
+
+/* 모든 캐릭터 삭제 */
+
+for (
+const actor of actors
+) {
+
+actor.element.remove();
+
+}
+
+
+/* 배열 비우기 */
+
+actors.length = 0;
+
+
+/* 선택 해제 */
+
+selectedActor = null;
+
+controlBox.classList.remove(
+"show"
+);
+
+
+/* 파일 선택 초기화 */
+
+photoInput.value = "";
+
 
 updateStatus();
 
@@ -1559,8 +1858,6 @@ saveButton.textContent =
 
 try {
 
-/* 일기 저장 */
-
 localStorage.setItem(
 "diary-title",
 titleInput.value
@@ -1571,10 +1868,6 @@ localStorage.setItem(
 diaryInput.value
 );
 
-
-/* =========================
-   이미지 크기
-========================= */
 
 const outputWidth =
 900;
@@ -1587,8 +1880,6 @@ outputWidth -
 margin * 2;
 
 
-/* 글씨 */
-
 const titleFont =
 "bold 44px sans-serif";
 
@@ -1598,8 +1889,6 @@ const diaryFont =
 const dateFont =
 "25px sans-serif";
 
-
-/* 측정 */
 
 const measureCanvas =
 document.createElement("canvas");
@@ -1623,8 +1912,6 @@ contentWidth
 const diaryLineHeight =
 52;
 
-
-/* 영역 */
 
 const topArea =
 150;
@@ -1654,8 +1941,6 @@ const sectionGap =
 25;
 
 
-/* 최종 높이 */
-
 const outputHeight =
 topArea +
 titleArea +
@@ -1664,8 +1949,6 @@ stageOutputHeight +
 sectionGap * 3 +
 80;
 
-
-/* 캔버스 */
 
 const canvas =
 document.createElement("canvas");
@@ -1681,8 +1964,6 @@ const ctx =
 canvas.getContext("2d");
 
 
-/* 배경 */
-
 ctx.fillStyle =
 "#fff";
 
@@ -1697,9 +1978,7 @@ ctx.textBaseline =
 "middle";
 
 
-/* =========================
-   오늘의 일기
-========================= */
+/* 오늘의 일기 */
 
 ctx.textAlign =
 "center";
@@ -1730,9 +2009,7 @@ outputWidth / 2,
 );
 
 
-/* =========================
-   제목
-========================= */
+/* 제목 */
 
 let currentY =
 topArea +
@@ -1792,9 +2069,7 @@ currentY + 82
 );
 
 
-/* =========================
-   일기 내용
-========================= */
+/* 일기 내용 */
 
 currentY +=
 titleArea +
@@ -1837,8 +2112,6 @@ currentY + 32
 );
 
 
-/* 내용 */
-
 ctx.fillStyle =
 "#111";
 
@@ -1866,9 +2139,7 @@ diaryLineHeight;
 }
 
 
-/* =========================
-   캐릭터 영역
-========================= */
+/* 캐릭터 영역 */
 
 currentY +=
 contentHeight +
@@ -1892,8 +2163,6 @@ const scaleY =
 stageOutputHeight /
 stage.clientHeight;
 
-
-/* 배경 */
 
 ctx.save();
 
@@ -1993,7 +2262,7 @@ error
 ctx.restore();
 
 
-/* 캐릭터 영역 테두리 */
+/* 테두리 */
 
 ctx.save();
 
@@ -2017,9 +2286,7 @@ ctx.stroke();
 ctx.restore();
 
 
-/* =========================
-   PNG
-========================= */
+/* PNG */
 
 const blob =
 await new Promise(
@@ -2049,9 +2316,7 @@ new Error(
 });
 
 
-/* =========================
-   iOS 공유
-========================= */
+/* iOS 공유 */
 
 const file =
 new File(
@@ -2108,13 +2373,10 @@ return;
 }
 
 
-/* =========================
-   다운로드
-========================= */
+/* 다운로드 */
 
 const url =
 URL.createObjectURL(blob);
-
 
 const link =
 document.createElement("a");
@@ -2130,7 +2392,6 @@ document.body.appendChild(link);
 link.click();
 
 link.remove();
-
 
 setTimeout(
 function() {
