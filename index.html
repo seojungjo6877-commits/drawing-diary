@@ -2,248 +2,192 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 
 <title>그림일기</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
-body {
-  margin: 0;
-  background: #eeeeee;
-  color: #111111;
-  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+body{
+  margin:0;
+  background:#eee;
+  color:#111;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
 }
 
-.app {
-  max-width: 700px;
-  min-height: 100vh;
-  margin: auto;
-  background: white;
-  padding-bottom: 80px;
+.app{
+  max-width:700px;
+  min-height:100vh;
+  margin:auto;
+  background:#fff;
+  padding-bottom:80px;
 }
 
-header {
-  height: 60px;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
+header{
+  height:60px;
+  border-bottom:1px solid #ddd;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 16px;
 }
 
-.logo {
-  font-size: 20px;
-  font-weight: 900;
+.logo{
+  font-size:20px;
+  font-weight:900;
 }
 
-.date {
-  font-size: 12px;
-  color: #777;
+.date{
+  font-size:12px;
+  color:#777;
 }
 
-main {
-  padding: 14px;
+main{
+  padding:14px;
 }
 
-.box {
-  border: 1px solid #ddd;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
+.box{
+  border:1px solid #ddd;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
 }
 
-input,
-textarea {
-  width: 100%;
-  border: 0;
-  outline: none;
-  font-family: inherit;
+.title{
+  width:100%;
+  border:0;
+  outline:0;
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:10px;
 }
 
-.title {
-  font-size: 22px;
-  font-weight: 900;
-  margin-bottom: 10px;
+.diary{
+  width:100%;
+  min-height:130px;
+  border:0;
+  outline:0;
+  resize:none;
+  font-size:16px;
+  line-height:1.7;
 }
 
-.diary {
-  min-height: 130px;
-  font-size: 16px;
-  line-height: 1.7;
-  resize: none;
+.head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+  font-weight:900;
 }
 
-button {
-  border: 0;
-  border-radius: 10px;
-  padding: 10px 13px;
-  background: #eeeeee;
-  color: #111;
-  font-weight: 800;
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  background:#eee;
+  color:#111;
+  font-weight:800;
 }
 
-.black {
-  background: #111;
-  color: white;
+.black{
+  background:#111;
+  color:#fff;
 }
 
-.character-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  font-weight: 900;
+.characters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
 }
 
-.characters {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
+.character{
+  width:75px;
+  flex-shrink:0;
+  text-align:center;
 }
 
-.character {
-  width: 75px;
-  flex-shrink: 0;
-  text-align: center;
+.character img{
+  width:68px;
+  height:68px;
+  object-fit:contain;
+  border:1px solid #ddd;
+  border-radius:10px;
 }
 
-.character img {
-  width: 68px;
-  height: 68px;
-  object-fit: contain;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+.character-name{
+  font-size:10px;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-.character-name {
-  font-size: 10px;
-  margin-top: 4px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.scene{
+  height:55vh;
+  min-height:380px;
+  border:1px solid #bbb;
+  border-radius:14px;
+  position:relative;
+  overflow:hidden;
+  background:#fff;
 }
 
-.scene {
-  height: 55vh;
-  min-height: 380px;
-  border: 1px solid #bbb;
-  border-radius: 14px;
-  position: relative;
-  overflow: hidden;
-  background: white;
+.empty{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#aaa;
+  font-size:13px;
+  pointer-events:none;
 }
 
-.empty {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #aaa;
-  font-size: 13px;
-  text-align: center;
-  pointer-events: none;
+.actor{
+  position:absolute;
+  width:110px;
+  height:110px;
+  object-fit:contain;
+  touch-action:none;
+  user-select:none;
 }
 
-.actor {
-  position: absolute;
-  width: 110px;
-  height: 110px;
-  object-fit: contain;
-  touch-action: none;
-  user-select: none;
+.tools{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  margin-top:8px;
 }
 
-.tools {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  margin-top: 10px;
+.tools button{
+  white-space:nowrap;
 }
 
-.tools button {
-  white-space: nowrap;
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(700px,100%);
+  padding:8px 14px;
+  background:#fffffff2;
+  border-top:1px solid #ddd;
+  display:flex;
+  gap:8px;
+  z-index:20;
 }
 
-.bottom {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(700px, 100%);
-  background: #ffffffee;
-  border-top: 1px solid #ddd;
-  padding: 8px 14px;
-  display: flex;
-  gap: 8px;
-  z-index: 20;
+.bottom button{
+  flex:1;
 }
 
-.bottom button {
-  flex: 1;
-  padding: 12px;
-}
-
-/* 사진 추가 창 */
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: #0008;
-  z-index: 100;
-  align-items: flex-end;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.sheet {
-  width: min(700px, 100%);
-  background: white;
-  border-radius: 20px 20px 0 0;
-  padding: 20px 16px 30px;
-}
-
-.sheet-title {
-  display: flex;
-  justify-content: space-between;
-  font-weight: 900;
-  margin-bottom: 15px;
-}
-
-.photo-button {
-  display: block;
-  border: 2px dashed #bbb;
-  border-radius: 14px;
-  padding: 28px;
-  text-align: center;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.photo-button input {
-  display: none;
-}
-
-.name {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 10px;
-}
 </style>
 </head>
 
@@ -257,8 +201,6 @@ button {
 </header>
 
 <main>
-
-<!-- 일기 -->
 
 <div class="box">
 
@@ -277,20 +219,24 @@ button {
 </div>
 
 
-<!-- 캐릭터 -->
-
 <div class="box">
 
-<div class="character-title">
+<div class="head">
 
 <span>캐릭터</span>
 
-<button
-  class="black"
-  id="addCharacter"
->
-＋ 사진 추가
-</button>
+<label>
+  <button class="black">
+    ＋ 사진 추가
+  </button>
+
+  <input
+    id="photo"
+    type="file"
+    accept="image/*"
+    style="display:none"
+  >
+</label>
 
 </div>
 
@@ -302,46 +248,41 @@ button {
 </div>
 
 
-<!-- 장면 -->
-
-<div class="scene" id="scene">
+<div
+  class="scene"
+  id="scene"
+>
 
 <div
   class="empty"
   id="empty"
 >
-사진을 추가해서<br>
-캐릭터를 만들어보세요.
+사진을 선택하면<br>
+캐릭터가 나타납니다.
 </div>
 
 </div>
 
-
-<!-- 움직임 -->
 
 <div class="tools">
 
-<button onclick="action('walk')">
+<button onclick="moveAction('walk')">
 걷기
 </button>
 
-<button onclick="action('jump')">
+<button onclick="moveAction('jump')">
 점프
 </button>
 
-<button onclick="action('wiggle')">
+<button onclick="moveAction('wiggle')">
 흔들기
-</button>
-
-<button onclick="action('sleep')">
-졸기
 </button>
 
 <button onclick="stopAction()">
 멈춤
 </button>
 
-<button onclick="deleteCharacter()">
+<button onclick="deleteActor()">
 삭제
 </button>
 
@@ -368,304 +309,89 @@ button {
 </div>
 
 
-<!-- 사진 추가 창 -->
-
-<div
-  class="modal"
-  id="modal"
->
-
-<div class="sheet">
-
-<div class="sheet-title">
-
-<span>사진 추가</span>
-
-<button onclick="closeModal()">
-×
-</button>
-
-</div>
-
-
-<label class="photo-button">
-
-📷<br><br>
-사진 선택
-
-<input
-  id="photo"
-  type="file"
-  accept="image/*"
->
-
-</label>
-
-
-<input
-  id="characterName"
-  class="name"
-  placeholder="캐릭터 이름"
->
-
-
-<div style="display:flex;gap:8px">
-
-<button
-  style="flex:1"
-  onclick="closeModal()"
->
-취소
-</button>
-
-<button
-  class="black"
-  style="flex:1"
-  onclick="createCharacter()"
->
-캐릭터 추가
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
 <script>
 
-const dateElement =
-document.getElementById("date");
+/* 날짜 */
 
-dateElement.textContent =
+document.getElementById("date").textContent =
 new Date().toLocaleDateString(
   "ko-KR",
   {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
+    year:"numeric",
+    month:"long",
+    day:"numeric"
   }
 );
 
 
-/* --------------------
-   변수
--------------------- */
-
-let characters = [];
+/* 현재 선택된 캐릭터 */
 
 let selectedActor = null;
 
-let selectedFile = null;
 
+/* 사진을 선택하면 바로 실행 */
 
-/* --------------------
-   사진 추가 창
--------------------- */
+document.getElementById("photo").addEventListener(
+  "change",
+  function(event){
 
-document
-.getElementById("addCharacter")
-.onclick = function() {
+    const file = event.target.files[0];
 
-  document
-  .getElementById("modal")
-  .classList.add("show");
+    if(!file){
+      return;
+    }
 
-};
+    const imageURL =
+    URL.createObjectURL(file);
 
+    createCharacter(imageURL);
 
-function closeModal() {
+    /*
+      같은 사진을 다시 선택할 수 있도록
+      입력값을 초기화
+    */
 
-  document
-  .getElementById("modal")
-  .classList.remove("show");
-
-  document
-  .getElementById("photo")
-  .value = "";
-
-  selectedFile = null;
-
-}
-
-
-/* --------------------
-   사진 선택
--------------------- */
-
-document
-.getElementById("photo")
-.onchange = function(event) {
-
-  if (event.target.files.length > 0) {
-
-    selectedFile =
-    event.target.files[0];
+    event.target.value = "";
 
   }
-
-};
-
-
-/* --------------------
-   캐릭터 만들기
--------------------- */
-
-function createCharacter() {
-
-  if (!selectedFile) {
-
-    alert("사진을 먼저 선택해주세요.");
-
-    return;
-
-  }
+);
 
 
-  const imageURL =
-  URL.createObjectURL(selectedFile);
+/* 캐릭터 생성 */
 
-
-  const name =
-  document
-  .getElementById("characterName")
-  .value
-  .trim()
-  || "캐릭터";
-
-
-  const character = {
-
-    id: Date.now(),
-
-    name: name,
-
-    image: imageURL
-
-  };
-
-
-  characters.push(character);
-
-
-  addCharacterToList(character);
-
-
-  /* 바로 장면에도 등장 */
-
-  addActor(character);
-
-
-  closeModal();
-
-}
-
-
-/* --------------------
-   캐릭터 목록
--------------------- */
-
-function addCharacterToList(character) {
-
-  const box =
-  document.getElementById("characters");
-
-
-  const item =
-  document.createElement("div");
-
-  item.className =
-  "character";
-
-
-  const image =
-  document.createElement("img");
-
-  image.src =
-  character.image;
-
-
-  image.onclick =
-  function() {
-
-    addActor(character);
-
-  };
-
-
-  const name =
-  document.createElement("div");
-
-  name.className =
-  "character-name";
-
-  name.textContent =
-  character.name;
-
-
-  item.appendChild(image);
-
-  item.appendChild(name);
-
-  box.appendChild(item);
-
-}
-
-
-/* --------------------
-   장면에 캐릭터 추가
--------------------- */
-
-function addActor(character) {
+function createCharacter(imageURL){
 
   const scene =
   document.getElementById("scene");
 
-
   const actor =
   document.createElement("img");
 
+  actor.src = imageURL;
 
-  actor.className =
-  "actor";
-
-
-  actor.src =
-  character.image;
-
+  actor.className = "actor";
 
   actor.style.left =
   "calc(50% - 55px)";
 
-
   actor.style.top =
   "calc(50% - 55px)";
 
-
   scene.appendChild(actor);
 
+  selectedActor = actor;
 
-  selectedActor =
-  actor;
+  document.getElementById("empty")
+  .style.display = "none";
 
-
-  document
-  .getElementById("empty")
-  .style.display =
-  "none";
-
-
-  makeDraggable(actor);
+  makeMovable(actor);
 
 }
 
 
-/* --------------------
-   캐릭터 드래그
--------------------- */
+/* 캐릭터 움직이기 */
 
-function makeDraggable(actor) {
+function makeMovable(actor){
 
   let dragging = false;
 
@@ -676,31 +402,24 @@ function makeDraggable(actor) {
 
   actor.addEventListener(
     "pointerdown",
-    function(event) {
+    function(e){
 
       dragging = true;
 
-      actor.setPointerCapture(
-        event.pointerId
-      );
+      selectedActor = actor;
 
+      actor.setPointerCapture(
+        e.pointerId
+      );
 
       const rect =
       actor.getBoundingClientRect();
 
-
       offsetX =
-      event.clientX -
-      rect.left;
-
+      e.clientX - rect.left;
 
       offsetY =
-      event.clientY -
-      rect.top;
-
-
-      selectedActor =
-      actor;
+      e.clientY - rect.top;
 
     }
   );
@@ -708,10 +427,11 @@ function makeDraggable(actor) {
 
   actor.addEventListener(
     "pointermove",
-    function(event) {
+    function(e){
 
-      if (!dragging) return;
-
+      if(!dragging){
+        return;
+      }
 
       const scene =
       document
@@ -720,13 +440,13 @@ function makeDraggable(actor) {
 
 
       let x =
-      event.clientX -
+      e.clientX -
       scene.left -
       offsetX;
 
 
       let y =
-      event.clientY -
+      e.clientY -
       scene.top -
       offsetY;
 
@@ -754,7 +474,6 @@ function makeDraggable(actor) {
       actor.style.left =
       x + "px";
 
-
       actor.style.top =
       y + "px";
 
@@ -764,7 +483,7 @@ function makeDraggable(actor) {
 
   actor.addEventListener(
     "pointerup",
-    function() {
+    function(){
 
       dragging = false;
 
@@ -774,13 +493,11 @@ function makeDraggable(actor) {
 }
 
 
-/* --------------------
-   움직임
--------------------- */
+/* 움직임 */
 
-function action(type) {
+function moveAction(type){
 
-  if (!selectedActor) {
+  if(!selectedActor){
 
     alert("캐릭터를 먼저 눌러주세요.");
 
@@ -789,110 +506,52 @@ function action(type) {
   }
 
 
-  selectedActor.classList.remove(
-    "walk",
-    "jump",
-    "wiggle",
-    "sleep"
-  );
+  stopAction();
 
 
-  if (type === "walk") {
+  if(type === "walk"){
 
     selectedActor.animate(
       [
-        {
-          transform:
-          "translateY(0)"
-        },
-        {
-          transform:
-          "translateY(-8px)"
-        },
-        {
-          transform:
-          "translateY(0)"
-        }
+        {transform:"translateY(0)"},
+        {transform:"translateY(-8px)"},
+        {transform:"translateY(0)"}
       ],
       {
-        duration: 600,
-        iterations: Infinity
+        duration:600,
+        iterations:Infinity
       }
     );
 
   }
 
 
-  if (type === "jump") {
+  if(type === "jump"){
 
     selectedActor.animate(
       [
-        {
-          transform:
-          "translateY(0)"
-        },
-        {
-          transform:
-          "translateY(-35px)"
-        },
-        {
-          transform:
-          "translateY(0)"
-        }
+        {transform:"translateY(0)"},
+        {transform:"translateY(-40px)"},
+        {transform:"translateY(0)"}
       ],
       {
-        duration: 500
+        duration:500
       }
     );
 
   }
 
 
-  if (type === "wiggle") {
+  if(type === "wiggle"){
 
     selectedActor.animate(
       [
-        {
-          transform:
-          "rotate(-8deg)"
-        },
-        {
-          transform:
-          "rotate(8deg)"
-        },
-        {
-          transform:
-          "rotate(0)"
-        }
+        {transform:"rotate(-8deg)"},
+        {transform:"rotate(8deg)"},
+        {transform:"rotate(0)"}
       ],
       {
-        duration: 500
-      }
-    );
-
-  }
-
-
-  if (type === "sleep") {
-
-    selectedActor.animate(
-      [
-        {
-          transform:
-          "translateY(0)"
-        },
-        {
-          transform:
-          "translateY(5px)"
-        },
-        {
-          transform:
-          "translateY(0)"
-        }
-      ],
-      {
-        duration: 1800,
-        iterations: Infinity
+        duration:500
       }
     );
 
@@ -901,18 +560,18 @@ function action(type) {
 }
 
 
-/* --------------------
-   움직임 정지
--------------------- */
+/* 움직임 멈추기 */
 
-function stopAction() {
+function stopAction(){
 
-  if (!selectedActor) return;
+  if(!selectedActor){
+    return;
+  }
 
-  selectedActor.getAnimations()
+  selectedActor
+  .getAnimations()
   .forEach(
-    animation =>
-    animation.cancel()
+    animation => animation.cancel()
   );
 
   selectedActor.style.transform =
@@ -921,13 +580,11 @@ function stopAction() {
 }
 
 
-/* --------------------
-   캐릭터 삭제
--------------------- */
+/* 선택한 캐릭터 삭제 */
 
-function deleteCharacter() {
+function deleteActor(){
 
-  if (!selectedActor) {
+  if(!selectedActor){
 
     alert("캐릭터를 먼저 눌러주세요.");
 
@@ -935,87 +592,63 @@ function deleteCharacter() {
 
   }
 
-
   selectedActor.remove();
 
   selectedActor = null;
 
-
   checkEmpty();
 
 }
 
 
-/* --------------------
-   장면 비우기
--------------------- */
+/* 장면 전체 삭제 */
 
-function clearScene() {
+function clearScene(){
 
-  const actors =
-  document.querySelectorAll(
-    ".actor"
+  document
+  .querySelectorAll(".actor")
+  .forEach(
+    actor => actor.remove()
   );
-
-
-  actors.forEach(
-    actor =>
-    actor.remove()
-  );
-
 
   selectedActor = null;
 
-
   checkEmpty();
 
 }
 
 
-function checkEmpty() {
+function checkEmpty(){
 
-  const actors =
-  document.querySelectorAll(
-    ".actor"
-  );
+  const count =
+  document.querySelectorAll(".actor")
+  .length;
 
-
-  document
-  .getElementById("empty")
+  document.getElementById("empty")
   .style.display =
-  actors.length
-  ? "none"
-  : "flex";
+  count === 0 ? "flex" : "none";
 
 }
 
 
-/* --------------------
-   일기 저장
--------------------- */
+/* 일기 저장 */
 
-function saveDiary() {
+function saveDiary(){
 
   const title =
-  document
-  .getElementById("title")
-  .value;
-
+  document.getElementById("title").value;
 
   const diary =
-  document
-  .getElementById("diary")
-  .value;
+  document.getElementById("diary").value;
 
 
   localStorage.setItem(
-    "diary-title",
+    "diaryTitle",
     title
   );
 
-
   localStorage.setItem(
-    "diary-body",
+    "diaryBody",
     diary
   );
 
@@ -1023,6 +656,15 @@ function saveDiary() {
   alert("일기를 저장했어요!");
 
 }
+
+
+/* 저장된 일기 불러오기 */
+
+document.getElementById("title").value =
+localStorage.getItem("diaryTitle") || "";
+
+document.getElementById("diary").value =
+localStorage.getItem("diaryBody") || "";
 
 </script>
 
