@@ -4,14 +4,11 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<meta name="apple-mobile-web-app-capable"
-content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
-<meta name="apple-mobile-web-app-status-bar-style"
-content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 
 <title>그림일기</title>
 
@@ -160,7 +157,6 @@ textarea {
 }
 
 .actor.dragging {
-
   cursor: grabbing;
 }
 
@@ -175,17 +171,14 @@ textarea {
 }
 
 .actor.sleeping {
-
   opacity: 0.65;
 }
 
 .actor.running {
-
   opacity: 1;
 }
 
 .actor.together {
-
   opacity: 0.9;
 }
 
@@ -220,7 +213,6 @@ textarea {
 ========================= */
 
 .add-area {
-
   margin: 12px 0 18px;
 }
 
@@ -766,10 +758,43 @@ types.length
 
 
 /* =================================================
-   캐릭터 선택
+   캐릭터 선택 / 선택 취소
 ================================================= */
 
 function selectActor(actor) {
+
+
+/*
+   이미 선택된 캐릭터를
+   다시 누르면 선택 취소
+*/
+
+if (
+selectedActor === actor
+) {
+
+actor.element
+.classList
+.remove("selected");
+
+selectedActor =
+null;
+
+controlBox
+.classList
+.remove("show");
+
+updateStatus();
+
+return;
+
+}
+
+
+/*
+   다른 캐릭터가 선택되어 있으면
+   먼저 선택 취소
+*/
 
 if (selectedActor) {
 
@@ -780,19 +805,20 @@ selectedActor.element
 }
 
 
+/*
+   새로운 캐릭터 선택
+*/
+
 selectedActor =
 actor;
-
 
 actor.element
 .classList
 .add("selected");
 
-
 controlBox
 .classList
 .add("show");
-
 
 updateStatus();
 
@@ -1051,10 +1077,8 @@ selectedActor;
 actor.paused =
 true;
 
-
 actor.dragging =
 false;
-
 
 actor.state =
 "paused";
@@ -1102,7 +1126,6 @@ selectedActor;
 
 actor.paused =
 false;
-
 
 actor.state =
 "walking";
@@ -1518,6 +1541,11 @@ return;
 }
 
 
+/*
+   선택 취소 상태
+   = 그냥 감상 모드
+*/
+
 status.textContent =
 "캐릭터들이 자유롭게 움직이고 있어요";
 
@@ -1723,7 +1751,6 @@ function() {
 reject(
 new Error(
 "이미지를 불러오지 못했습니다."
-)
 );
 
 };
@@ -1772,10 +1799,6 @@ saveButton.textContent =
 try {
 
 
-/* ---------------------------------
-   저장
---------------------------------- */
-
 localStorage.setItem(
 "diary-title",
 titleInput.value
@@ -1817,7 +1840,7 @@ const dateFont =
 
 
 /* ---------------------------------
-   글자 측정용
+   글자 측정
 --------------------------------- */
 
 const measureCanvas =
@@ -1826,10 +1849,6 @@ document.createElement("canvas");
 const measureCtx =
 measureCanvas.getContext("2d");
 
-
-/* ---------------------------------
-   일기 내용 줄바꿈
---------------------------------- */
 
 measureCtx.font =
 diaryFont;
@@ -1849,7 +1868,7 @@ const diaryLineHeight =
 
 
 /* ---------------------------------
-   영역 사이 간격
+   영역
 --------------------------------- */
 
 const topArea =
@@ -1870,20 +1889,12 @@ contentPadding * 2
 );
 
 
-/* ---------------------------------
-   캐릭터 공간
---------------------------------- */
-
 const stageOutputWidth =
 760;
 
 const stageOutputHeight =
 650;
 
-
-/* ---------------------------------
-   최종 이미지 높이
---------------------------------- */
 
 const sectionGap =
 25;
@@ -1905,7 +1916,6 @@ sectionGap * 3 +
 const canvas =
 document.createElement("canvas");
 
-
 canvas.width =
 outputWidth;
 
@@ -1920,7 +1930,6 @@ canvas.getContext("2d");
 ctx.fillStyle =
 "#fff";
 
-
 ctx.fillRect(
 0,
 0,
@@ -1934,7 +1943,7 @@ ctx.textBaseline =
 
 
 /* =================================================
-   ① 오늘의 일기
+   오늘의 일기
 ================================================= */
 
 ctx.fillStyle =
@@ -1942,7 +1951,6 @@ ctx.fillStyle =
 
 ctx.font =
 "bold 52px sans-serif";
-
 
 ctx.textAlign =
 "center";
@@ -1970,7 +1978,7 @@ outputWidth / 2,
 
 
 /* =================================================
-   ② 제목 영역
+   제목 영역
 ================================================= */
 
 let currentY =
@@ -2036,7 +2044,7 @@ currentY + 82
 
 
 /* =================================================
-   ③ 일기 내용 영역
+   일기 내용 영역
 ================================================= */
 
 currentY +=
@@ -2116,7 +2124,7 @@ diaryLineHeight;
 
 
 /* =================================================
-   ④ 캐릭터 공간
+   캐릭터 공간
 ================================================= */
 
 currentY +=
@@ -2142,10 +2150,6 @@ const scaleY =
 stageOutputHeight /
 stage.clientHeight;
 
-
-/* ---------------------------------
-   캐릭터 배경
---------------------------------- */
 
 ctx.save();
 
@@ -2194,21 +2198,12 @@ actor.element.src
 );
 
 
-/*
-   화면에서 실제 캐릭터 크기
-*/
-
 const actorWidth =
 actor.element.offsetWidth;
 
 const actorHeight =
 actor.element.offsetHeight;
 
-
-/*
-   X/Y를 각각 맞춰서
-   캐릭터 영역의 위치 유지
-*/
 
 const x =
 stageX +
@@ -2220,10 +2215,6 @@ stageY +
 actor.y *
 scaleY;
 
-
-/*
-   비율 유지
-*/
 
 const uniformScale =
 Math.min(
@@ -2241,11 +2232,6 @@ actorHeight *
 uniformScale;
 
 
-/*
-   이미지가 원래 90x90이라
-   같은 비율로 저장
-*/
-
 ctx.drawImage(
 image,
 x,
@@ -2254,11 +2240,12 @@ width,
 height
 );
 
+
 }
 catch(error) {
 
 console.error(
-"캐릭터 저장 실패:",
+"캐릭터 저장 실패",
 error
 );
 
@@ -2271,7 +2258,7 @@ ctx.restore();
 
 
 /* ---------------------------------
-   캐릭터 영역 테두리
+   캐릭터 테두리
 --------------------------------- */
 
 ctx.save();
@@ -2394,7 +2381,7 @@ return;
 
 
 /* =================================================
-   공유 기능이 없는 경우
+   다운로드
 ================================================= */
 
 const url =
@@ -2421,16 +2408,13 @@ link
 
 link.click();
 
-
 link.remove();
 
 
 setTimeout(
 function() {
 
-URL.revokeObjectURL(
-url
-);
+URL.revokeObjectURL(url);
 
 },
 1000
