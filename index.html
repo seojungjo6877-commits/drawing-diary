@@ -2,8 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>그림일기</title>
 
@@ -63,7 +62,6 @@ textarea{
   border-radius:16px;
   overflow:hidden;
   background:#fff;
-
   touch-action:none;
   user-select:none;
   -webkit-user-select:none;
@@ -71,17 +69,21 @@ textarea{
 
 .actor{
   position:absolute;
+
+  /*
+    화면에서도 이미지 자체를 찌그러뜨리지 않고
+    90×90 안에 비율 그대로 들어가게 함
+  */
   width:90px;
   height:90px;
-
   object-fit:contain;
+  object-position:center;
 
   user-select:none;
   -webkit-user-select:none;
   -webkit-user-drag:none;
 
   touch-action:none;
-
   cursor:grab;
 
   transition:opacity .3s ease;
@@ -147,13 +149,11 @@ input[type="file"]{
 }
 
 .save-buttons{
-  display:flex;
-  gap:8px;
   margin-top:10px;
 }
 
 .save-buttons button{
-  flex:1;
+  width:100%;
 }
 
 .hint{
@@ -182,11 +182,17 @@ input[type="file"]{
   ></textarea>
 
   <div class="stage" id="stage">
-    <div class="status" id="status">캐릭터를 추가해보세요</div>
+    <div class="status" id="status">
+      캐릭터를 추가해보세요
+    </div>
   </div>
 
   <div class="controls">
-    <label for="imageInput">＋ 사진 추가</label>
+
+    <label for="imageInput">
+      ＋ 사진 추가
+    </label>
+
     <input
       type="file"
       id="imageInput"
@@ -194,13 +200,20 @@ input[type="file"]{
       multiple
     >
 
-    <button id="pauseBtn">선택 캐릭터 멈춤</button>
-    <button id="resumeBtn">다시 움직이기</button>
+    <button id="pauseBtn">
+      선택 캐릭터 멈춤
+    </button>
+
+    <button id="resumeBtn">
+      다시 움직이기
+    </button>
+
   </div>
 
   <div class="save-buttons">
-    <button id="saveBtn">일기 저장</button>
-    <button id="galleryBtn">갤러리에 저장</button>
+    <button id="galleryBtn">
+      저장
+    </button>
   </div>
 
   <div class="hint">
@@ -212,19 +225,29 @@ input[type="file"]{
 
 <script>
 
-const stage = document.getElementById("stage");
-const imageInput = document.getElementById("imageInput");
+const stage =
+  document.getElementById("stage");
 
-const titleInput = document.getElementById("title");
-const diaryInput = document.getElementById("diary");
+const imageInput =
+  document.getElementById("imageInput");
 
-const status = document.getElementById("status");
+const titleInput =
+  document.getElementById("title");
 
-const pauseBtn = document.getElementById("pauseBtn");
-const resumeBtn = document.getElementById("resumeBtn");
+const diaryInput =
+  document.getElementById("diary");
 
-const saveBtn = document.getElementById("saveBtn");
-const galleryBtn = document.getElementById("galleryBtn");
+const status =
+  document.getElementById("status");
+
+const pauseBtn =
+  document.getElementById("pauseBtn");
+
+const resumeBtn =
+  document.getElementById("resumeBtn");
+
+const galleryBtn =
+  document.getElementById("galleryBtn");
 
 const actors = [];
 
@@ -249,30 +272,42 @@ document.getElementById("date").textContent =
   `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}`;
 
 
-/* 이미지 추가 */
+/* 사진 추가 */
 
 imageInput.addEventListener("change", function(){
 
   [...this.files].forEach(file => {
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
     reader.onload = function(e){
 
-      const img = new Image();
+      const img =
+        new Image();
 
       img.onload = function(){
 
         const actor = {
-          el: img,
 
-          x: Math.random() * Math.max(1, stage.clientWidth - 90),
-          y: Math.random() * Math.max(1, stage.clientHeight - 90),
+          el:img,
 
-          vx:0,
-          vy:0,
+          x:
+            Math.random() *
+            Math.max(
+              1,
+              stage.clientWidth - 90
+            ),
 
-          speed:0.5 + Math.random() * 0.8,
+          y:
+            Math.random() *
+            Math.max(
+              1,
+              stage.clientHeight - 90
+            ),
+
+          speed:
+            0.5 + Math.random() * 0.8,
 
           state:"idle",
 
@@ -280,10 +315,9 @@ imageInput.addEventListener("change", function(){
           targetY:0,
 
           paused:false,
+          dragging:false,
 
           actionUntil:0,
-
-          dragging:false,
 
           dragOffsetX:0,
           dragOffsetY:0,
@@ -291,9 +325,10 @@ imageInput.addEventListener("change", function(){
           lastInteraction:0
         };
 
-        img.src = e.target.result;
 
         img.className = "actor";
+
+        img.src = e.target.result;
 
         img.draggable = false;
 
@@ -301,19 +336,21 @@ imageInput.addEventListener("change", function(){
 
         actors.push(actor);
 
-        chooseNewAction(actor);
-
         setupDragging(actor);
+
+        chooseNewAction(actor);
 
         updatePosition(actor);
 
-        status.textContent = "캐릭터를 손가락으로 움직여보세요";
+        status.textContent =
+          "캐릭터를 손가락으로 움직여보세요.";
       };
 
       img.src = e.target.result;
     };
 
     reader.readAsDataURL(file);
+
   });
 
   this.value = "";
@@ -325,17 +362,22 @@ imageInput.addEventListener("change", function(){
 function selectActor(actor){
 
   if(selectedActor){
-    selectedActor.el.classList.remove("selected");
+    selectedActor.el.classList.remove(
+      "selected"
+    );
   }
 
   selectedActor = actor;
 
   if(actor){
-    actor.el.classList.add("selected");
+
+    actor.el.classList.add(
+      "selected"
+    );
 
     status.textContent =
       actor.paused
-        ? "선택한 캐릭터는 멈춰있어요"
+        ? "선택한 캐릭터는 멈춰있어요."
         : "선택한 캐릭터";
   }
 }
@@ -347,73 +389,97 @@ function setupDragging(actor){
 
   const el = actor.el;
 
-  el.addEventListener("pointerdown", function(e){
 
-    e.preventDefault();
-    e.stopPropagation();
+  el.addEventListener(
+    "pointerdown",
+    function(e){
 
-    /*
-      드래그할 때 선택이 풀리지 않도록
-      기존 선택 캐릭터와 같으면 그대로 유지
-    */
-    if(selectedActor !== actor){
-      selectActor(actor);
+      e.preventDefault();
+      e.stopPropagation();
+
+      if(selectedActor !== actor){
+        selectActor(actor);
+      }
+
+      actor.dragging = true;
+
+      actor.paused = true;
+
+      el.classList.add("dragging");
+
+      const rect =
+        stage.getBoundingClientRect();
+
+      actor.dragOffsetX =
+        e.clientX -
+        rect.left -
+        actor.x;
+
+      actor.dragOffsetY =
+        e.clientY -
+        rect.top -
+        actor.y;
+
+      try{
+        el.setPointerCapture(
+          e.pointerId
+        );
+      }catch(err){}
+
     }
-
-    actor.dragging = true;
-
-    el.classList.add("dragging");
-
-    const rect = stage.getBoundingClientRect();
-
-    actor.dragOffsetX =
-      e.clientX - rect.left - actor.x;
-
-    actor.dragOffsetY =
-      e.clientY - rect.top - actor.y;
-
-    actor.paused = true;
-
-    try{
-      el.setPointerCapture(e.pointerId);
-    }catch(err){}
-
-  });
+  );
 
 
-  el.addEventListener("pointermove", function(e){
+  el.addEventListener(
+    "pointermove",
+    function(e){
 
-    if(!actor.dragging) return;
+      if(!actor.dragging) return;
 
-    e.preventDefault();
+      e.preventDefault();
 
-    const rect = stage.getBoundingClientRect();
+      const rect =
+        stage.getBoundingClientRect();
 
-    let x =
-      e.clientX -
-      rect.left -
-      actor.dragOffsetX;
+      let x =
+        e.clientX -
+        rect.left -
+        actor.dragOffsetX;
 
-    let y =
-      e.clientY -
-      rect.top -
-      actor.dragOffsetY;
+      let y =
+        e.clientY -
+        rect.top -
+        actor.dragOffsetY;
 
-    const maxX =
-      stage.clientWidth - el.offsetWidth;
 
-    const maxY =
-      stage.clientHeight - el.offsetHeight;
+      const maxX =
+        stage.clientWidth -
+        el.offsetWidth;
 
-    x = Math.max(0, Math.min(x, maxX));
-    y = Math.max(0, Math.min(y, maxY));
+      const maxY =
+        stage.clientHeight -
+        el.offsetHeight;
 
-    actor.x = x;
-    actor.y = y;
 
-    updatePosition(actor);
+      x =
+        Math.max(
+          0,
+          Math.min(x,maxX)
+        );
 
-  });
+      y =
+        Math.max(
+          0,
+          Math.min(y,maxY)
+        );
+
+
+      actor.x = x;
+      actor.y = y;
+
+      updatePosition(actor);
+    }
+  );
 
 
   function endDrag(e){
@@ -422,20 +488,31 @@ function setupDragging(actor){
 
     actor.dragging = false;
 
-    el.classList.remove("dragging");
-
-    try{
-      el.releasePointerCapture(e.pointerId);
-    }catch(err){}
+    el.classList.remove(
+      "dragging"
+    );
 
     actor.paused = false;
+
+    try{
+      el.releasePointerCapture(
+        e.pointerId
+      );
+    }catch(err){}
 
     chooseNewAction(actor);
   }
 
 
-  el.addEventListener("pointerup", endDrag);
-  el.addEventListener("pointercancel", endDrag);
+  el.addEventListener(
+    "pointerup",
+    endDrag
+  );
+
+  el.addEventListener(
+    "pointercancel",
+    endDrag
+  );
 }
 
 
@@ -443,108 +520,145 @@ function setupDragging(actor){
 
 function updatePosition(actor){
 
-  actor.el.style.left = actor.x + "px";
-  actor.el.style.top = actor.y + "px";
+  actor.el.style.left =
+    actor.x + "px";
+
+  actor.el.style.top =
+    actor.y + "px";
 }
 
 
-/* 랜덤 행동 */
+/* 행동 선택 */
 
 function chooseNewAction(actor){
 
-  if(actor.paused || actor.dragging) return;
+  if(
+    actor.paused ||
+    actor.dragging
+  ) return;
 
-  const random = Math.random();
+
+  const random =
+    Math.random();
+
 
   if(random < 0.18){
 
-    actor.state = "sleeping";
-
-    actor.vx = 0;
-    actor.vy = 0;
+    actor.state =
+      "sleeping";
 
     actor.actionUntil =
-      Date.now() + 2500 + Math.random() * 3500;
-
+      Date.now() +
+      2500 +
+      Math.random() * 3500;
   }
+
   else if(random < 0.40){
 
-    actor.state = "idle";
-
-    actor.vx = 0;
-    actor.vy = 0;
+    actor.state =
+      "idle";
 
     actor.actionUntil =
-      Date.now() + 1000 + Math.random() * 2500;
-
+      Date.now() +
+      1000 +
+      Math.random() * 2500;
   }
+
   else if(random < 0.70){
 
-    actor.state = "walking";
+    actor.state =
+      "walking";
 
     setRandomTarget(actor);
 
     actor.actionUntil =
-      Date.now() + 2500 + Math.random() * 3000;
-
+      Date.now() +
+      2500 +
+      Math.random() * 3000;
   }
+
   else{
 
-    actor.state = "running";
+    actor.state =
+      "running";
 
     setRandomTarget(actor);
 
     actor.actionUntil =
-      Date.now() + 1800 + Math.random() * 2500;
-
+      Date.now() +
+      1800 +
+      Math.random() * 2500;
   }
+
 
   updateAppearance(actor);
 }
 
 
-/* 랜덤 목적지 */
+/* 목적지 */
 
 function setRandomTarget(actor){
 
   actor.targetX =
     Math.random() *
-    Math.max(1, stage.clientWidth - actor.el.offsetWidth);
+    Math.max(
+      1,
+      stage.clientWidth -
+      actor.el.offsetWidth
+    );
 
   actor.targetY =
     Math.random() *
-    Math.max(1, stage.clientHeight - actor.el.offsetHeight);
+    Math.max(
+      1,
+      stage.clientHeight -
+      actor.el.offsetHeight
+    );
 }
 
 
-/* 행동 */
+/* 이동 */
 
 function nextAction(actor){
 
-  if(actor.paused || actor.dragging) return;
+  if(
+    actor.paused ||
+    actor.dragging
+  ) return;
 
-  if(Date.now() >= actor.actionUntil){
+
+  if(
+    Date.now() >=
+    actor.actionUntil
+  ){
 
     chooseNewAction(actor);
-
   }
+
 
   if(
     actor.state !== "walking" &&
     actor.state !== "running"
   ){
-
     return;
   }
 
+
   const dx =
-    actor.targetX - actor.x;
+    actor.targetX -
+    actor.x;
 
   const dy =
-    actor.targetY - actor.y;
+    actor.targetY -
+    actor.y;
+
 
   const distance =
-    Math.sqrt(dx * dx + dy * dy);
+    Math.sqrt(
+      dx * dx +
+      dy * dy
+    );
+
 
   if(distance < 3){
 
@@ -553,10 +667,12 @@ function nextAction(actor){
     return;
   }
 
+
   const speed =
     actor.state === "running"
       ? actor.speed * 2
       : actor.speed;
+
 
   actor.x +=
     dx / distance * speed;
@@ -564,11 +680,12 @@ function nextAction(actor){
   actor.y +=
     dy / distance * speed;
 
+
   updatePosition(actor);
 }
 
 
-/* 캐릭터 외형 */
+/* 외형 */
 
 function updateAppearance(actor){
 
@@ -578,32 +695,52 @@ function updateAppearance(actor){
     "together"
   );
 
+
   if(actor.state === "sleeping"){
-    actor.el.classList.add("sleeping");
+    actor.el.classList.add(
+      "sleeping"
+    );
   }
+
 
   if(actor.state === "running"){
-    actor.el.classList.add("running");
+    actor.el.classList.add(
+      "running"
+    );
   }
 
+
   if(actor.state === "together"){
-    actor.el.classList.add("together");
+    actor.el.classList.add(
+      "together"
+    );
   }
 }
 
 
-/* 캐릭터끼리 만남 */
+/* 캐릭터 만남 */
 
 function checkInteractions(){
 
-  const currentTime = Date.now();
+  const currentTime =
+    Date.now();
 
-  for(let i=0; i<actors.length; i++){
 
-    for(let j=i+1; j<actors.length; j++){
+  for(
+    let i = 0;
+    i < actors.length;
+    i++
+  ){
+
+    for(
+      let j = i + 1;
+      j < actors.length;
+      j++
+    ){
 
       const a = actors[i];
       const b = actors[j];
+
 
       if(
         a.dragging ||
@@ -612,29 +749,41 @@ function checkInteractions(){
         b.paused
       ) continue;
 
-      if(
-        currentTime - a.lastInteraction < 5000 ||
-        currentTime - b.lastInteraction < 5000
-      ) continue;
 
-      const dx = a.x - b.x;
-      const dy = a.y - b.y;
+      if(
+        currentTime -
+        a.lastInteraction < 5000 ||
+        currentTime -
+        b.lastInteraction < 5000
+      ){
+        continue;
+      }
+
+
+      const dx =
+        a.x - b.x;
+
+      const dy =
+        a.y - b.y;
+
 
       const distance =
-        Math.sqrt(dx * dx + dy * dy);
+        Math.sqrt(
+          dx * dx +
+          dy * dy
+        );
+
 
       if(distance < 65){
 
         if(Math.random() < 0.02){
 
-          a.state = "together";
-          b.state = "together";
+          a.state =
+            "together";
 
-          a.vx = 0;
-          a.vy = 0;
+          b.state =
+            "together";
 
-          b.vx = 0;
-          b.vy = 0;
 
           a.actionUntil =
             currentTime + 1800;
@@ -642,8 +791,13 @@ function checkInteractions(){
           b.actionUntil =
             currentTime + 1800;
 
-          a.lastInteraction = currentTime;
-          b.lastInteraction = currentTime;
+
+          a.lastInteraction =
+            currentTime;
+
+          b.lastInteraction =
+            currentTime;
+
 
           updateAppearance(a);
           updateAppearance(b);
@@ -654,7 +808,7 @@ function checkInteractions(){
 }
 
 
-/* 전체 자동 움직임 */
+/* 자동 실행 */
 
 function animationLoop(){
 
@@ -668,7 +822,9 @@ function animationLoop(){
 
   checkInteractions();
 
-  requestAnimationFrame(animationLoop);
+  requestAnimationFrame(
+    animationLoop
+  );
 }
 
 animationLoop();
@@ -676,349 +832,448 @@ animationLoop();
 
 /* 멈춤 */
 
-pauseBtn.addEventListener("click", function(){
-
-  if(!selectedActor){
-
-    status.textContent =
-      "먼저 캐릭터를 선택해주세요.";
-
-    return;
-  }
-
-  selectedActor.paused = true;
-
-  selectedActor.vx = 0;
-  selectedActor.vy = 0;
-
-  selectedActor.state = "idle";
-
-  updateAppearance(selectedActor);
-
-  status.textContent =
-    "선택한 캐릭터를 멈췄어요.";
-});
-
-
-/* 다시 움직이기 */
-
-resumeBtn.addEventListener("click", function(){
-
-  if(!selectedActor){
-
-    status.textContent =
-      "먼저 캐릭터를 선택해주세요.";
-
-    return;
-  }
-
-  selectedActor.paused = false;
-
-  chooseNewAction(selectedActor);
-
-  status.textContent =
-    "선택한 캐릭터가 다시 움직여요.";
-});
-
-
-/* 일기 저장 */
-
-saveBtn.addEventListener("click", function(){
-
-  localStorage.setItem(
-    "diaryTitle",
-    titleInput.value
-  );
-
-  localStorage.setItem(
-    "diaryText",
-    diaryInput.value
-  );
-
-  status.textContent =
-    "일기를 저장했어요.";
-});
-
-
-/* 기존 일기 불러오기 */
-
-titleInput.value =
-  localStorage.getItem("diaryTitle") || "";
-
-diaryInput.value =
-  localStorage.getItem("diaryText") || "";
-
-
-/* 
-   갤러리에 저장
-   ★ 여기만 이미지 비율 유지하도록 수정
-*/
-
-galleryBtn.addEventListener("click", async function(){
-
-  const canvas = document.createElement("canvas");
-
-  const width = 1000;
-  const height = 1300;
-
-  canvas.width = width;
-  canvas.height = height;
-
-  const ctx = canvas.getContext("2d");
-
-  /* 흰 배경 */
-
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0, 0, width, height);
-
-  /* 제목 */
-
-  ctx.fillStyle = "#111";
-
-  ctx.font =
-    "bold 42px sans-serif";
-
-  ctx.fillText(
-    titleInput.value || "오늘의 그림일기",
-    60,
-    80
-  );
-
-
-  /* 날짜 */
-
-  ctx.font =
-    "22px sans-serif";
-
-  ctx.fillText(
-    document.getElementById("date").textContent,
-    60,
-    120
-  );
-
-
-  /* 일기 */
-
-  ctx.font =
-    "24px sans-serif";
-
-  const diaryText =
-    diaryInput.value || "";
-
-  const lines =
-    diaryText.split("\n");
-
-  let diaryY = 175;
-
-  lines.forEach(line => {
-
-    ctx.fillText(
-      line,
-      60,
-      diaryY
-    );
-
-    diaryY += 34;
-
-  });
-
-
-  /*
-    캐릭터 영역
-    실제 stage 크기를 기준으로 확대해서 그림
-  */
-
-  const stageRect =
-    stage.getBoundingClientRect();
-
-  const scaleX =
-    880 / stageRect.width;
-
-  const scaleY =
-    700 / stageRect.height;
-
-  const scale =
-    Math.min(scaleX, scaleY);
-
-
-  const stageX = 60;
-
-  const stageY =
-    Math.max(
-      diaryY + 30,
-      300
-    );
-
-
-  /* 캐릭터 그리기 */
-
-  for(const actor of actors){
-
-    const img = actor.el;
-
-    /*
-      화면에서 사용하는 캐릭터의 실제 크기
-    */
-
-    const originalW =
-      img.naturalWidth || img.width;
-
-    const originalH =
-      img.naturalHeight || img.height;
-
-    /*
-      기존 화면에서 캐릭터는
-      90 × 90 영역 안에 object-fit: contain으로 표시됨.
-
-      따라서 canvas에서도 똑같이
-      비율을 유지하면서 90×90 안에 맞춘다.
-    */
-
-    const boxW = 90;
-    const boxH = 90;
-
-    const ratio =
-      Math.min(
-        boxW / originalW,
-        boxH / originalH
-      );
-
-    const drawW =
-      originalW * ratio;
-
-    const drawH =
-      originalH * ratio;
-
-
-    /*
-      90×90 박스 중앙에 배치
-    */
-
-    const offsetX =
-      (boxW - drawW) / 2;
-
-    const offsetY =
-      (boxH - drawH) / 2;
-
-
-    /*
-      stage의 실제 위치를 canvas 위치로 변환
-    */
-
-    const drawX =
-      stageX +
-      actor.x * scale +
-      offsetX * scale;
-
-    const drawY =
-      stageY +
-      actor.y * scale +
-      offsetY * scale;
-
-
-    /*
-      ★ 중요
-      drawW / drawH도 같은 scale을 적용해서
-      원본 비율을 그대로 유지한다.
-    */
-
-    ctx.drawImage(
-      img,
-      drawX,
-      drawY,
-      drawW * scale,
-      drawH * scale
-    );
-  }
-
-
-  /* 캐릭터 영역 테두리 */
-
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 4;
-
-  ctx.strokeRect(
-    stageX,
-    stageY,
-    stageRect.width * scale,
-    stageRect.height * scale
-  );
-
-
-  /* PNG 생성 */
-
-  canvas.toBlob(async function(blob){
-
-    if(!blob) return;
-
-    const file =
-      new File(
-        [blob],
-        "그림일기.png",
-        {
-          type:"image/png"
-        }
-      );
-
-
-    /*
-      모바일에서 공유 가능한 경우
-      바로 공유 창을 띄운다.
-    */
-
-    if(
-      navigator.share &&
-      navigator.canShare &&
-      navigator.canShare({files:[file]})
-    ){
-
-      try{
-
-        await navigator.share({
-          files:[file],
-          title:"그림일기"
-        });
-
-        status.textContent =
-          "그림일기를 저장했어요.";
-
-        return;
-
-      }catch(err){
-
-        if(err.name === "AbortError"){
-          return;
-        }
-
-      }
-    }
-
-
-    /*
-      공유 기능이 안 되는 환경에서는
-      새 창에서 이미지를 보여준다.
-    */
-
-    const url =
-      URL.createObjectURL(blob);
-
-    const newWindow =
-      window.open(url, "_blank");
-
-    if(!newWindow){
+pauseBtn.addEventListener(
+  "click",
+  function(){
+
+    if(!selectedActor){
 
       status.textContent =
-        "이미지를 저장할 수 없어요.";
+        "먼저 캐릭터를 선택해주세요.";
 
       return;
     }
 
+
+    selectedActor.paused = true;
+
+    selectedActor.state =
+      "idle";
+
+    updateAppearance(
+      selectedActor
+    );
+
+
     status.textContent =
-      "이미지를 길게 눌러 저장해주세요.";
+      "선택한 캐릭터를 멈췄어요.";
+  }
+);
 
-  }, "image/png");
 
-});
+/* 다시 움직이기 */
+
+resumeBtn.addEventListener(
+  "click",
+  function(){
+
+    if(!selectedActor){
+
+      status.textContent =
+        "먼저 캐릭터를 선택해주세요.";
+
+      return;
+    }
+
+
+    selectedActor.paused =
+      false;
+
+    chooseNewAction(
+      selectedActor
+    );
+
+
+    status.textContent =
+      "선택한 캐릭터가 다시 움직여요.";
+  }
+);
+
+
+/* 
+==================================================
+저장
+==================================================
+*/
+
+galleryBtn.addEventListener(
+  "click",
+  async function(){
+
+    const canvas =
+      document.createElement(
+        "canvas"
+      );
+
+
+    const width = 1000;
+    const height = 1300;
+
+
+    canvas.width = width;
+    canvas.height = height;
+
+
+    const ctx =
+      canvas.getContext("2d");
+
+
+    /* 흰 배경 */
+
+    ctx.fillStyle = "#fff";
+
+    ctx.fillRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+
+    /* 제목 */
+
+    ctx.fillStyle = "#111";
+
+    ctx.font =
+      "bold 42px sans-serif";
+
+    ctx.fillText(
+      titleInput.value ||
+      "오늘의 그림일기",
+      60,
+      80
+    );
+
+
+    /* 날짜 */
+
+    ctx.font =
+      "22px sans-serif";
+
+    ctx.fillText(
+      document.getElementById(
+        "date"
+      ).textContent,
+      60,
+      120
+    );
+
+
+    /* 일기 */
+
+    ctx.font =
+      "24px sans-serif";
+
+
+    const lines =
+      diaryInput.value
+        ? diaryInput.value.split("\n")
+        : [];
+
+
+    let diaryY = 175;
+
+
+    lines.forEach(line => {
+
+      ctx.fillText(
+        line,
+        60,
+        diaryY
+      );
+
+      diaryY += 34;
+    });
+
+
+    /*
+      캐릭터가 들어갈 영역
+    */
+
+    const stageRect =
+      stage.getBoundingClientRect();
+
+
+    const canvasStageWidth =
+      880;
+
+
+    const canvasStageHeight =
+      700;
+
+
+    /*
+      stage 전체 비율을 유지하면서
+      캔버스에 들어갈 크기 계산
+    */
+
+    const stageScale =
+      Math.min(
+        canvasStageWidth /
+          stageRect.width,
+
+        canvasStageHeight /
+          stageRect.height
+      );
+
+
+    const actualStageWidth =
+      stageRect.width *
+      stageScale;
+
+
+    const actualStageHeight =
+      stageRect.height *
+      stageScale;
+
+
+    const stageX =
+      (width -
+        actualStageWidth) / 2;
+
+
+    const stageY =
+      Math.max(
+        diaryY + 30,
+        300
+      );
+
+
+    /*
+      캐릭터 이미지 저장
+      ★ 원본 비율 절대 변경하지 않음
+    */
+
+    for(
+      const actor of actors
+    ){
+
+      const img =
+        actor.el;
+
+
+      const naturalWidth =
+        img.naturalWidth;
+
+
+      const naturalHeight =
+        img.naturalHeight;
+
+
+      if(
+        !naturalWidth ||
+        !naturalHeight
+      ){
+        continue;
+      }
+
+
+      /*
+        화면에서 캐릭터가 들어가는
+        90×90 영역을 캔버스에서도
+        동일하게 표현
+      */
+
+      const displayBox =
+        90 * stageScale;
+
+
+      /*
+        원본 가로세로 비율
+      */
+
+      const imageRatio =
+        naturalWidth /
+        naturalHeight;
+
+
+      let drawWidth;
+      let drawHeight;
+
+
+      /*
+        ★ 핵심
+        이미지 비율을 유지하면서
+        90×90 영역에 맞춘다.
+      */
+
+      if(imageRatio >= 1){
+
+        drawWidth =
+          displayBox;
+
+        drawHeight =
+          displayBox /
+          imageRatio;
+
+      }
+      else{
+
+        drawHeight =
+          displayBox;
+
+        drawWidth =
+          displayBox *
+          imageRatio;
+      }
+
+
+      /*
+        캐릭터의 화면상 위치
+      */
+
+      const boxX =
+        stageX +
+        actor.x *
+        stageScale;
+
+
+      const boxY =
+        stageY +
+        actor.y *
+        stageScale;
+
+
+      /*
+        90×90 영역 가운데에
+        실제 이미지 배치
+      */
+
+      const drawX =
+        boxX +
+        (displayBox -
+          drawWidth) / 2;
+
+
+      const drawY =
+        boxY +
+        (displayBox -
+          drawHeight) / 2;
+
+
+      /*
+        ★★★★★
+        원본 비율 그대로 출력
+        강제로 90×90으로 만들지 않음
+      */
+
+      ctx.drawImage(
+        img,
+        drawX,
+        drawY,
+        drawWidth,
+        drawHeight
+      );
+    }
+
+
+    /* stage 테두리 */
+
+    ctx.strokeStyle =
+      "#111";
+
+    ctx.lineWidth = 4;
+
+
+    ctx.strokeRect(
+      stageX,
+      stageY,
+      actualStageWidth,
+      actualStageHeight
+    );
+
+
+    /* PNG */
+
+    canvas.toBlob(
+      async function(blob){
+
+        if(!blob) return;
+
+
+        const file =
+          new File(
+            [blob],
+            "그림일기.png",
+            {
+              type:"image/png"
+            }
+          );
+
+
+        /*
+          아이폰 / 아이패드
+        */
+
+        if(
+          navigator.share &&
+          navigator.canShare &&
+          navigator.canShare({
+            files:[file]
+          })
+        ){
+
+          try{
+
+            await navigator.share({
+              files:[file],
+              title:"그림일기"
+            });
+
+
+            status.textContent =
+              "저장했어요.";
+
+            return;
+
+          }
+          catch(err){
+
+            if(
+              err.name ===
+              "AbortError"
+            ){
+              return;
+            }
+          }
+        }
+
+
+        /*
+          공유 기능이 없는 경우
+        */
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+
+        const newWindow =
+          window.open(
+            url,
+            "_blank"
+          );
+
+
+        if(!newWindow){
+
+          status.textContent =
+            "이미지를 저장할 수 없어요.";
+
+          return;
+        }
+
+
+        status.textContent =
+          "이미지를 길게 눌러 저장해주세요.";
+
+      },
+      "image/png"
+    );
+
+  }
+);
 
 </script>
 
