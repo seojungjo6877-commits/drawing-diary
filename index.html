@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
@@ -25,8 +25,8 @@ body{
   max-width:700px;
   min-height:100vh;
   margin:auto;
-  background:#fff;
-  padding-bottom:80px;
+  background:white;
+  padding-bottom:90px;
 }
 
 header{
@@ -97,13 +97,34 @@ button{
 
 .black{
   background:#111;
-  color:#fff;
+  color:white;
+}
+
+/* 실제 사진 선택 버튼 */
+.photoButton{
+  display:block;
+  width:100%;
+  padding:15px;
+  border-radius:12px;
+  background:#111;
+  color:white;
+  text-align:center;
+  font-weight:900;
+  font-size:15px;
+}
+
+#photo{
+  display:block;
+  width:100%;
+  margin-top:8px;
+  font-size:14px;
 }
 
 .characters{
   display:flex;
   gap:8px;
   overflow-x:auto;
+  margin-top:12px;
 }
 
 .character{
@@ -135,7 +156,7 @@ button{
   border-radius:14px;
   position:relative;
   overflow:hidden;
-  background:#fff;
+  background:white;
 }
 
 .empty{
@@ -157,6 +178,11 @@ button{
   object-fit:contain;
   touch-action:none;
   user-select:none;
+}
+
+.actor.selected{
+  outline:1px dashed #999;
+  outline-offset:3px;
 }
 
 .tools{
@@ -187,7 +213,6 @@ button{
 .bottom button{
   flex:1;
 }
-
 </style>
 </head>
 
@@ -222,43 +247,29 @@ button{
 <div class="box">
 
 <div class="head">
+  <span>캐릭터</span>
+</div>
 
-<span>캐릭터</span>
-
-<label>
-  <button class="black">
-    ＋ 사진 추가
-  </button>
-
-  <input
-    id="photo"
-    type="file"
-    accept="image/*"
-    style="display:none"
-  >
+<label class="photoButton" for="photo">
+  ＋ 사진 추가
 </label>
 
-</div>
-
-<div
-  class="characters"
-  id="characters"
-></div>
-
-</div>
-
-
-<div
-  class="scene"
-  id="scene"
+<input
+  id="photo"
+  type="file"
+  accept="image/jpeg,image/png,image/webp,image/gif"
 >
 
-<div
-  class="empty"
-  id="empty"
->
-사진을 선택하면<br>
-캐릭터가 나타납니다.
+<div class="characters" id="characters"></div>
+
+</div>
+
+
+<div class="scene" id="scene">
+
+<div class="empty" id="empty">
+  사진을 선택하면<br>
+  캐릭터가 나타납니다.
 </div>
 
 </div>
@@ -266,25 +277,11 @@ button{
 
 <div class="tools">
 
-<button onclick="moveAction('walk')">
-걷기
-</button>
-
-<button onclick="moveAction('jump')">
-점프
-</button>
-
-<button onclick="moveAction('wiggle')">
-흔들기
-</button>
-
-<button onclick="stopAction()">
-멈춤
-</button>
-
-<button onclick="deleteActor()">
-삭제
-</button>
+<button onclick="moveAction('walk')">걷기</button>
+<button onclick="moveAction('jump')">점프</button>
+<button onclick="moveAction('wiggle')">흔들기</button>
+<button onclick="stopAction()">멈춤</button>
+<button onclick="deleteActor()">삭제</button>
 
 </div>
 
@@ -294,14 +291,11 @@ button{
 <div class="bottom">
 
 <button onclick="clearScene()">
-장면 비우기
+  장면 비우기
 </button>
 
-<button
-  class="black"
-  onclick="saveDiary()"
->
-일기 저장
+<button class="black" onclick="saveDiary()">
+  일기 저장
 </button>
 
 </div>
@@ -310,8 +304,6 @@ button{
 
 
 <script>
-
-/* 날짜 */
 
 document.getElementById("date").textContent =
 new Date().toLocaleDateString(
@@ -324,13 +316,10 @@ new Date().toLocaleDateString(
 );
 
 
-/* 현재 선택된 캐릭터 */
-
 let selectedActor = null;
 
 
-/* 사진을 선택하면 바로 실행 */
-
+/* 사진 선택 */
 document.getElementById("photo").addEventListener(
   "change",
   function(event){
@@ -341,48 +330,56 @@ document.getElementById("photo").addEventListener(
       return;
     }
 
-    const imageURL =
-    URL.createObjectURL(file);
-
-    createCharacter(imageURL);
-
     /*
-      같은 사진을 다시 선택할 수 있도록
-      입력값을 초기화
+      아이폰에서도 안정적으로 읽도록
+      FileReader를 사용
     */
 
-    event.target.value = "";
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+      createCharacter(e.target.result);
+
+    };
+
+    reader.onerror = function(){
+
+      alert("사진을 읽지 못했어요.");
+
+    };
+
+    reader.readAsDataURL(file);
 
   }
 );
 
 
-/* 캐릭터 생성 */
-
+/* 캐릭터 만들기 */
 function createCharacter(imageURL){
 
   const scene =
-  document.getElementById("scene");
+    document.getElementById("scene");
 
   const actor =
-  document.createElement("img");
+    document.createElement("img");
 
   actor.src = imageURL;
 
   actor.className = "actor";
 
   actor.style.left =
-  "calc(50% - 55px)";
+    "calc(50% - 55px)";
 
   actor.style.top =
-  "calc(50% - 55px)";
+    "calc(50% - 55px)";
 
   scene.appendChild(actor);
 
   selectedActor = actor;
 
   document.getElementById("empty")
-  .style.display = "none";
+    .style.display = "none";
 
   makeMovable(actor);
 
@@ -390,15 +387,11 @@ function createCharacter(imageURL){
 
 
 /* 캐릭터 움직이기 */
-
 function makeMovable(actor){
 
   let dragging = false;
-
   let offsetX = 0;
-
   let offsetY = 0;
-
 
   actor.addEventListener(
     "pointerdown",
@@ -408,18 +401,18 @@ function makeMovable(actor){
 
       selectedActor = actor;
 
-      actor.setPointerCapture(
-        e.pointerId
-      );
+      actor.classList.add("selected");
+
+      actor.setPointerCapture(e.pointerId);
 
       const rect =
-      actor.getBoundingClientRect();
+        actor.getBoundingClientRect();
 
       offsetX =
-      e.clientX - rect.left;
+        e.clientX - rect.left;
 
       offsetY =
-      e.clientY - rect.top;
+        e.clientY - rect.top;
 
     }
   );
@@ -434,48 +427,43 @@ function makeMovable(actor){
       }
 
       const scene =
-      document
-      .getElementById("scene")
-      .getBoundingClientRect();
-
+        document
+        .getElementById("scene")
+        .getBoundingClientRect();
 
       let x =
-      e.clientX -
-      scene.left -
-      offsetX;
-
+        e.clientX -
+        scene.left -
+        offsetX;
 
       let y =
-      e.clientY -
-      scene.top -
-      offsetY;
+        e.clientY -
+        scene.top -
+        offsetY;
 
-
-      x =
-      Math.max(
+      x = Math.max(
         0,
         Math.min(
-          scene.width - actor.offsetWidth,
+          scene.width -
+          actor.offsetWidth,
           x
         )
       );
 
-
-      y =
-      Math.max(
+      y = Math.max(
         0,
         Math.min(
-          scene.height - actor.offsetHeight,
+          scene.height -
+          actor.offsetHeight,
           y
         )
       );
 
-
       actor.style.left =
-      x + "px";
+        x + "px";
 
       actor.style.top =
-      y + "px";
+        y + "px";
 
     }
   );
@@ -493,8 +481,36 @@ function makeMovable(actor){
 }
 
 
-/* 움직임 */
+/* 캐릭터 선택 */
+document
+  .getElementById("scene")
+  .addEventListener(
+    "pointerdown",
+    function(e){
 
+      if(e.target.classList.contains("actor")){
+
+        if(selectedActor){
+
+          selectedActor.classList.remove(
+            "selected"
+          );
+
+        }
+
+        selectedActor = e.target;
+
+        selectedActor.classList.add(
+          "selected"
+        );
+
+      }
+
+    }
+  );
+
+
+/* 움직임 */
 function moveAction(type){
 
   if(!selectedActor){
@@ -505,9 +521,7 @@ function moveAction(type){
 
   }
 
-
   stopAction();
-
 
   if(type === "walk"){
 
@@ -560,8 +574,7 @@ function moveAction(type){
 }
 
 
-/* 움직임 멈추기 */
-
+/* 멈춤 */
 function stopAction(){
 
   if(!selectedActor){
@@ -569,19 +582,18 @@ function stopAction(){
   }
 
   selectedActor
-  .getAnimations()
-  .forEach(
-    animation => animation.cancel()
-  );
+    .getAnimations()
+    .forEach(
+      animation => animation.cancel()
+    );
 
   selectedActor.style.transform =
-  "none";
+    "none";
 
 }
 
 
-/* 선택한 캐릭터 삭제 */
-
+/* 캐릭터 삭제 */
 function deleteActor(){
 
   if(!selectedActor){
@@ -601,15 +613,14 @@ function deleteActor(){
 }
 
 
-/* 장면 전체 삭제 */
-
+/* 장면 비우기 */
 function clearScene(){
 
   document
-  .querySelectorAll(".actor")
-  .forEach(
-    actor => actor.remove()
-  );
+    .querySelectorAll(".actor")
+    .forEach(
+      actor => actor.remove()
+    );
 
   selectedActor = null;
 
@@ -618,29 +629,31 @@ function clearScene(){
 }
 
 
+/* 빈 장면 표시 */
 function checkEmpty(){
 
   const count =
-  document.querySelectorAll(".actor")
-  .length;
+    document.querySelectorAll(
+      ".actor"
+    ).length;
 
   document.getElementById("empty")
-  .style.display =
-  count === 0 ? "flex" : "none";
+    .style.display =
+      count === 0
+      ? "flex"
+      : "none";
 
 }
 
 
 /* 일기 저장 */
-
 function saveDiary(){
 
   const title =
-  document.getElementById("title").value;
+    document.getElementById("title").value;
 
   const diary =
-  document.getElementById("diary").value;
-
+    document.getElementById("diary").value;
 
   localStorage.setItem(
     "diaryTitle",
@@ -652,19 +665,17 @@ function saveDiary(){
     diary
   );
 
-
   alert("일기를 저장했어요!");
 
 }
 
 
-/* 저장된 일기 불러오기 */
-
+/* 기존 일기 불러오기 */
 document.getElementById("title").value =
-localStorage.getItem("diaryTitle") || "";
+  localStorage.getItem("diaryTitle") || "";
 
 document.getElementById("diary").value =
-localStorage.getItem("diaryBody") || "";
+  localStorage.getItem("diaryBody") || "";
 
 </script>
 
