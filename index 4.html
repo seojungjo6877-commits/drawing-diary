@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#fff"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>그림일기</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--b:#111;--g:#777;--l:#ddd}
+body{margin:0;background:#eee;color:var(--b);font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif}
+.app{max-width:760px;min-height:100dvh;margin:auto;background:#fff}
+header{height:62px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--l);position:sticky;top:0;background:#fff;z-index:30}
+.logo{font-weight:900;font-size:20px}.date{font-size:11px;color:var(--g)}
+main{padding:14px 14px 105px}.card{border:1px solid var(--l);border-radius:14px;padding:14px;margin-bottom:12px}
+.title{width:100%;border:0;outline:0;font-size:23px;font-weight:900;padding:0 0 10px}.diary{width:100%;min-height:135px;border:0;outline:0;resize:none;font-size:16px;line-height:1.8}
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:900}
+button{border:0;border-radius:10px;background:#eee;padding:9px 12px;font-weight:800;color:#111}button.black{background:#111;color:#fff}
+.char-list{display:flex;gap:8px;overflow-x:auto}.char{min-width:72px;position:relative;text-align:center}.thumb{width:68px;height:68px;object-fit:contain;border:1px solid #ddd;border-radius:10px}.char span{display:block;font-size:10px;margin-top:3px;overflow:hidden;text-overflow:ellipsis}.x{position:absolute;right:-2px;top:-5px;width:20px;height:20px;padding:0;border-radius:50%;border:1px solid #bbb;background:#fff}
+.paper{height:57dvh;min-height:390px;position:relative;overflow:hidden;border:1px solid #bbb;border-radius:14px;background:#fff}
+.stage{position:absolute;inset:0}.empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:#aaa;font-size:12px;pointer-events:none}
+.actor{position:absolute;width:105px;height:105px;object-fit:contain;touch-action:none;user-select:none;cursor:grab;filter:grayscale(1);transition:filter .15s}
+.actor.selected{outline:1px dashed #999;outline-offset:3px}
+.actor.walk{animation:walk .7s ease-in-out infinite}.actor.bounce{animation:bounce .5s ease}.actor.wiggle{animation:wiggle .55s ease}.actor.sleep{animation:sleep 1.8s ease-in-out infinite}
+@keyframes walk{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}
+@keyframes bounce{0%{transform:scale(1)}45%{transform:scale(1.13) translateY(-12px)}100%{transform:scale(1)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
+@keyframes sleep{0%,100%{transform:translateY(0)}50%{transform:translateY(3px) scale(.98)}}
+.tools{display:flex;gap:6px;overflow-x:auto;margin-top:8px}.tools button{white-space:nowrap}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:#fffffff2;border-top:1px solid #ddd;display:flex;gap:8px;z-index:40}.bottom button{flex:1;padding:12px}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:100;align-items:flex-end}.modal.show{display:flex}.sheet{width:min(760px,100%);background:#fff;padding:20px 16px calc(20px + env(safe-area-inset-bottom));border-radius:20px 20px 0 0}.pick{display:block;text-align:center;border:2px dashed #bbb;padding:25px;border-radius:14px;margin-bottom:10px}.pick input{display:none}.name{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin-bottom:10px;outline:0}.hint{font-size:11px;color:#888;line-height:1.5}
+</style></head>
+<body>
+<div class="app">
+<header><div class="logo">그림일기</div><div class="date" id="date"></div></header>
+<main>
+<section class="card"><input id="title" class="title" placeholder="오늘의 제목"><textarea id="body" class="diary" placeholder="오늘은 어떤 하루였나요?"></textarea></section>
+<section class="card">
+<div class="head"><span>캐릭터</span><button class="black" id="add">＋ 사진 추가</button></div>
+<div class="char-list" id="chars"></div>
+<div class="hint">캐릭터를 누르면 장면에 추가됩니다. 장면의 캐릭터를 누른 뒤 아래 동작을 선택해보세요.</div>
+</section>
+<div class="paper" id="paper"><div class="stage" id="stage"></div><div class="empty" id="empty">사진을 추가해서 캐릭터를 만들어보세요.</div></div>
+<div class="tools">
+<button data-act="walk">걷기</button><button data-act="bounce">점프</button><button data-act="wiggle">흔들기</button><button data-act="sleep">졸기</button><button id="stop">멈춤</button><button id="remove">삭제</button>
+</div>
+</main>
+<div class="bottom"><button id="clear">장면 비우기</button><button class="black" id="save">일기 저장</button></div>
+</div>
+<div class="modal" id="modal"><div class="sheet">
+<div class="head"><span>그림 추가</span><button id="close">×</button></div>
+<label class="pick">＋<br><b>사진 선택</b><div class="hint">사진 앱에서 내가 그린 그림을 골라주세요.</div><input id="photo" type="file" accept="image/*"></label>
+<input id="name" class="name" placeholder="캐릭터 이름">
+<div style="display:flex;gap:8px"><button style="flex:1" id="cancel">취소</button><button class="black" style="flex:1" id="make">추가</button></div>
+</div></div>
+<script>
+const $=s=>document.querySelector(s);$("#date").textContent=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});
+let chars=JSON.parse(localStorage.getItem("gda_chars")||"[]"),file=null,actors=[],selected=null,z=10;
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function render(){const box=$("#chars");box.innerHTML="";chars.forEach((c,i)=>{let d=document.createElement("div");d.className="char";d.innerHTML=`<button class=x>×</button><img class=thumb src="${c.src}"><span>${esc(c.name)}</span>`;d.querySelector(".thumb").onclick=()=>addActor(c);d.querySelector(".x").onclick=()=>{chars.splice(i,1);localStorage.setItem("gda_chars",JSON.stringify(chars));render()};box.appendChild(d)})}
+$("#add").onclick=()=>{$("#modal").classList.add("show");file=null;$("#photo").value="";$("#name").value=""};
+$("#close").onclick=$("#cancel").onclick=()=>$("#modal").classList.remove("show");$("#photo").onchange=e=>file=e.target.files[0];
+$("#make").onclick=()=>{if(!file)return alert("그림 사진을 선택해주세요.");let r=new FileReader();r.onload=()=>{let c={id:Date.now(),name:$("#name").value.trim()||"캐릭터",src:r.result};chars.push(c);localStorage.setItem("gda_chars",JSON.stringify(chars));render();$("#modal").classList.remove("show");addActor(c)};r.readAsDataURL(file)};
+function addActor(c){let a=document.createElement("img");a.className="actor";a.src=c.src;a.dataset.name=c.name;let p=$("#paper").getBoundingClientRect();a.style.left=(p.width/2-52)+"px";a.style.top=(p.height/2-52)+"px";a.style.zIndex=++z;$("#stage").appendChild(a);actors.push(a);select(a);drag(a);$("#empty").style.display="none"}
+function select(a){if(selected)selected.classList.remove("selected");selected=a;a.classList.add("selected")}
+function drag(a){let on=false,dx=0,dy=0;a.onpointerdown=e=>{on=true;a.setPointerCapture(e.pointerId);select(a);let r=a.getBoundingClientRect();dx=e.clientX-r.left;dy=e.clientY-r.top;a.style.zIndex=++z};a.onpointermove=e=>{if(!on)return;let r=$("#paper").getBoundingClientRect();a.style.left=Math.max(0,Math.min(r.width-a.offsetWidth,e.clientX-r.left-dx))+"px";a.style.top=Math.max(0,Math.min(r.height-a.offsetHeight,e.clientY-r.top-dy))+"px"};a.onpointerup=a.onpointercancel=()=>on=false}
+document.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{if(!selected)return;selected.classList.remove("walk","bounce","wiggle","sleep");void selected.offsetWidth;selected.classList.add(b.dataset.act)});
+$("#stop").onclick=()=>{if(selected){selected.classList.remove("walk","bounce","wiggle","sleep");selected.style.transform="none"}};
+$("#remove").onclick=()=>{if(selected){let i=actors.indexOf(selected);if(i>=0)actors.splice(i,1);selected.remove();selected=null;if(!actors.length)$("#empty").style.display="flex"}};
+$("#clear").onclick=()=>{actors.forEach(a=>a.remove());actors=[];selected=null;$("#empty").style.display="flex"};
+$("#save").onclick=()=>{localStorage.setItem("gda_diary",JSON.stringify({title:$("#title").value,body:$("#body").value,date:new Date().toISOString()}));alert("저장했습니다.")};
+let old=JSON.parse(localStorage.getItem("gda_diary")||"null");if(old){$("#title").value=old.title||"";$("#body").value=old.body||""}render();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js");
+</script></body></html>
