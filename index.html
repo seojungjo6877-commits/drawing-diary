@@ -2,681 +2,451 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
 <title>그림일기</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body{
-  margin:0;
-  background:#eee;
-  color:#111;
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+body {
+  margin: 0;
+  background: #fff;
+  color: #111;
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+               "Noto Sans KR", sans-serif;
 }
 
-.app{
-  max-width:700px;
-  min-height:100vh;
-  margin:auto;
-  background:white;
-  padding-bottom:90px;
+header {
+  padding: 18px 16px 10px;
 }
 
-header{
-  height:60px;
-  border-bottom:1px solid #ddd;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 16px;
+.date {
+  font-size: 13px;
+  color: #777;
 }
 
-.logo{
-  font-size:20px;
-  font-weight:900;
+input[type="text"],
+textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
 }
 
-.date{
-  font-size:12px;
-  color:#777;
+textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
-main{
-  padding:14px;
+button {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #111;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
 }
 
-.box{
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:12px;
+.container {
+  padding: 0 16px 30px;
 }
 
-.title{
-  width:100%;
-  border:0;
-  outline:0;
-  font-size:22px;
-  font-weight:900;
-  margin-bottom:10px;
+.stage {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fafafa;
 }
 
-.diary{
-  width:100%;
-  min-height:130px;
-  border:0;
-  outline:0;
-  resize:none;
-  font-size:16px;
-  line-height:1.7;
+.actor {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-  font-weight:900;
+.add-area {
+  margin: 12px 0;
 }
 
-button{
-  border:0;
-  border-radius:10px;
-  padding:10px 13px;
-  background:#eee;
-  color:#111;
-  font-weight:800;
+/*
+  핵심:
+  사진 선택 input을 화면에 실제로 표시한다.
+  아이폰 Safari에서 label -> hidden input 방식이 막히는 것을 피한다.
+*/
+.photo-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: white;
+  font-size: 15px;
 }
 
-.black{
-  background:#111;
-  color:white;
-}
-
-/* 실제 사진 선택 버튼 */
-.photoButton{
-  display:block;
-  width:100%;
-  padding:15px;
-  border-radius:12px;
-  background:#111;
-  color:white;
-  text-align:center;
-  font-weight:900;
-  font-size:15px;
-}
-
-#photo{
-  display:block;
-  width:100%;
-  margin-top:8px;
-  font-size:14px;
-}
-
-.characters{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  margin-top:12px;
-}
-
-.character{
-  width:75px;
-  flex-shrink:0;
-  text-align:center;
-}
-
-.character img{
-  width:68px;
-  height:68px;
-  object-fit:contain;
-  border:1px solid #ddd;
-  border-radius:10px;
-}
-
-.character-name{
-  font-size:10px;
-  margin-top:4px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.scene{
-  height:55vh;
-  min-height:380px;
-  border:1px solid #bbb;
-  border-radius:14px;
-  position:relative;
-  overflow:hidden;
-  background:white;
-}
-
-.empty{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:#aaa;
-  font-size:13px;
-  pointer-events:none;
-}
-
-.actor{
-  position:absolute;
-  width:110px;
-  height:110px;
-  object-fit:contain;
-  touch-action:none;
-  user-select:none;
-}
-
-.actor.selected{
-  outline:1px dashed #999;
-  outline-offset:3px;
-}
-
-.tools{
-  display:flex;
-  gap:6px;
-  overflow-x:auto;
-  margin-top:8px;
-}
-
-.tools button{
-  white-space:nowrap;
-}
-
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(700px,100%);
-  padding:8px 14px;
-  background:#fffffff2;
-  border-top:1px solid #ddd;
-  display:flex;
-  gap:8px;
-  z-index:20;
-}
-
-.bottom button{
-  flex:1;
+.notice {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #777;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
 <header>
-  <div class="logo">그림일기</div>
   <div class="date" id="date"></div>
 </header>
 
-<main>
+<div class="container">
 
-<div class="box">
+  <input
+    type="text"
+    id="title"
+    placeholder="오늘의 제목"
+  >
 
-<input
-  id="title"
-  class="title"
-  placeholder="오늘의 제목"
->
+  <div class="stage" id="stage"></div>
 
-<textarea
-  id="diary"
-  class="diary"
-  placeholder="오늘은 어떤 하루였나요?"
-></textarea>
+  <div class="add-area">
 
-</div>
+    <!-- 아이폰에서 직접 누르는 사진 선택 버튼 -->
+    <input
+      class="photo-input"
+      id="photo"
+      type="file"
+      accept="image/*"
+    >
 
+    <div class="notice">
+      사진을 선택하면 사진이 캐릭터가 되어 화면에 나타나요.
+    </div>
 
-<div class="box">
+  </div>
 
-<div class="head">
-  <span>캐릭터</span>
-</div>
+  <textarea
+    id="diary"
+    placeholder="오늘의 일기를 써보세요."
+  ></textarea>
 
-<label class="photoButton" for="photo">
-  ＋ 사진 추가
-</label>
+  <br><br>
 
-<input
-  id="photo"
-  type="file"
-  accept="image/jpeg,image/png,image/webp,image/gif"
->
-
-<div class="characters" id="characters"></div>
+  <button id="save">저장</button>
 
 </div>
-
-
-<div class="scene" id="scene">
-
-<div class="empty" id="empty">
-  사진을 선택하면<br>
-  캐릭터가 나타납니다.
-</div>
-
-</div>
-
-
-<div class="tools">
-
-<button onclick="moveAction('walk')">걷기</button>
-<button onclick="moveAction('jump')">점프</button>
-<button onclick="moveAction('wiggle')">흔들기</button>
-<button onclick="stopAction()">멈춤</button>
-<button onclick="deleteActor()">삭제</button>
-
-</div>
-
-</main>
-
-
-<div class="bottom">
-
-<button onclick="clearScene()">
-  장면 비우기
-</button>
-
-<button class="black" onclick="saveDiary()">
-  일기 저장
-</button>
-
-</div>
-
-</div>
-
 
 <script>
+/* =========================
+   날짜
+========================= */
 
-document.getElementById("date").textContent =
-new Date().toLocaleDateString(
-  "ko-KR",
-  {
-    year:"numeric",
-    month:"long",
-    day:"numeric"
+const dateElement = document.getElementById("date");
+
+const now = new Date();
+
+dateElement.textContent =
+  now.getFullYear() + "년 " +
+  (now.getMonth() + 1) + "월 " +
+  now.getDate() + "일";
+
+
+/* =========================
+   일기 저장
+========================= */
+
+const titleInput = document.getElementById("title");
+const diaryInput = document.getElementById("diary");
+const saveButton = document.getElementById("save");
+
+titleInput.value =
+  localStorage.getItem("diary-title") || "";
+
+diaryInput.value =
+  localStorage.getItem("diary-text") || "";
+
+saveButton.addEventListener("click", function () {
+
+  localStorage.setItem(
+    "diary-title",
+    titleInput.value
+  );
+
+  localStorage.setItem(
+    "diary-text",
+    diaryInput.value
+  );
+
+  alert("저장했어요!");
+});
+
+
+/* =========================
+   사진 → 캐릭터
+========================= */
+
+const photoInput = document.getElementById("photo");
+const stage = document.getElementById("stage");
+
+
+photoInput.addEventListener("change", function(event) {
+
+  const file = event.target.files[0];
+
+  if (!file) {
+    return;
   }
-);
 
+  /*
+    사진 파일을 화면에서 사용할 수 있도록
+    Data URL로 변환
+  */
 
-let selectedActor = null;
+  const reader = new FileReader();
 
+  reader.onload = function(e) {
 
-/* 사진 선택 */
-document.getElementById("photo").addEventListener(
-  "change",
-  function(event){
+    const img = document.createElement("img");
 
-    const file = event.target.files[0];
+    img.className = "actor";
 
-    if(!file){
-      return;
-    }
+    img.src = e.target.result;
 
     /*
-      아이폰에서도 안정적으로 읽도록
-      FileReader를 사용
+      처음 등장 위치
     */
 
-    const reader = new FileReader();
+    img.style.left = "30px";
+    img.style.top = "30px";
 
-    reader.onload = function(e){
+    stage.appendChild(img);
 
-      createCharacter(e.target.result);
+    makeDraggable(img);
+  };
 
-    };
+  reader.readAsDataURL(file);
 
-    reader.onerror = function(){
-
-      alert("사진을 읽지 못했어요.");
-
-    };
-
-    reader.readAsDataURL(file);
-
-  }
-);
+});
 
 
-/* 캐릭터 만들기 */
-function createCharacter(imageURL){
+/* =========================
+   캐릭터 움직이기
+========================= */
 
-  const scene =
-    document.getElementById("scene");
+function makeDraggable(element) {
 
-  const actor =
-    document.createElement("img");
+  let startX = 0;
+  let startY = 0;
 
-  actor.src = imageURL;
-
-  actor.className = "actor";
-
-  actor.style.left =
-    "calc(50% - 55px)";
-
-  actor.style.top =
-    "calc(50% - 55px)";
-
-  scene.appendChild(actor);
-
-  selectedActor = actor;
-
-  document.getElementById("empty")
-    .style.display = "none";
-
-  makeMovable(actor);
-
-}
-
-
-/* 캐릭터 움직이기 */
-function makeMovable(actor){
+  let originalLeft = 0;
+  let originalTop = 0;
 
   let dragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
 
-  actor.addEventListener(
-    "pointerdown",
-    function(e){
+
+  element.addEventListener(
+    "touchstart",
+    function(e) {
+
+      e.preventDefault();
+
+      const touch = e.touches[0];
+
+      startX = touch.clientX;
+      startY = touch.clientY;
+
+      originalLeft =
+        parseFloat(element.style.left) || 0;
+
+      originalTop =
+        parseFloat(element.style.top) || 0;
 
       dragging = true;
 
-      selectedActor = actor;
-
-      actor.classList.add("selected");
-
-      actor.setPointerCapture(e.pointerId);
-
-      const rect =
-        actor.getBoundingClientRect();
-
-      offsetX =
-        e.clientX - rect.left;
-
-      offsetY =
-        e.clientY - rect.top;
-
-    }
+    },
+    { passive: false }
   );
 
 
-  actor.addEventListener(
-    "pointermove",
-    function(e){
+  element.addEventListener(
+    "touchmove",
+    function(e) {
 
-      if(!dragging){
-        return;
-      }
+      if (!dragging) return;
 
-      const scene =
-        document
-        .getElementById("scene")
-        .getBoundingClientRect();
+      e.preventDefault();
 
-      let x =
-        e.clientX -
-        scene.left -
-        offsetX;
+      const touch = e.touches[0];
 
-      let y =
-        e.clientY -
-        scene.top -
-        offsetY;
+      const moveX =
+        touch.clientX - startX;
 
-      x = Math.max(
-        0,
-        Math.min(
-          scene.width -
-          actor.offsetWidth,
-          x
-        )
-      );
+      const moveY =
+        touch.clientY - startY;
 
-      y = Math.max(
-        0,
-        Math.min(
-          scene.height -
-          actor.offsetHeight,
-          y
-        )
-      );
+      let newLeft =
+        originalLeft + moveX;
 
-      actor.style.left =
-        x + "px";
+      let newTop =
+        originalTop + moveY;
 
-      actor.style.top =
-        y + "px";
 
-    }
+      /*
+        화면 밖으로 너무 나가지 않도록 제한
+      */
+
+      const maxLeft =
+        stage.clientWidth - element.offsetWidth;
+
+      const maxTop =
+        stage.clientHeight - element.offsetHeight;
+
+
+      newLeft =
+        Math.max(
+          0,
+          Math.min(newLeft, maxLeft)
+        );
+
+      newTop =
+        Math.max(
+          0,
+          Math.min(newTop, maxTop)
+        );
+
+
+      element.style.left =
+        newLeft + "px";
+
+      element.style.top =
+        newTop + "px";
+
+    },
+    { passive: false }
   );
 
 
-  actor.addEventListener(
-    "pointerup",
-    function(){
+  element.addEventListener(
+    "touchend",
+    function() {
 
       dragging = false;
 
     }
   );
 
-}
+
+  /*
+    PC에서도 마우스로 움직일 수 있게
+  */
+
+  element.addEventListener(
+    "mousedown",
+    function(e) {
+
+      e.preventDefault();
+
+      startX = e.clientX;
+      startY = e.clientY;
+
+      originalLeft =
+        parseFloat(element.style.left) || 0;
+
+      originalTop =
+        parseFloat(element.style.top) || 0;
+
+      dragging = true;
 
 
-/* 캐릭터 선택 */
-document
-  .getElementById("scene")
-  .addEventListener(
-    "pointerdown",
-    function(e){
+      function mouseMove(ev) {
 
-      if(e.target.classList.contains("actor")){
+        if (!dragging) return;
 
-        if(selectedActor){
+        const moveX =
+          ev.clientX - startX;
 
-          selectedActor.classList.remove(
-            "selected"
+        const moveY =
+          ev.clientY - startY;
+
+        let newLeft =
+          originalLeft + moveX;
+
+        let newTop =
+          originalTop + moveY;
+
+
+        const maxLeft =
+          stage.clientWidth - element.offsetWidth;
+
+        const maxTop =
+          stage.clientHeight - element.offsetHeight;
+
+
+        newLeft =
+          Math.max(
+            0,
+            Math.min(newLeft, maxLeft)
           );
 
-        }
+        newTop =
+          Math.max(
+            0,
+            Math.min(newTop, maxTop)
+          );
 
-        selectedActor = e.target;
 
-        selectedActor.classList.add(
-          "selected"
+        element.style.left =
+          newLeft + "px";
+
+        element.style.top =
+          newTop + "px";
+      }
+
+
+      function mouseUp() {
+
+        dragging = false;
+
+        document.removeEventListener(
+          "mousemove",
+          mouseMove
         );
 
+        document.removeEventListener(
+          "mouseup",
+          mouseUp
+        );
       }
+
+
+      document.addEventListener(
+        "mousemove",
+        mouseMove
+      );
+
+      document.addEventListener(
+        "mouseup",
+        mouseUp
+      );
 
     }
   );
 
-
-/* 움직임 */
-function moveAction(type){
-
-  if(!selectedActor){
-
-    alert("캐릭터를 먼저 눌러주세요.");
-
-    return;
-
-  }
-
-  stopAction();
-
-  if(type === "walk"){
-
-    selectedActor.animate(
-      [
-        {transform:"translateY(0)"},
-        {transform:"translateY(-8px)"},
-        {transform:"translateY(0)"}
-      ],
-      {
-        duration:600,
-        iterations:Infinity
-      }
-    );
-
-  }
-
-
-  if(type === "jump"){
-
-    selectedActor.animate(
-      [
-        {transform:"translateY(0)"},
-        {transform:"translateY(-40px)"},
-        {transform:"translateY(0)"}
-      ],
-      {
-        duration:500
-      }
-    );
-
-  }
-
-
-  if(type === "wiggle"){
-
-    selectedActor.animate(
-      [
-        {transform:"rotate(-8deg)"},
-        {transform:"rotate(8deg)"},
-        {transform:"rotate(0)"}
-      ],
-      {
-        duration:500
-      }
-    );
-
-  }
-
 }
-
-
-/* 멈춤 */
-function stopAction(){
-
-  if(!selectedActor){
-    return;
-  }
-
-  selectedActor
-    .getAnimations()
-    .forEach(
-      animation => animation.cancel()
-    );
-
-  selectedActor.style.transform =
-    "none";
-
-}
-
-
-/* 캐릭터 삭제 */
-function deleteActor(){
-
-  if(!selectedActor){
-
-    alert("캐릭터를 먼저 눌러주세요.");
-
-    return;
-
-  }
-
-  selectedActor.remove();
-
-  selectedActor = null;
-
-  checkEmpty();
-
-}
-
-
-/* 장면 비우기 */
-function clearScene(){
-
-  document
-    .querySelectorAll(".actor")
-    .forEach(
-      actor => actor.remove()
-    );
-
-  selectedActor = null;
-
-  checkEmpty();
-
-}
-
-
-/* 빈 장면 표시 */
-function checkEmpty(){
-
-  const count =
-    document.querySelectorAll(
-      ".actor"
-    ).length;
-
-  document.getElementById("empty")
-    .style.display =
-      count === 0
-      ? "flex"
-      : "none";
-
-}
-
-
-/* 일기 저장 */
-function saveDiary(){
-
-  const title =
-    document.getElementById("title").value;
-
-  const diary =
-    document.getElementById("diary").value;
-
-  localStorage.setItem(
-    "diaryTitle",
-    title
-  );
-
-  localStorage.setItem(
-    "diaryBody",
-    diary
-  );
-
-  alert("일기를 저장했어요!");
-
-}
-
-
-/* 기존 일기 불러오기 */
-document.getElementById("title").value =
-  localStorage.getItem("diaryTitle") || "";
-
-document.getElementById("diary").value =
-  localStorage.getItem("diaryBody") || "";
-
 </script>
 
 </body>
