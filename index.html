@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+content="default">
 
 <title>그림일기</title>
 
 <style>
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -21,13 +26,19 @@ body {
   margin: 0;
   background: #fff;
   color: #111;
+
   font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Apple SD Gothic Neo",
-    "Noto Sans KR",
-    sans-serif;
+  -apple-system,
+  BlinkMacSystemFont,
+  "Apple SD Gothic Neo",
+  "Noto Sans KR",
+  sans-serif;
 }
+
+
+/* =========================
+   날짜
+========================= */
 
 header {
   padding: 18px 16px 10px;
@@ -38,104 +49,201 @@ header {
   color: #777;
 }
 
+
+/* =========================
+   전체
+========================= */
+
 .container {
   padding: 0 16px 35px;
 }
 
+
+/* =========================
+   제목
+========================= */
+
 input[type="text"] {
+
   width: 100%;
+
   border: 1px solid #ddd;
+
   border-radius: 12px;
+
   padding: 12px;
+
   font-size: 16px;
+
   outline: none;
+
   background: #fff;
 }
+
+
+/* =========================
+   일기
+========================= */
 
 textarea {
+
   width: 100%;
+
   min-height: 180px;
+
   margin-top: 10px;
+
   border: 1px solid #ddd;
+
   border-radius: 12px;
+
   padding: 14px;
+
   font-size: 16px;
+
   line-height: 1.6;
+
   outline: none;
+
   resize: vertical;
+
   background: #fff;
 }
 
+
+/* =========================
+   캐릭터 공간
+========================= */
+
 .stage {
+
   position: relative;
+
   width: 100%;
+
   height: 380px;
+
   margin: 15px 0;
+
   border: 1px solid #ddd;
+
   border-radius: 18px;
+
   overflow: hidden;
+
   background: #fafafa;
+
   touch-action: none;
 }
 
+
+/* =========================
+   캐릭터
+========================= */
+
 .actor {
+
   position: absolute;
+
   width: 90px;
   height: 90px;
+
   object-fit: contain;
+
   user-select: none;
+
   -webkit-user-select: none;
+
   touch-action: none;
+
   cursor: grab;
 }
 
 .actor.dragging {
+
   cursor: grabbing;
 }
 
 .actor.selected {
-  outline: 2px dashed #777;
+
+  outline:
+  2px dashed #777;
+
   outline-offset: 4px;
+
   border-radius: 12px;
 }
 
 .actor.sleeping {
+
   opacity: 0.65;
 }
 
 .actor.running {
+
   opacity: 1;
 }
 
 .actor.together {
+
   opacity: 0.9;
 }
 
+
+/* =========================
+   상태
+========================= */
+
 .status {
+
   position: absolute;
+
   left: 50%;
+
   bottom: 8px;
-  transform: translateX(-50%);
+
+  transform:
+  translateX(-50%);
+
   font-size: 12px;
+
   color: #777;
+
   pointer-events: none;
+
   white-space: nowrap;
 }
 
+
+/* =========================
+   캐릭터 추가
+========================= */
+
 .add-area {
+
   margin: 12px 0 18px;
 }
 
 .photo-button {
+
   display: block;
+
   width: 100%;
+
   padding: 12px 16px;
+
   border: 1px solid #ddd;
+
   border-radius: 12px;
+
   background: #fff;
+
   color: #111;
+
   font-size: 15px;
+
   text-align: center;
+
   cursor: pointer;
 }
 
@@ -143,14 +251,27 @@ textarea {
   display: none;
 }
 
+
+/* =========================
+   버튼
+========================= */
+
 button {
+
   width: 100%;
+
   border: 1px solid #ddd;
+
   background: #fff;
+
   color: #111;
+
   border-radius: 12px;
+
   padding: 13px 16px;
+
   font-size: 15px;
+
   margin-top: 10px;
 }
 
@@ -158,12 +279,23 @@ button:disabled {
   opacity: 0.5;
 }
 
+
+/* =========================
+   캐릭터 제어
+========================= */
+
 .control-box {
+
   display: none;
+
   margin-top: 10px;
+
   padding: 10px;
+
   border: 1px solid #ddd;
+
   border-radius: 12px;
+
   background: #fafafa;
 }
 
@@ -172,1319 +304,2173 @@ button:disabled {
 }
 
 .control-title {
+
   font-size: 13px;
+
   color: #666;
+
   margin-bottom: 5px;
 }
 
+
+/* =========================
+   안내
+========================= */
+
 .help {
+
   margin-top: 8px;
+
   text-align: center;
+
   font-size: 12px;
+
   color: #888;
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-  <div class="date" id="date"></div>
+
+<div
+class="date"
+id="date">
+</div>
+
 </header>
+
 
 <div class="container">
 
+
 <input
-  type="text"
-  id="title"
-  placeholder="오늘의 제목"
->
+type="text"
+id="title"
+placeholder="오늘의 제목">
+
 
 <textarea
-  id="diary"
-  placeholder="오늘의 일기를 써보세요."
-></textarea>
+id="diary"
+placeholder="오늘의 일기를 써보세요.">
+</textarea>
 
-<div class="stage" id="stage">
 
-  <div class="status" id="status">
-    캐릭터를 추가해보세요
-  </div>
+<div
+class="stage"
+id="stage">
+
+<div
+class="status"
+id="status">
+
+캐릭터를 추가해보세요
 
 </div>
+
+</div>
+
 
 <div class="add-area">
 
-  <label class="photo-button" for="photo">
-    ＋ 캐릭터 추가
-  </label>
+<label
+class="photo-button"
+for="photo">
 
-  <input
-    id="photo"
-    type="file"
-    accept="image/*"
-  >
+＋ 캐릭터 추가
 
-</div>
+</label>
 
-<div class="control-box" id="controlBox">
-
-  <div class="control-title">
-    선택한 캐릭터
-  </div>
-
-  <button id="pauseButton">
-    ⏸ 이 캐릭터 멈추기
-  </button>
-
-  <button id="resumeButton">
-    ▶ 다시 움직이기
-  </button>
+<input
+id="photo"
+type="file"
+accept="image/*">
 
 </div>
 
-<div class="help">
-  캐릭터를 손가락으로 끌어서 원하는 곳에 놓을 수 있어요.
+
+<div
+class="control-box"
+id="controlBox">
+
+<div class="control-title">
+
+선택한 캐릭터
+
 </div>
 
-<button id="save">
-  저장
+
+<button
+id="pauseButton">
+
+⏸ 이 캐릭터 멈추기
+
+</button>
+
+
+<button
+id="resumeButton">
+
+▶ 다시 움직이기
+
 </button>
 
 </div>
 
+
+<div class="help">
+
+캐릭터를 손가락으로 끌어서 원하는 곳에 놓을 수 있어요.
+
+</div>
+
+
+<button
+id="save">
+
+저장
+
+</button>
+
+
+</div>
+
+
+
 <script>
 
-/* =========================
+
+/* =================================================
    기본 요소
-========================= */
+================================================= */
 
-const dateElement = document.getElementById("date");
-const titleInput = document.getElementById("title");
-const diaryInput = document.getElementById("diary");
+const dateElement =
+document.getElementById("date");
 
-const photoInput = document.getElementById("photo");
-const stage = document.getElementById("stage");
-const status = document.getElementById("status");
+const titleInput =
+document.getElementById("title");
 
-const controlBox = document.getElementById("controlBox");
-const pauseButton = document.getElementById("pauseButton");
-const resumeButton = document.getElementById("resumeButton");
+const diaryInput =
+document.getElementById("diary");
 
-const saveButton = document.getElementById("save");
+const photoInput =
+document.getElementById("photo");
+
+const stage =
+document.getElementById("stage");
+
+const status =
+document.getElementById("status");
+
+const controlBox =
+document.getElementById("controlBox");
+
+const pauseButton =
+document.getElementById("pauseButton");
+
+const resumeButton =
+document.getElementById("resumeButton");
+
+const saveButton =
+document.getElementById("save");
 
 
-/* =========================
+/* =================================================
    날짜
-========================= */
+================================================= */
 
-const today = new Date();
+const today =
+new Date();
 
 dateElement.textContent =
-  today.getFullYear() +
-  "년 " +
-  (today.getMonth() + 1) +
-  "월 " +
-  today.getDate() +
-  "일";
+today.getFullYear() +
+"년 " +
+(today.getMonth() + 1) +
+"월 " +
+today.getDate() +
+"일";
 
 
-/* =========================
-   저장된 일기 불러오기
-========================= */
+/* =================================================
+   일기 불러오기
+================================================= */
 
 titleInput.value =
-  localStorage.getItem("diary-title") || "";
+localStorage.getItem(
+"diary-title"
+) || "";
 
 diaryInput.value =
-  localStorage.getItem("diary-text") || "";
+localStorage.getItem(
+"diary-text"
+) || "";
 
 
-titleInput.addEventListener("input", function() {
-  localStorage.setItem("diary-title", titleInput.value);
+titleInput.addEventListener(
+"input",
+function() {
+
+localStorage.setItem(
+"diary-title",
+titleInput.value
+);
+
 });
 
-diaryInput.addEventListener("input", function() {
-  localStorage.setItem("diary-text", diaryInput.value);
+
+diaryInput.addEventListener(
+"input",
+function() {
+
+localStorage.setItem(
+"diary-text",
+diaryInput.value
+);
+
 });
 
 
-/* =========================
+/* =================================================
    캐릭터
-========================= */
+================================================= */
 
 const actors = [];
 
 let selectedActor = null;
 
 
-/* =========================
+/* =================================================
    캐릭터 추가
-========================= */
+================================================= */
 
-photoInput.addEventListener("change", function(event) {
+photoInput.addEventListener(
+"change",
+function(event) {
 
-  const file = event.target.files[0];
+const file =
+event.target.files[0];
 
-  if (!file) return;
+if (!file) {
+return;
+}
 
-  const reader = new FileReader();
 
-  reader.onload = function(e) {
+const reader =
+new FileReader();
 
-    const img = document.createElement("img");
 
-    img.className = "actor";
-    img.src = e.target.result;
+reader.onload =
+function(e) {
 
-    img.style.width = "90px";
-    img.style.height = "90px";
+const img =
+document.createElement("img");
 
-    const maxX = Math.max(
-      0,
-      stage.clientWidth - 90
-    );
 
-    const maxY = Math.max(
-      0,
-      stage.clientHeight - 90
-    );
+img.className =
+"actor";
 
-    const startX = Math.random() * maxX;
-    const startY = Math.random() * maxY;
+img.src =
+e.target.result;
 
-    img.style.left = startX + "px";
-    img.style.top = startY + "px";
 
-    const personality = createPersonality();
+img.style.width =
+"90px";
 
-    const actor = {
+img.style.height =
+"90px";
 
-      element: img,
 
-      x: startX,
-      y: startY,
+const maxX =
+Math.max(
+0,
+stage.clientWidth - 90
+);
 
-      targetX: startX,
-      targetY: startY,
+const maxY =
+Math.max(
+0,
+stage.clientHeight - 90
+);
 
-      speed: personality.speed,
-      runSpeed: personality.runSpeed,
 
-      sleepChance: personality.sleepChance,
-      runChance: personality.runChance,
+const startX =
+Math.random() * maxX;
 
-      state: "walking",
+const startY =
+Math.random() * maxY;
 
-      paused: false,
-      dragging: false,
 
-      nextAction:
-        Date.now() +
-        1000 +
-        Math.random() * 2000,
+img.style.left =
+startX + "px";
 
-      partner: null,
-      togetherUntil: 0
-    };
+img.style.top =
+startY + "px";
 
-    actors.push(actor);
 
-    stage.appendChild(img);
+const personality =
+createPersonality();
 
-    enableDragging(actor);
 
-    chooseNewAction(actor);
+const actor = {
 
-    updateStatus();
-  };
+element: img,
 
-  reader.readAsDataURL(file);
+x: startX,
+y: startY,
 
-  photoInput.value = "";
+targetX: startX,
+targetY: startY,
+
+speed:
+personality.speed,
+
+runSpeed:
+personality.runSpeed,
+
+sleepChance:
+personality.sleepChance,
+
+runChance:
+personality.runChance,
+
+state:
+"walking",
+
+paused:
+false,
+
+dragging:
+false,
+
+nextAction:
+Date.now() +
+1000 +
+Math.random() * 2000
+
+};
+
+
+actors.push(actor);
+
+
+stage.appendChild(img);
+
+
+enableDragging(actor);
+
+
+chooseNewAction(actor);
+
+
+updateStatus();
+
+};
+
+
+reader.readAsDataURL(file);
+
+
+photoInput.value = "";
+
 });
 
 
-/* =========================
-   성격
-========================= */
+/* =================================================
+   캐릭터 성격
+================================================= */
 
 function createPersonality() {
 
-  const types = [
+const types = [
 
-    {
-      speed: 0.5 + Math.random() * 0.4,
-      runSpeed: 1.1 + Math.random() * 0.4,
-      sleepChance: 0.35,
-      runChance: 0.10
-    },
+{
+speed:
+0.5 +
+Math.random() * 0.4,
 
-    {
-      speed: 0.8 + Math.random() * 0.5,
-      runSpeed: 1.8 + Math.random() * 0.7,
-      sleepChance: 0.12,
-      runChance: 0.45
-    },
+runSpeed:
+1.1 +
+Math.random() * 0.4,
 
-    {
-      speed: 0.55 + Math.random() * 0.35,
-      runSpeed: 1.2 + Math.random() * 0.4,
-      sleepChance: 0.55,
-      runChance: 0.08
-    },
+sleepChance:
+0.35,
 
-    {
-      speed: 0.9 + Math.random() * 0.5,
-      runSpeed: 2.0 + Math.random() * 0.8,
-      sleepChance: 0.15,
-      runChance: 0.40
-    }
+runChance:
+0.10
+},
 
-  ];
+{
+speed:
+0.8 +
+Math.random() * 0.5,
 
-  return types[
-    Math.floor(Math.random() * types.length)
-  ];
+runSpeed:
+1.8 +
+Math.random() * 0.7,
+
+sleepChance:
+0.12,
+
+runChance:
+0.45
+},
+
+{
+speed:
+0.55 +
+Math.random() * 0.35,
+
+runSpeed:
+1.2 +
+Math.random() * 0.4,
+
+sleepChance:
+0.55,
+
+runChance:
+0.08
+},
+
+{
+speed:
+0.9 +
+Math.random() * 0.5,
+
+runSpeed:
+2.0 +
+Math.random() * 0.8,
+
+sleepChance:
+0.15,
+
+runChance:
+0.40
+}
+
+];
+
+
+return types[
+Math.floor(
+Math.random() *
+types.length
+)
+];
+
 }
 
 
-/* =========================
+/* =================================================
    캐릭터 선택
-========================= */
+================================================= */
 
 function selectActor(actor) {
 
-  if (selectedActor) {
-    selectedActor.element.classList.remove("selected");
-  }
+if (selectedActor) {
 
-  selectedActor = actor;
+selectedActor.element
+.classList
+.remove("selected");
 
-  actor.element.classList.add("selected");
-
-  controlBox.classList.add("show");
-
-  updateStatus();
 }
 
 
-/* =========================
+selectedActor =
+actor;
+
+
+actor.element
+.classList
+.add("selected");
+
+
+controlBox
+.classList
+.add("show");
+
+
+updateStatus();
+
+}
+
+
+/* =================================================
    드래그
-========================= */
+================================================= */
 
 function enableDragging(actor) {
 
-  const element = actor.element;
+const element =
+actor.element;
 
-  let offsetX = 0;
-  let offsetY = 0;
-
-  element.addEventListener("pointerdown", function(e) {
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    selectActor(actor);
-
-    actor.dragging = true;
-
-    element.classList.add("dragging");
-
-    try {
-      element.setPointerCapture(e.pointerId);
-    } catch(err) {}
-
-    const rect =
-      stage.getBoundingClientRect();
-
-    const px =
-      e.clientX - rect.left;
-
-    const py =
-      e.clientY - rect.top;
-
-    offsetX = px - actor.x;
-    offsetY = py - actor.y;
-
-    actor.targetX = actor.x;
-    actor.targetY = actor.y;
-
-  });
+let offsetX = 0;
+let offsetY = 0;
 
 
-  element.addEventListener("pointermove", function(e) {
+element.addEventListener(
+"pointerdown",
+function(e) {
 
-    if (!actor.dragging) return;
-
-    e.preventDefault();
-
-    const rect =
-      stage.getBoundingClientRect();
-
-    let newX =
-      e.clientX -
-      rect.left -
-      offsetX;
-
-    let newY =
-      e.clientY -
-      rect.top -
-      offsetY;
-
-    const maxX =
-      Math.max(
-        0,
-        stage.clientWidth -
-        element.offsetWidth
-      );
-
-    const maxY =
-      Math.max(
-        0,
-        stage.clientHeight -
-        element.offsetHeight
-      );
-
-    newX = Math.max(
-      0,
-      Math.min(newX, maxX)
-    );
-
-    newY = Math.max(
-      0,
-      Math.min(newY, maxY)
-    );
-
-    actor.x = newX;
-    actor.y = newY;
-
-    actor.targetX = newX;
-    actor.targetY = newY;
-
-    element.style.left =
-      newX + "px";
-
-    element.style.top =
-      newY + "px";
-
-  });
+e.preventDefault();
+e.stopPropagation();
 
 
-  element.addEventListener("pointerup", function(e) {
-
-    finishDragging(actor, e);
-
-  });
+selectActor(actor);
 
 
-  element.addEventListener("pointercancel", function(e) {
+actor.dragging =
+true;
 
-    finishDragging(actor, e);
 
-  });
+element.classList
+.add("dragging");
+
+
+try {
+
+element.setPointerCapture(
+e.pointerId
+);
+
+} catch(error) {}
+
+
+const rect =
+stage.getBoundingClientRect();
+
+
+const px =
+e.clientX -
+rect.left;
+
+const py =
+e.clientY -
+rect.top;
+
+
+offsetX =
+px -
+actor.x;
+
+offsetY =
+py -
+actor.y;
+
+
+actor.targetX =
+actor.x;
+
+actor.targetY =
+actor.y;
+
+});
+
+
+element.addEventListener(
+"pointermove",
+function(e) {
+
+if (!actor.dragging) {
+return;
+}
+
+
+e.preventDefault();
+
+
+const rect =
+stage.getBoundingClientRect();
+
+
+let newX =
+e.clientX -
+rect.left -
+offsetX;
+
+let newY =
+e.clientY -
+rect.top -
+offsetY;
+
+
+const maxX =
+Math.max(
+0,
+stage.clientWidth -
+element.offsetWidth
+);
+
+const maxY =
+Math.max(
+0,
+stage.clientHeight -
+element.offsetHeight
+);
+
+
+newX =
+Math.max(
+0,
+Math.min(
+newX,
+maxX
+)
+);
+
+newY =
+Math.max(
+0,
+Math.min(
+newY,
+maxY
+)
+);
+
+
+actor.x =
+newX;
+
+actor.y =
+newY;
+
+actor.targetX =
+newX;
+
+actor.targetY =
+newY;
+
+
+element.style.left =
+newX + "px";
+
+element.style.top =
+newY + "px";
+
+});
+
+
+element.addEventListener(
+"pointerup",
+function(e) {
+
+finishDragging(
+actor,
+e
+);
+
+});
+
+
+element.addEventListener(
+"pointercancel",
+function(e) {
+
+finishDragging(
+actor,
+e
+);
+
+});
 
 }
 
 
-function finishDragging(actor, e) {
+/* =================================================
+   드래그 종료
+================================================= */
 
-  if (!actor.dragging) return;
+function finishDragging(
+actor,
+e
+) {
 
-  actor.dragging = false;
-
-  actor.element.classList.remove("dragging");
-
-  try {
-    actor.element.releasePointerCapture(e.pointerId);
-  } catch(err) {}
-
-  if (!actor.paused) {
-
-    actor.nextAction =
-      Date.now() +
-      500 +
-      Math.random() * 1000;
-
-  }
-
-  updateStatus();
+if (!actor.dragging) {
+return;
 }
 
 
-/* =========================
+actor.dragging =
+false;
+
+
+actor.element
+.classList
+.remove("dragging");
+
+
+try {
+
+actor.element.releasePointerCapture(
+e.pointerId
+);
+
+} catch(error) {}
+
+
+if (!actor.paused) {
+
+actor.nextAction =
+Date.now() +
+500 +
+Math.random() * 1000;
+
+}
+
+
+updateStatus();
+
+}
+
+
+/* =================================================
    멈추기
-========================= */
+================================================= */
 
-pauseButton.addEventListener("click", function(e) {
+pauseButton.addEventListener(
+"click",
+function(e) {
 
-  e.preventDefault();
-  e.stopPropagation();
+e.preventDefault();
+e.stopPropagation();
 
-  if (!selectedActor) return;
 
-  const actor = selectedActor;
+if (!selectedActor) {
+return;
+}
 
-  actor.paused = true;
-  actor.dragging = false;
 
-  actor.state = "paused";
+const actor =
+selectedActor;
 
-  actor.targetX = actor.x;
-  actor.targetY = actor.y;
 
-  actor.element.classList.remove("running");
-  actor.element.classList.remove("sleeping");
-  actor.element.classList.remove("together");
+actor.paused =
+true;
 
-  actor.partner = null;
 
-  updateStatus();
+actor.dragging =
+false;
+
+
+actor.state =
+"paused";
+
+
+actor.targetX =
+actor.x;
+
+actor.targetY =
+actor.y;
+
+
+actor.element.classList
+.remove("running");
+
+actor.element.classList
+.remove("sleeping");
+
+
+updateStatus();
 
 });
 
 
-/* =========================
+/* =================================================
    다시 움직이기
-========================= */
+================================================= */
 
-resumeButton.addEventListener("click", function(e) {
+resumeButton.addEventListener(
+"click",
+function(e) {
 
-  e.preventDefault();
-  e.stopPropagation();
+e.preventDefault();
+e.stopPropagation();
 
-  if (!selectedActor) return;
 
-  const actor = selectedActor;
+if (!selectedActor) {
+return;
+}
 
-  actor.paused = false;
 
-  actor.state = "walking";
+const actor =
+selectedActor;
 
-  actor.nextAction =
-    Date.now() +
-    300;
 
-  chooseNewAction(actor);
+actor.paused =
+false;
 
-  updateStatus();
+
+actor.state =
+"walking";
+
+
+actor.nextAction =
+Date.now() +
+300;
+
+
+chooseNewAction(actor);
+
+
+updateStatus();
 
 });
 
 
-/* =========================
+/* =================================================
    행동 선택
-========================= */
+================================================= */
 
 function chooseNewAction(actor) {
 
-  if (actor.paused || actor.dragging) {
-    return;
-  }
-
-  const random = Math.random();
-
-  if (random < actor.sleepChance) {
-
-    sleep(actor);
-
-  } else if (
-    random <
-    actor.sleepChance +
-    actor.runChance
-  ) {
-
-    run(actor);
-
-  } else {
-
-    walk(actor);
-
-  }
+if (
+actor.paused ||
+actor.dragging
+) {
+return;
 }
 
 
-/* =========================
+const random =
+Math.random();
+
+
+if (
+random <
+actor.sleepChance
+) {
+
+sleep(actor);
+
+}
+
+else if (
+random <
+actor.sleepChance +
+actor.runChance
+) {
+
+run(actor);
+
+}
+
+else {
+
+walk(actor);
+
+}
+
+}
+
+
+/* =================================================
    졸기
-========================= */
+================================================= */
 
 function sleep(actor) {
 
-  if (actor.paused || actor.dragging) return;
-
-  actor.state = "sleeping";
-
-  actor.element.classList.add("sleeping");
-  actor.element.classList.remove("running");
-
-  actor.targetX = actor.x;
-  actor.targetY = actor.y;
-
-  actor.nextAction =
-    Date.now() +
-    2000 +
-    Math.random() * 4000;
+if (
+actor.paused ||
+actor.dragging
+) {
+return;
 }
 
 
-/* =========================
+actor.state =
+"sleeping";
+
+
+actor.element.classList
+.add("sleeping");
+
+actor.element.classList
+.remove("running");
+
+
+actor.targetX =
+actor.x;
+
+actor.targetY =
+actor.y;
+
+
+actor.nextAction =
+Date.now() +
+2000 +
+Math.random() * 4000;
+
+}
+
+
+/* =================================================
    걷기
-========================= */
+================================================= */
 
 function walk(actor) {
 
-  if (actor.paused || actor.dragging) return;
-
-  actor.state = "walking";
-
-  actor.element.classList.remove("sleeping");
-  actor.element.classList.remove("running");
-
-  setRandomTarget(actor);
-
-  actor.nextAction =
-    Date.now() +
-    2500 +
-    Math.random() * 3500;
+if (
+actor.paused ||
+actor.dragging
+) {
+return;
 }
 
 
-/* =========================
+actor.state =
+"walking";
+
+
+actor.element.classList
+.remove("sleeping");
+
+actor.element.classList
+.remove("running");
+
+
+setRandomTarget(actor);
+
+
+actor.nextAction =
+Date.now() +
+2500 +
+Math.random() * 3500;
+
+}
+
+
+/* =================================================
    뛰기
-========================= */
+================================================= */
 
 function run(actor) {
 
-  if (actor.paused || actor.dragging) return;
-
-  actor.state = "running";
-
-  actor.element.classList.remove("sleeping");
-  actor.element.classList.add("running");
-
-  setRandomTarget(actor);
-
-  actor.nextAction =
-    Date.now() +
-    1500 +
-    Math.random() * 2200;
+if (
+actor.paused ||
+actor.dragging
+) {
+return;
 }
 
 
-/* =========================
-   랜덤 위치
-========================= */
+actor.state =
+"running";
+
+
+actor.element.classList
+.remove("sleeping");
+
+actor.element.classList
+.add("running");
+
+
+setRandomTarget(actor);
+
+
+actor.nextAction =
+Date.now() +
+1500 +
+Math.random() * 2200;
+
+}
+
+
+/* =================================================
+   랜덤 목적지
+================================================= */
 
 function setRandomTarget(actor) {
 
-  const maxX =
-    Math.max(
-      0,
-      stage.clientWidth -
-      actor.element.offsetWidth
-    );
+const maxX =
+Math.max(
+0,
+stage.clientWidth -
+actor.element.offsetWidth
+);
 
-  const maxY =
-    Math.max(
-      0,
-      stage.clientHeight -
-      actor.element.offsetHeight
-    );
+const maxY =
+Math.max(
+0,
+stage.clientHeight -
+actor.element.offsetHeight
+);
 
-  actor.targetX =
-    Math.random() * maxX;
 
-  actor.targetY =
-    Math.random() * maxY;
+actor.targetX =
+Math.random() *
+maxX;
+
+actor.targetY =
+Math.random() *
+maxY;
+
 }
 
 
-/* =========================
-   움직임
-========================= */
+/* =================================================
+   캐릭터 움직임
+================================================= */
 
 function updateActors() {
 
-  const now = Date.now();
+const currentTime =
+Date.now();
 
-  for (const actor of actors) {
 
-    if (actor.paused) continue;
-    if (actor.dragging) continue;
+for (
+const actor of actors
+) {
 
-    if (now >= actor.nextAction) {
-      chooseNewAction(actor);
-    }
+if (actor.paused) {
+continue;
+}
 
-    if (actor.state === "sleeping") {
-      continue;
-    }
-
-    const dx =
-      actor.targetX - actor.x;
-
-    const dy =
-      actor.targetY - actor.y;
-
-    const distance =
-      Math.sqrt(
-        dx * dx +
-        dy * dy
-      );
-
-    if (distance < 1) {
-      continue;
-    }
-
-    let speed = actor.speed;
-
-    if (actor.state === "running") {
-      speed = actor.runSpeed;
-    }
-
-    const step =
-      Math.min(speed, distance);
-
-    actor.x +=
-      (dx / distance) * step;
-
-    actor.y +=
-      (dy / distance) * step;
-
-    const maxX =
-      Math.max(
-        0,
-        stage.clientWidth -
-        actor.element.offsetWidth
-      );
-
-    const maxY =
-      Math.max(
-        0,
-        stage.clientHeight -
-        actor.element.offsetHeight
-      );
-
-    actor.x =
-      Math.max(
-        0,
-        Math.min(actor.x, maxX)
-      );
-
-    actor.y =
-      Math.max(
-        0,
-        Math.min(actor.y, maxY)
-      );
-
-    actor.element.style.left =
-      actor.x + "px";
-
-    actor.element.style.top =
-      actor.y + "px";
-  }
-
-  updateStatus();
-
-  requestAnimationFrame(updateActors);
+if (actor.dragging) {
+continue;
 }
 
 
-/* =========================
+if (
+currentTime >=
+actor.nextAction
+) {
+
+chooseNewAction(actor);
+
+}
+
+
+if (
+actor.state ===
+"sleeping"
+) {
+
+continue;
+
+}
+
+
+const dx =
+actor.targetX -
+actor.x;
+
+const dy =
+actor.targetY -
+actor.y;
+
+
+const distance =
+Math.sqrt(
+dx * dx +
+dy * dy
+);
+
+
+if (
+distance < 1
+) {
+
+continue;
+
+}
+
+
+let speed =
+actor.speed;
+
+
+if (
+actor.state ===
+"running"
+) {
+
+speed =
+actor.runSpeed;
+
+}
+
+
+const step =
+Math.min(
+speed,
+distance
+);
+
+
+actor.x +=
+(dx / distance) *
+step;
+
+actor.y +=
+(dy / distance) *
+step;
+
+
+const maxX =
+Math.max(
+0,
+stage.clientWidth -
+actor.element.offsetWidth
+);
+
+const maxY =
+Math.max(
+0,
+stage.clientHeight -
+actor.element.offsetHeight
+);
+
+
+actor.x =
+Math.max(
+0,
+Math.min(
+actor.x,
+maxX
+)
+);
+
+actor.y =
+Math.max(
+0,
+Math.min(
+actor.y,
+maxY
+)
+);
+
+
+actor.element.style.left =
+actor.x + "px";
+
+actor.element.style.top =
+actor.y + "px";
+
+}
+
+
+updateStatus();
+
+
+requestAnimationFrame(
+updateActors
+);
+
+}
+
+
+/* =================================================
    상태
-========================= */
+================================================= */
 
 function updateStatus() {
 
-  if (actors.length === 0) {
+if (
+actors.length === 0
+) {
 
-    status.textContent =
-      "캐릭터를 추가해보세요";
+status.textContent =
+"캐릭터를 추가해보세요";
 
-    return;
-  }
+return;
 
-  if (selectedActor) {
+}
 
-    if (selectedActor.paused) {
 
-      status.textContent =
-        "선택한 캐릭터가 멈춰 있어요";
+if (
+selectedActor
+) {
 
-    } else if (selectedActor.dragging) {
+if (
+selectedActor.paused
+) {
 
-      status.textContent =
-        "캐릭터를 움직이고 있어요";
+status.textContent =
+"선택한 캐릭터가 멈춰 있어요";
 
-    } else {
+}
 
-      status.textContent =
-        "선택한 캐릭터 · " +
-        getStateText(selectedActor.state);
-    }
+else if (
+selectedActor.dragging
+) {
 
-    return;
-  }
+status.textContent =
+"캐릭터를 움직이고 있어요";
 
-  status.textContent =
-    "캐릭터들이 자유롭게 움직이고 있어요";
+}
+
+else {
+
+status.textContent =
+"선택한 캐릭터 · " +
+getStateText(
+selectedActor.state
+);
+
+}
+
+return;
+
+}
+
+
+status.textContent =
+"캐릭터들이 자유롭게 움직이고 있어요";
+
 }
 
 
 function getStateText(state) {
 
-  switch (state) {
+switch(state) {
 
-    case "sleeping":
-      return "졸고 있어요 😴";
+case "sleeping":
+return "졸고 있어요 😴";
 
-    case "running":
-      return "뛰고 있어요";
+case "running":
+return "뛰고 있어요";
 
-    case "walking":
-      return "걷고 있어요";
+case "walking":
+return "걷고 있어요";
 
-    case "paused":
-      return "멈춰 있어요";
+case "paused":
+return "멈춰 있어요";
 
-    default:
-      return "쉬고 있어요";
-  }
+default:
+return "쉬고 있어요";
+
+}
+
 }
 
 
-/* =========================
+/* =================================================
    저장용 줄바꿈
-========================= */
+================================================= */
 
-function getWrappedLines(ctx, text, maxWidth) {
+function getWrappedLines(
+ctx,
+text,
+maxWidth
+) {
 
-  const result = [];
+const result = [];
 
-  const paragraphs =
-    String(text).split("\n");
+const paragraphs =
+String(text).split("\n");
 
-  for (const paragraph of paragraphs) {
 
-    if (paragraph.length === 0) {
-      result.push("");
-      continue;
-    }
+for (
+const paragraph of paragraphs
+) {
 
-    let line = "";
+if (
+paragraph.length === 0
+) {
 
-    for (const char of paragraph) {
+result.push("");
 
-      const test =
-        line + char;
+continue;
 
-      if (
-        ctx.measureText(test).width >
-        maxWidth &&
-        line
-      ) {
-
-        result.push(line);
-        line = char;
-
-      } else {
-
-        line = test;
-
-      }
-    }
-
-    result.push(line);
-  }
-
-  return result;
 }
 
 
-/* =========================
+let line = "";
+
+
+for (
+const char of paragraph
+) {
+
+const test =
+line + char;
+
+
+if (
+ctx.measureText(test).width >
+maxWidth &&
+line
+) {
+
+result.push(line);
+
+line =
+char;
+
+}
+
+else {
+
+line =
+test;
+
+}
+
+}
+
+
+result.push(line);
+
+}
+
+
+return result;
+
+}
+
+
+/* =================================================
    둥근 사각형
-========================= */
+================================================= */
 
-function roundedRect(ctx, x, y, w, h, r) {
+function roundedRect(
+ctx,
+x,
+y,
+w,
+h,
+r
+) {
 
-  ctx.beginPath();
+ctx.beginPath();
 
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
+ctx.moveTo(
+x + r,
+y
+);
 
-  ctx.quadraticCurveTo(
-    x + w,
-    y,
-    x + w,
-    y + r
-  );
+ctx.lineTo(
+x + w - r,
+y
+);
 
-  ctx.lineTo(
-    x + w,
-    y + h - r
-  );
+ctx.quadraticCurveTo(
+x + w,
+y,
+x + w,
+y + r
+);
 
-  ctx.quadraticCurveTo(
-    x + w,
-    y + h,
-    x + w - r,
-    y + h
-  );
+ctx.lineTo(
+x + w,
+y + h - r
+);
 
-  ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(
+x + w,
+y + h,
+x + w - r,
+y + h
+);
 
-  ctx.quadraticCurveTo(
-    x,
-    y + h,
-    x,
-    y + h - r
-  );
+ctx.lineTo(
+x + r,
+y + h
+);
 
-  ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(
+x,
+y + h,
+x,
+y + h - r
+);
 
-  ctx.quadraticCurveTo(
-    x,
-    y,
-    x + r,
-    y
-  );
+ctx.lineTo(
+x,
+y + r
+);
 
-  ctx.closePath();
+ctx.quadraticCurveTo(
+x,
+y,
+x + r,
+y
+);
+
+ctx.closePath();
+
 }
 
 
-/* =========================
+/* =================================================
    이미지 불러오기
-========================= */
+================================================= */
 
 function loadImage(src) {
 
-  return new Promise(function(resolve, reject) {
+return new Promise(
+function(resolve, reject) {
 
-    const image = new Image();
+const image =
+new Image();
 
-    image.onload = function() {
-      resolve(image);
-    };
 
-    image.onerror = function() {
-      reject(new Error("이미지를 불러오지 못했습니다."));
-    };
+image.onload =
+function() {
 
-    image.src = src;
-  });
+resolve(image);
+
+};
+
+
+image.onerror =
+function() {
+
+reject(
+new Error(
+"이미지를 불러오지 못했습니다."
+)
+);
+
+};
+
+
+image.src =
+src;
+
+});
+
 }
 
 
-/* =========================
+/* =================================================
    저장
-========================= */
+   세로형 / 영역 분리 / 큰 글씨
+================================================= */
 
-saveButton.addEventListener("click", async function(e) {
+saveButton.addEventListener(
+"click",
+async function(e) {
 
-  e.preventDefault();
-  e.stopPropagation();
+e.preventDefault();
+e.stopPropagation();
 
-  if (saveButton.disabled) {
-    return;
-  }
 
-  saveButton.disabled = true;
+if (
+saveButton.disabled
+) {
+return;
+}
 
-  const originalText =
-    saveButton.textContent;
 
-  saveButton.textContent =
-    "이미지 만드는 중...";
+saveButton.disabled =
+true;
 
-  try {
 
-    localStorage.setItem(
-      "diary-title",
-      titleInput.value
-    );
+const oldText =
+saveButton.textContent;
 
-    localStorage.setItem(
-      "diary-text",
-      diaryInput.value
-    );
 
+saveButton.textContent =
+"이미지 만드는 중...";
 
-    /* 저장 이미지 크기 */
 
-    const outputWidth = 900;
+try {
 
-    const stageWidth =
-      stage.clientWidth;
 
-    const stageHeight =
-      stage.clientHeight;
+/* ---------------------------------
+   저장
+--------------------------------- */
 
-    const scale =
-      outputWidth / stageWidth;
+localStorage.setItem(
+"diary-title",
+titleInput.value
+);
 
-    const outputStageWidth =
-      stageWidth * scale;
+localStorage.setItem(
+"diary-text",
+diaryInput.value
+);
 
-    const outputStageHeight =
-      stageHeight * scale;
 
+/* ---------------------------------
+   세로형 이미지
+--------------------------------- */
 
-    const margin = 60;
+const outputWidth =
+900;
 
+const margin =
+70;
 
-    /* 일기 글 크기 */
+const contentWidth =
+outputWidth -
+margin * 2;
 
-    const measureCanvas =
-      document.createElement("canvas");
 
-    const measureCtx =
-      measureCanvas.getContext("2d");
+/* ---------------------------------
+   글자 크기
+--------------------------------- */
 
-    measureCtx.font =
-      "26px sans-serif";
+const titleFont =
+"bold 44px sans-serif";
 
+const diaryFont =
+"32px sans-serif";
 
-    const diaryLines =
-      getWrappedLines(
-        measureCtx,
-        diaryInput.value || "",
-        outputWidth - margin * 2
-      );
+const dateFont =
+"25px sans-serif";
 
 
-    const lineHeight = 42;
+/* ---------------------------------
+   글자 측정용
+--------------------------------- */
 
-    const diaryHeight =
-      Math.max(
-        lineHeight,
-        diaryLines.length * lineHeight
-      );
+const measureCanvas =
+document.createElement("canvas");
 
+const measureCtx =
+measureCanvas.getContext("2d");
 
-    const dateY = 55;
-    const titleY = 115;
-    const diaryY = 175;
 
-    const stageY =
-      diaryY +
-      diaryHeight +
-      45;
+/* ---------------------------------
+   일기 내용 줄바꿈
+--------------------------------- */
 
+measureCtx.font =
+diaryFont;
 
-    const outputHeight =
-      stageY +
-      outputStageHeight +
-      60;
 
+const diaryLines =
+getWrappedLines(
+measureCtx,
+diaryInput.value ||
+"오늘의 일기를 써보세요.",
+contentWidth
+);
 
-    /* 캔버스 */
 
-    const canvas =
-      document.createElement("canvas");
+const diaryLineHeight =
+52;
 
-    canvas.width =
-      Math.ceil(outputWidth);
 
-    canvas.height =
-      Math.ceil(outputHeight);
+/* ---------------------------------
+   영역 사이 간격
+--------------------------------- */
 
+const topArea =
+150;
 
-    const ctx =
-      canvas.getContext("2d");
+const titleArea =
+130;
 
+const contentPadding =
+45;
 
-    /* 배경 */
+const contentHeight =
+Math.max(
+170,
+diaryLines.length *
+diaryLineHeight +
+contentPadding * 2
+);
 
-    ctx.fillStyle = "#fff";
 
-    ctx.fillRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+/* ---------------------------------
+   캐릭터 공간
+--------------------------------- */
 
+const stageOutputWidth =
+760;
 
-    /* 날짜 */
+const stageOutputHeight =
+650;
 
-    ctx.fillStyle = "#111";
 
-    ctx.font =
-      "24px sans-serif";
+/* ---------------------------------
+   최종 이미지 높이
+--------------------------------- */
 
-    ctx.textBaseline =
-      "alphabetic";
+const sectionGap =
+25;
 
-    ctx.fillText(
-      dateElement.textContent,
-      margin,
-      dateY
-    );
 
+const outputHeight =
+topArea +
+titleArea +
+contentHeight +
+stageOutputHeight +
+sectionGap * 3 +
+80;
 
-    /* 제목 */
 
-    ctx.font =
-      "bold 42px sans-serif";
+/* ---------------------------------
+   캔버스
+--------------------------------- */
 
-    ctx.fillText(
-      titleInput.value ||
-      "오늘의 일기",
-      margin,
-      titleY
-    );
+const canvas =
+document.createElement("canvas");
 
 
-    /* 일기 */
+canvas.width =
+outputWidth;
 
-    ctx.font =
-      "26px sans-serif";
+canvas.height =
+outputHeight;
 
-    let diaryTextY =
-      diaryY;
 
-    for (const line of diaryLines) {
+const ctx =
+canvas.getContext("2d");
 
-      ctx.fillText(
-        line,
-        margin,
-        diaryTextY
-      );
 
-      diaryTextY += lineHeight;
-    }
+ctx.fillStyle =
+"#fff";
 
 
-    /* 캐릭터 공간 */
+ctx.fillRect(
+0,
+0,
+outputWidth,
+outputHeight
+);
 
-    ctx.save();
 
-    roundedRect(
-      ctx,
-      margin,
-      stageY,
-      outputStageWidth,
-      outputStageHeight,
-      18
-    );
+ctx.textBaseline =
+"middle";
 
-    ctx.fillStyle = "#fafafa";
-    ctx.fill();
 
-    ctx.strokeStyle = "#ddd";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+/* =================================================
+   ① 오늘의 일기
+================================================= */
 
-    ctx.clip();
+ctx.fillStyle =
+"#111";
 
+ctx.font =
+"bold 52px sans-serif";
 
-    /* 캐릭터 */
 
-    for (const actor of actors) {
+ctx.textAlign =
+"center";
 
-      try {
 
-        const image =
-          await loadImage(
-            actor.element.src
-          );
+ctx.fillText(
+"오늘의 일기",
+outputWidth / 2,
+70
+);
 
 
-        /*
-          가로 세로 같은 비율로
-          확대해서 짜부되지 않게 저장
-        */
+ctx.font =
+dateFont;
 
-        const width =
-          90 * scale;
+ctx.fillStyle =
+"#777";
 
-        const height =
-          90 * scale;
 
+ctx.fillText(
+dateElement.textContent,
+outputWidth / 2,
+120
+);
 
-        const x =
-          margin +
-          actor.x * scale;
 
-        const y =
-          stageY +
-          actor.y * scale;
+/* =================================================
+   ② 제목 영역
+================================================= */
 
+let currentY =
+topArea +
+sectionGap;
 
-        ctx.drawImage(
-          image,
-          x,
-          y,
-          width,
-          height
-        );
 
-      } catch(error) {
+roundedRect(
+ctx,
+margin,
+currentY,
+contentWidth,
+titleArea,
+20
+);
 
-        console.error(
-          "캐릭터 저장 실패",
-          error
-        );
-      }
-    }
 
+ctx.fillStyle =
+"#fafafa";
 
-    ctx.restore();
+ctx.fill();
 
 
-    /* 테두리 */
+ctx.strokeStyle =
+"#ddd";
 
-    ctx.save();
+ctx.lineWidth =
+2;
 
-    roundedRect(
-      ctx,
-      margin,
-      stageY,
-      outputStageWidth,
-      outputStageHeight,
-      18
-    );
+ctx.stroke();
 
-    ctx.strokeStyle = "#ddd";
-    ctx.lineWidth = 2;
-    ctx.stroke();
 
-    ctx.restore();
+ctx.textAlign =
+"left";
 
+ctx.fillStyle =
+"#777";
 
-    /* PNG 생성 */
+ctx.font =
+"20px sans-serif";
 
-    const blob =
-      await new Promise(function(resolve, reject) {
 
-        canvas.toBlob(
-          function(result) {
+ctx.fillText(
+"제목",
+margin + 30,
+currentY + 30
+);
 
-            if (result) {
-              resolve(result);
-            } else {
-              reject(
-                new Error("이미지 생성 실패")
-              );
-            }
 
-          },
-          "image/png"
-        );
+ctx.fillStyle =
+"#111";
 
-      });
+ctx.font =
+titleFont;
 
 
-    /*
-      iOS에서는 공유 메뉴를 열어
-      "이미지 저장"을 선택할 수 있게 함
-    */
+ctx.fillText(
+titleInput.value ||
+"오늘의 제목",
+margin + 30,
+currentY + 82
+);
 
-    const file =
-      new File(
-        [blob],
-        "그림일기.png",
-        {
-          type: "image/png"
-        }
-      );
 
+/* =================================================
+   ③ 일기 내용 영역
+================================================= */
 
-    if (
-      navigator.share &&
-      navigator.canShare
-    ) {
+currentY +=
+titleArea +
+sectionGap;
 
-      try {
 
-        if (
-          navigator.canShare({
-            files: [file]
-          })
-        ) {
+roundedRect(
+ctx,
+margin,
+currentY,
+contentWidth,
+contentHeight,
+20
+);
 
-          await navigator.share({
-            files: [file],
-            title: "그림일기"
-          });
 
-          return;
-        }
+ctx.fillStyle =
+"#fff";
 
-      } catch(error) {
+ctx.fill();
 
-        /*
-          공유창을 사용자가 닫은 경우도
-          오류로 처리하지 않음
-        */
 
-        if (
-          error.name ===
-          "AbortError"
-        ) {
-          return;
-        }
+ctx.strokeStyle =
+"#ddd";
 
-      }
-    }
+ctx.lineWidth =
+2;
 
+ctx.stroke();
 
-    /*
-      공유 기능을 지원하지 않는 경우
-      파일 다운로드
-    */
 
-    const url =
-      URL.createObjectURL(blob);
+ctx.fillStyle =
+"#777";
 
-    const link =
-      document.createElement("a");
+ctx.font =
+"20px sans-serif";
 
-    link.href = url;
-    link.download = "그림일기.png";
 
-    document.body.appendChild(link);
+ctx.fillText(
+"일기 내용",
+margin + 30,
+currentY + 32
+);
 
-    link.click();
 
-    link.remove();
+/* ---------------------------------
+   내용
+--------------------------------- */
 
-    setTimeout(function() {
+ctx.fillStyle =
+"#111";
 
-      URL.revokeObjectURL(url);
+ctx.font =
+diaryFont;
 
-    }, 1000);
 
+let textY =
+currentY +
+78;
 
-  } catch(error) {
 
-    console.error(
-      "저장 오류:",
-      error
-    );
+for (
+const line of diaryLines
+) {
 
-    alert(
-      "이미지를 만드는 중 문제가 생겼어요."
-    );
+ctx.fillText(
+line,
+margin + 30,
+textY
+);
 
-  } finally {
+textY +=
+diaryLineHeight;
 
-    saveButton.disabled = false;
+}
 
-    saveButton.textContent =
-      originalText;
 
-  }
+/* =================================================
+   ④ 캐릭터 공간
+================================================= */
+
+currentY +=
+contentHeight +
+sectionGap;
+
+
+const stageX =
+(outputWidth -
+stageOutputWidth) /
+2;
+
+
+const stageY =
+currentY;
+
+
+const scaleX =
+stageOutputWidth /
+stage.clientWidth;
+
+const scaleY =
+stageOutputHeight /
+stage.clientHeight;
+
+
+/* ---------------------------------
+   캐릭터 배경
+--------------------------------- */
+
+ctx.save();
+
+
+roundedRect(
+ctx,
+stageX,
+stageY,
+stageOutputWidth,
+stageOutputHeight,
+24
+);
+
+
+ctx.fillStyle =
+"#fafafa";
+
+ctx.fill();
+
+
+ctx.strokeStyle =
+"#ddd";
+
+ctx.lineWidth =
+2;
+
+ctx.stroke();
+
+
+ctx.clip();
+
+
+/* ---------------------------------
+   캐릭터 저장
+--------------------------------- */
+
+for (
+const actor of actors
+) {
+
+try {
+
+const image =
+await loadImage(
+actor.element.src
+);
+
+
+/*
+   화면에서 실제 캐릭터 크기
+*/
+
+const actorWidth =
+actor.element.offsetWidth;
+
+const actorHeight =
+actor.element.offsetHeight;
+
+
+/*
+   X/Y를 각각 맞춰서
+   캐릭터 영역의 위치 유지
+*/
+
+const x =
+stageX +
+actor.x *
+scaleX;
+
+const y =
+stageY +
+actor.y *
+scaleY;
+
+
+/*
+   비율 유지
+*/
+
+const uniformScale =
+Math.min(
+scaleX,
+scaleY
+);
+
+
+const width =
+actorWidth *
+uniformScale;
+
+const height =
+actorHeight *
+uniformScale;
+
+
+/*
+   이미지가 원래 90x90이라
+   같은 비율로 저장
+*/
+
+ctx.drawImage(
+image,
+x,
+y,
+width,
+height
+);
+
+}
+catch(error) {
+
+console.error(
+"캐릭터 저장 실패:",
+error
+);
+
+}
+
+}
+
+
+ctx.restore();
+
+
+/* ---------------------------------
+   캐릭터 영역 테두리
+--------------------------------- */
+
+ctx.save();
+
+
+roundedRect(
+ctx,
+stageX,
+stageY,
+stageOutputWidth,
+stageOutputHeight,
+24
+);
+
+
+ctx.strokeStyle =
+"#ddd";
+
+ctx.lineWidth =
+2;
+
+ctx.stroke();
+
+
+ctx.restore();
+
+
+/* =================================================
+   PNG
+================================================= */
+
+const blob =
+await new Promise(
+function(resolve, reject) {
+
+canvas.toBlob(
+function(result) {
+
+if (result) {
+
+resolve(result);
+
+}
+
+else {
+
+reject(
+new Error(
+"PNG 생성 실패"
+)
+);
+
+}
+
+},
+"image/png"
+);
 
 });
 
 
-/* =========================
-   시작
-========================= */
+/* =================================================
+   iOS 저장
+================================================= */
 
-requestAnimationFrame(updateActors);
+const file =
+new File(
+[blob],
+"그림일기.png",
+{
+type:
+"image/png"
+}
+);
+
+
+if (
+navigator.share &&
+navigator.canShare
+) {
+
+try {
+
+const canShare =
+navigator.canShare({
+files: [file]
+});
+
+
+if (canShare) {
+
+await navigator.share({
+
+files: [file],
+
+title:
+"그림일기"
+
+});
+
+return;
+
+}
+
+}
+catch(error) {
+
+if (
+error.name ===
+"AbortError"
+) {
+
+return;
+
+}
+
+}
+
+}
+
+
+/* =================================================
+   공유 기능이 없는 경우
+================================================= */
+
+const url =
+URL.createObjectURL(
+blob
+);
+
+
+const link =
+document.createElement("a");
+
+
+link.href =
+url;
+
+link.download =
+"그림일기.png";
+
+
+document.body.appendChild(
+link
+);
+
+
+link.click();
+
+
+link.remove();
+
+
+setTimeout(
+function() {
+
+URL.revokeObjectURL(
+url
+);
+
+},
+1000
+);
+
+
+}
+catch(error) {
+
+console.error(
+"저장 오류:",
+error
+);
+
+
+alert(
+"이미지를 만드는 중 문제가 생겼어요."
+);
+
+}
+finally {
+
+saveButton.disabled =
+false;
+
+saveButton.textContent =
+oldText;
+
+}
+
+});
+
+
+/* =================================================
+   자동 움직임 시작
+================================================= */
+
+requestAnimationFrame(
+updateActors
+);
 
 </script>
 
