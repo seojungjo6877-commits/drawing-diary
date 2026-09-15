@@ -278,8 +278,14 @@ h1{
   position:absolute;
   object-fit:contain;
   user-select:none;
-  pointer-events:none;
+  touch-action:none;
   z-index:35;
+}
+
+.gift-on-stage.selected{
+  outline:2px dashed #777;
+  outline-offset:3px;
+  border-radius:8px;
 }
 
 /* =========================
@@ -590,7 +596,6 @@ input[type="range"]{
 
 <h1>그림일기</h1>
 
-
 <!-- =========================
      제목 / 일기
 ========================= -->
@@ -602,8 +607,7 @@ input[type="range"]{
     <input
       id="titleInput"
       class="title-input"
-      placeholder="오늘의 제목"
-    >
+      placeholder="오늘의 제목">
 
     <div class="color-tools">
 
@@ -643,8 +647,7 @@ input[type="range"]{
         type="color"
         class="custom-color"
         id="titleColor"
-        value="#ffffff"
-      >
+        value="#ffffff">
 
       <label class="photo-label">
         🖼️ 사진
@@ -662,8 +665,7 @@ input[type="range"]{
     <textarea
       id="diaryInput"
       class="diary-input"
-      placeholder="오늘 있었던 일을 적어보세요."
-    ></textarea>
+      placeholder="오늘 있었던 일을 적어보세요."></textarea>
 
     <div class="color-tools">
 
@@ -703,8 +705,7 @@ input[type="range"]{
         type="color"
         class="custom-color"
         id="diaryColor"
-        value="#ffffff"
-      >
+        value="#ffffff">
 
       <label class="photo-label">
         🖼️ 사진
@@ -727,30 +728,35 @@ input[type="range"]{
 <div class="feature-buttons">
 
   <button
+    type="button"
     class="feature-button"
     data-panel="characterPanel">
-    👤 캐릭터 추가
+    👤 캐릭터
   </button>
 
   <button
+    type="button"
     class="feature-button"
     data-panel="giftPanel">
-    🎁 선물 만들기
+    🎁 선물
   </button>
 
   <button
+    type="button"
     class="feature-button"
     data-panel="accessoryPanel">
     🎀 악세서리
   </button>
 
   <button
+    type="button"
     class="feature-button"
     data-panel="furniturePanel">
     🪑 가구
   </button>
 
   <button
+    type="button"
     class="feature-button"
     data-panel="backgroundPanel">
     🌈 배경
@@ -760,7 +766,7 @@ input[type="range"]{
 
 
 <!-- =========================
-     캐릭터 추가
+     캐릭터
 ========================= -->
 
 <div
@@ -770,11 +776,11 @@ input[type="range"]{
   <div class="tool-box">
 
     <div class="tool-box-title">
-      👤 캐릭터 추가
+      👤 캐릭터
     </div>
 
     <label class="file-label">
-      ＋ 캐릭터 추가
+      ＋ 캐릭터
       <input
         type="file"
         id="characterFile"
@@ -797,12 +803,13 @@ input[type="range"]{
   <div class="gift-box">
 
     <div class="section-title">
-      🎁 선물 만들기
+      🎁 선물
     </div>
 
     <div class="gift-grid">
 
       <button
+        type="button"
         class="gift-choice"
         data-emoji="🎁"
         data-name="선물상자">
@@ -810,6 +817,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="gift-choice"
         data-emoji="🍪"
         data-name="쿠키">
@@ -817,6 +825,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="gift-choice"
         data-emoji="🌷"
         data-name="꽃">
@@ -824,6 +833,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="gift-choice"
         data-emoji="🧸"
         data-name="인형">
@@ -831,6 +841,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="gift-choice"
         data-emoji="⭐"
         data-name="별">
@@ -838,6 +849,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="gift-choice"
         data-emoji="🍎"
         data-name="사과">
@@ -847,13 +859,12 @@ input[type="range"]{
     </div>
 
     <label class="file-label custom-choice">
-      ＋ 선물 만들기
+      ＋ 선물
       <input
         type="file"
         id="giftFile"
         accept="image/*">
     </label>
-
 
     <div class="inventory-box">
 
@@ -895,6 +906,7 @@ input[type="range"]{
     <div class="choice-grid">
 
       <button
+        type="button"
         class="choice-btn accessory-choice"
         data-emoji="🎩"
         data-name="모자">
@@ -902,6 +914,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn accessory-choice"
         data-emoji="👑"
         data-name="왕관">
@@ -909,6 +922,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn accessory-choice"
         data-emoji="🎀"
         data-name="리본">
@@ -916,6 +930,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn accessory-choice"
         data-emoji="☁️"
         data-name="구름">
@@ -923,6 +938,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn accessory-choice"
         data-emoji="🤍"
         data-name="하트">
@@ -930,6 +946,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn accessory-choice"
         data-emoji="✨"
         data-name="별">
@@ -939,7 +956,7 @@ input[type="range"]{
     </div>
 
     <label class="file-label custom-choice">
-      ＋ 악세서리 추가
+      ＋ 악세서리
       <input
         type="file"
         id="accessoryFile"
@@ -968,6 +985,7 @@ input[type="range"]{
     <div class="choice-grid">
 
       <button
+        type="button"
         class="choice-btn furniture-choice"
         data-emoji="🪑"
         data-name="의자">
@@ -975,6 +993,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn furniture-choice"
         data-emoji="🛋️"
         data-name="소파">
@@ -982,6 +1001,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn furniture-choice"
         data-emoji="🛏️"
         data-name="침대">
@@ -989,6 +1009,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn furniture-choice"
         data-emoji="🪴"
         data-name="화분">
@@ -996,6 +1017,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn furniture-choice"
         data-emoji="🗄️"
         data-name="서랍장">
@@ -1003,6 +1025,7 @@ input[type="range"]{
       </button>
 
       <button
+        type="button"
         class="choice-btn furniture-choice"
         data-emoji="🪟"
         data-name="창문">
@@ -1012,7 +1035,7 @@ input[type="range"]{
     </div>
 
     <label class="file-label custom-choice">
-      ＋ 가구 추가
+      ＋ 가구
       <input
         type="file"
         id="furnitureFile"
@@ -1040,49 +1063,49 @@ input[type="range"]{
 
     <div class="background-buttons">
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="plain"
         style="background:#fffdfd">
         기본
       </button>
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="pink"
         style="background:#ffeef4">
         딸기우유
       </button>
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="yellow"
         style="background:#fff7c7">
         크림
       </button>
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="blue"
         style="background:#e5f5ff">
         하늘
       </button>
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="green"
         style="background:#eaf8e4">
         민트
       </button>
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="purple"
         style="background:#f1eaff">
         라벤더
       </button>
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="peach"
         style="background:#ffebdf">
         복숭아
       </button>
 
-      <button class="bg-btn"
+      <button type="button" class="bg-btn"
         data-bg="night"
         style="background:#dfe3f4">
         밤
@@ -1139,20 +1162,18 @@ input[type="range"]{
 
   <div class="control-row">
 
-    <button id="petButton">
+    <button type="button" id="petButton">
       🖐 쓰다듬기
     </button>
 
     <button
+      type="button"
       id="deleteCharacter"
       class="delete-btn">
       이 캐릭터 삭제
     </button>
 
   </div>
-
-
-  <!-- 쓰다듬기 -->
 
   <div
     class="petting-box"
@@ -1176,12 +1197,70 @@ input[type="range"]{
 
   </div>
 
+</div>
+
+
+<!-- =========================
+     악세서리 조절
+========================= -->
+
+<div
+  id="accessoryControl"
+  class="control-box hidden">
+
+  <div class="control-title">
+    🎀 선택한 악세서리
+  </div>
+
+  <div class="control-row">
+
+    <label>크기</label>
+
+    <input
+      type="range"
+      id="accessorySize"
+      min="20"
+      max="180"
+      value="55">
+
+  </div>
+
+  <div class="control-row">
+
+    <label>각도</label>
+
+    <input
+      type="range"
+      id="accessoryRotation"
+      min="-180"
+      max="180"
+      value="0">
+
+  </div>
+
+  <div class="control-row">
+
+    <button
+      type="button"
+      id="accessoryLock"
+      class="lock-btn">
+      🔒 악세서리 고정
+    </button>
+
+    <button
+      type="button"
+      id="accessoryDelete"
+      class="delete-btn">
+      악세서리 삭제
+    </button>
+
+  </div>
 
 </div>
 
 
 <!-- =========================
-     가구 조절창
+     가구 조절
 ========================= -->
 
 <div
@@ -1221,16 +1300,59 @@ input[type="range"]{
   <div class="control-row">
 
     <button
+      type="button"
       id="furnitureLock"
       class="lock-btn">
       🔒 가구 고정
     </button>
 
     <button
+      type="button"
       id="furnitureDelete"
       class="delete-btn">
       가구 삭제
     </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     선물 조절
+========================= -->
+
+<div
+  id="giftControl"
+  class="control-box hidden">
+
+  <div class="control-title">
+    🎁 선택한 선물
+  </div>
+
+  <div class="control-row">
+
+    <label>크기</label>
+
+    <input
+      type="range"
+      id="giftSize"
+      min="25"
+      max="180"
+      value="52">
+
+  </div>
+
+  <div class="control-row">
+
+    <label>각도</label>
+
+    <input
+      type="range"
+      id="giftRotation"
+      min="-180"
+      max="180"
+      value="0">
 
   </div>
 
@@ -1244,12 +1366,14 @@ input[type="range"]{
 <div class="bottom-buttons">
 
   <button
+    type="button"
     class="save-btn"
     id="saveButton">
     저장
   </button>
 
   <button
+    type="button"
     class="clear-btn"
     id="clearButton">
     전체 삭제
@@ -1320,6 +1444,25 @@ const inventoryList =
 const deleteCharacter =
   document.getElementById("deleteCharacter");
 
+
+/* 선택 조절창 */
+
+const accessoryControl =
+  document.getElementById("accessoryControl");
+
+const accessorySize =
+  document.getElementById("accessorySize");
+
+const accessoryRotation =
+  document.getElementById("accessoryRotation");
+
+const accessoryLock =
+  document.getElementById("accessoryLock");
+
+const accessoryDelete =
+  document.getElementById("accessoryDelete");
+
+
 const furnitureControl =
   document.getElementById("furnitureControl");
 
@@ -1336,6 +1479,16 @@ const furnitureDelete =
   document.getElementById("furnitureDelete");
 
 
+const giftControl =
+  document.getElementById("giftControl");
+
+const giftSize =
+  document.getElementById("giftSize");
+
+const giftRotation =
+  document.getElementById("giftRotation");
+
+
 let actors = [];
 let accessories = [];
 let furnitures = [];
@@ -1343,8 +1496,12 @@ let furnitures = [];
 let selectedActor = null;
 let selectedAccessory = null;
 let selectedFurniture = null;
+let selectedGift = null;
 
 let customBackgroundImage = null;
+
+let titlePhotoImage = null;
+let diaryPhotoImage = null;
 
 let actorId = 0;
 let accessoryId = 0;
@@ -1464,6 +1621,9 @@ function applyBackground(){
 
   if(customBackgroundImage){
 
+    stage.style.background =
+      "none";
+
     stage.style.backgroundImage =
       `url("${customBackgroundImage}")`;
 
@@ -1475,14 +1635,15 @@ function applyBackground(){
 
   }else{
 
-    stage.style.backgroundImage =
+    /* 기존 오류 수정:
+       backgroundImage가 아니라 background에
+       색/그라디언트를 넣어야 함 */
+
+    stage.style.background =
       backgrounds[currentBackground];
 
-    stage.style.backgroundSize =
-      "cover";
-
-    stage.style.backgroundPosition =
-      "center";
+    stage.style.backgroundImage =
+      "none";
 
   }
 
@@ -1615,7 +1776,7 @@ document.getElementById("diaryColor")
    제목 / 일기 사진
 ========================================================= */
 
-function setBoxPhoto(box,file){
+function setBoxPhoto(box,file,type){
 
   if(!file) return;
 
@@ -1633,6 +1794,16 @@ function setBoxPhoto(box,file){
     box.style.backgroundPosition =
       "center";
 
+    if(type==="title"){
+      titlePhotoImage =
+        reader.result;
+    }
+
+    if(type==="diary"){
+      diaryPhotoImage =
+        reader.result;
+    }
+
   };
 
   reader.readAsDataURL(file);
@@ -1645,7 +1816,8 @@ document.getElementById("titlePhoto")
 
   setBoxPhoto(
     titleWrap,
-    e.target.files[0]
+    e.target.files[0],
+    "title"
   );
 
 });
@@ -1656,7 +1828,8 @@ document.getElementById("diaryPhoto")
 
   setBoxPhoto(
     diaryWrap,
-    e.target.files[0]
+    e.target.files[0],
+    "diary"
   );
 
 });
@@ -1666,16 +1839,33 @@ document.getElementById("diaryPhoto")
    선택 처리
 ========================================================= */
 
-function clearSelections(){
-
-  selectedActor = null;
-  selectedAccessory = null;
-  selectedFurniture = null;
+function clearVisualSelections(){
 
   document.querySelectorAll(".selected")
     .forEach(el=>{
       el.classList.remove("selected");
     });
+
+}
+
+
+function hideObjectControls(){
+
+  accessoryControl.classList.add("hidden");
+  furnitureControl.classList.add("hidden");
+  giftControl.classList.add("hidden");
+
+}
+
+
+function clearSelections(){
+
+  selectedActor = null;
+  selectedAccessory = null;
+  selectedFurniture = null;
+  selectedGift = null;
+
+  clearVisualSelections();
 
   characterStatus.textContent =
     "캐릭터를 선택해주세요.";
@@ -1685,9 +1875,7 @@ function clearSelections(){
   petButton.textContent =
     "🖐 쓰다듬기";
 
-  furnitureControl.classList.add(
-    "hidden"
-  );
+  hideObjectControls();
 
   inventoryList.innerHTML =
     `<div class="inventory-empty">
@@ -1703,11 +1891,9 @@ function selectActor(actor){
 
   selectedAccessory = null;
   selectedFurniture = null;
+  selectedGift = null;
 
-  document.querySelectorAll(".selected")
-    .forEach(el=>{
-      el.classList.remove("selected");
-    });
+  clearVisualSelections();
 
   actor.element.classList.add("selected");
 
@@ -1717,9 +1903,7 @@ function selectActor(actor){
   characterSize.value =
     actor.size;
 
-  furnitureControl.classList.add(
-    "hidden"
-  );
+  hideObjectControls();
 
   renderInventory(actor);
 
@@ -1731,19 +1915,45 @@ function selectAccessory(accessory){
   selectedAccessory = accessory;
 
   selectedFurniture = null;
+  selectedGift = null;
 
-  document.querySelectorAll(".selected")
-    .forEach(el=>{
-      el.classList.remove("selected");
-    });
+  /*
+    캐릭터 선택 상태는 유지.
+    캐릭터 창도 사라지지 않음.
+  */
+
+  document.querySelectorAll(
+    ".accessory.selected,.furniture.selected,.gift-on-stage.selected"
+  ).forEach(el=>{
+    el.classList.remove("selected");
+  });
 
   accessory.element.classList.add(
     "selected"
   );
 
+  accessoryControl.classList.remove(
+    "hidden"
+  );
+
   furnitureControl.classList.add(
     "hidden"
   );
+
+  giftControl.classList.add(
+    "hidden"
+  );
+
+  accessorySize.value =
+    accessory.size;
+
+  accessoryRotation.value =
+    accessory.rotation || 0;
+
+  accessoryLock.textContent =
+    accessory.locked
+      ? "🔓 악세서리 고정 해제"
+      : "🔒 악세서리 고정";
 
 }
 
@@ -1753,22 +1963,31 @@ function selectFurniture(furniture){
   selectedFurniture = furniture;
 
   selectedAccessory = null;
+  selectedGift = null;
 
   /*
     selectedActor는 절대로 지우지 않음.
-    따라서 가구를 선택해도 캐릭터 창이 유지됨.
   */
 
-  document.querySelectorAll(".selected")
-    .forEach(el=>{
-      el.classList.remove("selected");
-    });
+  document.querySelectorAll(
+    ".accessory.selected,.furniture.selected,.gift-on-stage.selected"
+  ).forEach(el=>{
+    el.classList.remove("selected");
+  });
 
   furniture.element.classList.add(
     "selected"
   );
 
+  accessoryControl.classList.add(
+    "hidden"
+  );
+
   furnitureControl.classList.remove(
+    "hidden"
+  );
+
+  giftControl.classList.add(
     "hidden"
   );
 
@@ -1776,12 +1995,54 @@ function selectFurniture(furniture){
     furniture.size;
 
   furnitureRotation.value =
-    furniture.rotation;
+    furniture.rotation || 0;
 
   furnitureLock.textContent =
     furniture.locked
       ? "🔓 가구 고정 해제"
       : "🔒 가구 고정";
+
+}
+
+
+function selectGift(gift){
+
+  selectedGift = gift;
+
+  selectedAccessory = null;
+  selectedFurniture = null;
+
+  document.querySelectorAll(
+    ".accessory.selected,.furniture.selected,.gift-on-stage.selected"
+  ).forEach(el=>{
+    el.classList.remove("selected");
+  });
+
+  if(gift.element){
+
+    gift.element.classList.add(
+      "selected"
+    );
+
+  }
+
+  accessoryControl.classList.add(
+    "hidden"
+  );
+
+  furnitureControl.classList.add(
+    "hidden"
+  );
+
+  giftControl.classList.remove(
+    "hidden"
+  );
+
+  giftSize.value =
+    gift.size;
+
+  giftRotation.value =
+    gift.rotation || 0;
 
 }
 
@@ -1830,6 +2091,8 @@ characterFile.addEventListener(
           vy:0,
 
           moving:true,
+
+          dragging:false,
 
           inventory:[],
 
@@ -1899,9 +2162,6 @@ function updateActorPosition(actor){
 
 /* =========================================================
    캐릭터 드래그
-
-   선택해도 moving=false로 만들지 않음.
-   따라서 선택 상태에서도 계속 움직임.
 ========================================================= */
 
 function setupActorDrag(actor){
@@ -1940,6 +2200,8 @@ function setupActorDrag(actor){
 
       dragging=false;
 
+      actor.dragging=true;
+
       actor.element.setPointerCapture(
         e.pointerId
       );
@@ -1949,12 +2211,6 @@ function setupActorDrag(actor){
         selectActor(actor);
 
       }
-
-      /*
-        중요:
-        캐릭터 선택 때문에 자동 움직임을
-        멈추지 않는다.
-      */
 
     }
   );
@@ -2001,6 +2257,8 @@ function setupActorDrag(actor){
     "pointerup",
     e=>{
 
+      actor.dragging=false;
+
       if(
         actor.element.hasPointerCapture(
           e.pointerId
@@ -2013,11 +2271,6 @@ function setupActorDrag(actor){
 
       }
 
-
-      /*
-        같은 캐릭터를 짧게 한 번 더 누르면
-        선택 해제.
-      */
 
       if(
         !dragging &&
@@ -2076,14 +2329,16 @@ characterSize.addEventListener(
 
 /* =========================================================
    캐릭터 자동 움직임
-   선택 여부와 상관없이 계속 움직임
 ========================================================= */
 
 function animateActors(){
 
   actors.forEach(actor=>{
 
-    if(!actor.moving){
+    if(
+      !actor.moving ||
+      actor.dragging
+    ){
       return;
     }
 
@@ -2201,6 +2456,8 @@ function addAccessory(
     accessory
   );
 
+  selectAccessory(accessory);
+
 }
 
 
@@ -2271,7 +2528,7 @@ accessoryFile.addEventListener(
 
 function updateAccessoryPosition(a){
 
-  if(a.owner){
+  if(a.owner && !a.locked){
 
     a.x =
       a.owner.x+a.relativeX;
@@ -2294,7 +2551,7 @@ function updateAccessoryPosition(a){
     a.size+"px";
 
   a.element.style.transform =
-    `rotate(${a.rotation}deg)`;
+    `rotate(${a.rotation || 0}deg)`;
 
 }
 
@@ -2328,7 +2585,7 @@ function updateAttachedAccessories(actor){
         a.size+"px";
 
       a.element.style.transform =
-        `rotate(${a.rotation}deg)`;
+        `rotate(${a.rotation || 0}deg)`;
 
     });
 
@@ -2442,6 +2699,120 @@ function setupAccessoryDrag(a){
 
 
 /* =========================================================
+   악세서리 크기
+========================================================= */
+
+accessorySize.addEventListener(
+  "input",
+  ()=>{
+
+    if(!selectedAccessory)
+      return;
+
+    selectedAccessory.size =
+      Number(
+        accessorySize.value
+      );
+
+    updateAccessoryPosition(
+      selectedAccessory
+    );
+
+  }
+);
+
+
+/* =========================================================
+   악세서리 각도
+========================================================= */
+
+accessoryRotation.addEventListener(
+  "input",
+  ()=>{
+
+    if(!selectedAccessory)
+      return;
+
+    selectedAccessory.rotation =
+      Number(
+        accessoryRotation.value
+      );
+
+    updateAccessoryPosition(
+      selectedAccessory
+    );
+
+  }
+);
+
+
+/* =========================================================
+   악세서리 고정
+========================================================= */
+
+accessoryLock.addEventListener(
+  "click",
+  ()=>{
+
+    if(!selectedAccessory)
+      return;
+
+    selectedAccessory.locked =
+      !selectedAccessory.locked;
+
+    if(selectedAccessory.locked){
+
+      selectedAccessory.element
+        .classList.remove(
+          "selected"
+        );
+
+      selectedAccessory=null;
+
+      accessoryControl.classList.add(
+        "hidden"
+      );
+
+    }else{
+
+      accessoryLock.textContent =
+        "🔒 악세서리 고정";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   악세서리 삭제
+========================================================= */
+
+accessoryDelete.addEventListener(
+  "click",
+  ()=>{
+
+    if(!selectedAccessory)
+      return;
+
+    selectedAccessory.element.remove();
+
+    accessories =
+      accessories.filter(
+        a=>a!==selectedAccessory
+      );
+
+    selectedAccessory=null;
+
+    accessoryControl.classList.add(
+      "hidden"
+    );
+
+  }
+);
+
+
+/* =========================================================
    가구 추가
 ========================================================= */
 
@@ -2507,6 +2878,8 @@ function addFurniture(
   updateFurniturePosition(
     furniture
   );
+
+  selectFurniture(furniture);
 
 }
 
@@ -2591,7 +2964,7 @@ function updateFurniturePosition(f){
     f.size+"px";
 
   f.element.style.transform =
-    `rotate(${f.rotation}deg)`;
+    `rotate(${f.rotation || 0}deg)`;
 
 }
 
@@ -2749,11 +3122,6 @@ furnitureLock.addEventListener(
           "selected"
         );
 
-      /*
-        가구만 선택 해제.
-        캐릭터 선택은 그대로 유지.
-      */
-
       selectedFurniture = null;
 
       furnitureControl.classList.add(
@@ -2772,7 +3140,7 @@ furnitureLock.addEventListener(
 
 
 /* =========================================================
-   고정된 가구 선택
+   고정된 가구도 선택
 ========================================================= */
 
 stage.addEventListener(
@@ -2791,10 +3159,7 @@ stage.addEventListener(
             item.element===e.target
         );
 
-      if(
-        f &&
-        f.locked
-      ){
+      if(f){
 
         selectFurniture(f);
 
@@ -3002,7 +3367,7 @@ function renderPettingView(actor){
         top+a.relativeY*factor+"px";
 
       acc.style.transform =
-        `rotate(${a.rotation}deg)`;
+        `rotate(${a.rotation || 0}deg)`;
 
       pettingStage.appendChild(
         acc
@@ -3121,6 +3486,14 @@ function addGiftToActor(
     emoji:emoji,
 
     owner:selectedActor,
+
+    size:52,
+
+    rotation:0,
+
+    relativeX:selectedActor.size*.55,
+
+    relativeY:selectedActor.size*.48,
 
     onStage:false,
 
@@ -3271,10 +3644,10 @@ function showGift(
     "gift-on-stage";
 
   img.style.width =
-    "52px";
+    gift.size+"px";
 
   img.style.height =
-    "52px";
+    gift.size+"px";
 
 
   stage.appendChild(img);
@@ -3286,6 +3659,8 @@ function showGift(
   gift.onStage=true;
   gift.held=true;
 
+
+  setupGiftDrag(gift);
 
   updateGiftPosition(
     gift
@@ -3336,16 +3711,151 @@ function updateGiftPosition(gift){
     gift.owner;
 
 
-  gift.element.style.left =
+  gift.x =
     actor.x+
-    actor.size*.55+
-    "px";
+    gift.relativeX;
 
+  gift.y =
+    actor.y+
+    gift.relativeY;
+
+
+  gift.element.style.left =
+    gift.x+"px";
 
   gift.element.style.top =
-    actor.y+
-    actor.size*.48+
-    "px";
+    gift.y+"px";
+
+  gift.element.style.width =
+    gift.size+"px";
+
+  gift.element.style.height =
+    gift.size+"px";
+
+  gift.element.style.transform =
+    `rotate(${gift.rotation || 0}deg)`;
+
+}
+
+
+/* =========================================================
+   선물 드래그
+========================================================= */
+
+function setupGiftDrag(gift){
+
+  if(!gift.element)
+    return;
+
+  const element =
+    gift.element;
+
+  let sx=0;
+  let sy=0;
+
+  let ox=0;
+  let oy=0;
+
+  element.addEventListener(
+    "pointerdown",
+    e=>{
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      selectGift(gift);
+
+      sx=e.clientX;
+      sy=e.clientY;
+
+      ox=gift.x;
+      oy=gift.y;
+
+      element.setPointerCapture(
+        e.pointerId
+      );
+
+    }
+  );
+
+
+  element.addEventListener(
+    "pointermove",
+    e=>{
+
+      if(
+        !element.hasPointerCapture(
+          e.pointerId
+        )
+      ) return;
+
+      const dx =
+        e.clientX-sx;
+
+      const dy =
+        e.clientY-sy;
+
+      gift.x =
+        ox+dx;
+
+      gift.y =
+        oy+dy;
+
+      gift.relativeX =
+        gift.x-gift.owner.x;
+
+      gift.relativeY =
+        gift.y-gift.owner.y;
+
+      updateGiftPositionFromXY(
+        gift
+      );
+
+    }
+  );
+
+
+  element.addEventListener(
+    "pointerup",
+    e=>{
+
+      if(
+        element.hasPointerCapture(
+          e.pointerId
+        )
+      ){
+
+        element.releasePointerCapture(
+          e.pointerId
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+function updateGiftPositionFromXY(gift){
+
+  if(!gift.element)
+    return;
+
+  gift.element.style.left =
+    gift.x+"px";
+
+  gift.element.style.top =
+    gift.y+"px";
+
+  gift.element.style.width =
+    gift.size+"px";
+
+  gift.element.style.height =
+    gift.size+"px";
+
+  gift.element.style.transform =
+    `rotate(${gift.rotation || 0}deg)`;
 
 }
 
@@ -3365,6 +3875,54 @@ function updateHeldGifts(actor){
     });
 
 }
+
+
+/* =========================================================
+   선물 크기
+========================================================= */
+
+giftSize.addEventListener(
+  "input",
+  ()=>{
+
+    if(!selectedGift)
+      return;
+
+    selectedGift.size =
+      Number(
+        giftSize.value
+      );
+
+    updateGiftPositionFromXY(
+      selectedGift
+    );
+
+  }
+);
+
+
+/* =========================================================
+   선물 각도
+========================================================= */
+
+giftRotation.addEventListener(
+  "input",
+  ()=>{
+
+    if(!selectedGift)
+      return;
+
+    selectedGift.rotation =
+      Number(
+        giftRotation.value
+      );
+
+    updateGiftPositionFromXY(
+      selectedGift
+    );
+
+  }
+);
 
 
 /* =========================================================
@@ -3395,6 +3953,9 @@ function renderInventory(actor){
 
     const button =
       document.createElement("button");
+
+    button.type =
+      "button";
 
     button.className =
       "inventory-item";
@@ -3450,6 +4011,12 @@ function renderInventory(actor){
 
           gift.onStage=false;
           gift.held=false;
+
+          selectedGift=null;
+
+          giftControl.classList.add(
+            "hidden"
+          );
 
         }else{
 
@@ -3649,22 +4216,49 @@ document.getElementById(
     );
 
 
+    /* 제목 배경 */
+
+    if(titlePhotoImage){
+
+      const img =
+        await loadImage(
+          titlePhotoImage
+        );
+
+      if(img){
+
+        drawCoverImage(
+          ctx,
+          img,
+
+          padding*scale,
+          padding*scale,
+
+          stageW*scale,
+          titleH*scale
+        );
+
+      }
+
+    }else{
+
+      ctx.fillStyle =
+        getComputedStyle(
+          titleWrap
+        ).backgroundColor ||
+        "#fff";
+
+      ctx.fillRect(
+        padding*scale,
+        padding*scale,
+        stageW*scale,
+        titleH*scale
+      );
+
+    }
+
+
     /* 제목 */
-
-    ctx.fillStyle =
-      getComputedStyle(
-        titleWrap
-      ).backgroundColor ||
-      "#fff";
-
-
-    ctx.fillRect(
-      padding*scale,
-      padding*scale,
-      stageW*scale,
-      titleH*scale
-    );
-
 
     ctx.fillStyle="#222";
 
@@ -3691,19 +4285,44 @@ document.getElementById(
       padding+titleH+10;
 
 
-    ctx.fillStyle =
-      getComputedStyle(
-        diaryWrap
-      ).backgroundColor ||
-      "#fff";
+    if(diaryPhotoImage){
 
+      const img =
+        await loadImage(
+          diaryPhotoImage
+        );
 
-    ctx.fillRect(
-      padding*scale,
-      diaryY*scale,
-      stageW*scale,
-      diaryH*scale
-    );
+      if(img){
+
+        drawCoverImage(
+          ctx,
+          img,
+
+          padding*scale,
+          diaryY*scale,
+
+          stageW*scale,
+          diaryH*scale
+        );
+
+      }
+
+    }else{
+
+      ctx.fillStyle =
+        getComputedStyle(
+          diaryWrap
+        ).backgroundColor ||
+        "#fff";
+
+      ctx.fillRect(
+        padding*scale,
+        diaryY*scale,
+        stageW*scale,
+        diaryH*scale
+      );
+
+    }
 
 
     ctx.fillStyle="#222";
@@ -3855,7 +4474,7 @@ document.getElementById(
         furniture.size*scale,
         furniture.size*scale,
 
-        furniture.rotation
+        furniture.rotation || 0
       );
 
     }
@@ -3942,7 +4561,7 @@ document.getElementById(
         a.size*scale,
         a.size*scale,
 
-        a.rotation
+        a.rotation || 0
       );
 
     }
@@ -3970,27 +4589,24 @@ document.getElementById(
         if(!img) continue;
 
 
-        const size=52;
-
-
-        drawContain(
+        drawRotatedContain(
           ctx,
           img,
 
           (
             padding+
-            actor.x+
-            actor.size*.55
+            gift.x
           )*scale,
 
           (
             stageY+
-            actor.y+
-            actor.size*.48
+            gift.y
           )*scale,
 
-          size*scale,
-          size*scale
+          gift.size*scale,
+          gift.size*scale,
+
+          gift.rotation || 0
         );
 
       }
@@ -4255,6 +4871,27 @@ document.getElementById(
       a=>{
         if(a.element)
           a.element.remove();
+
+        a.inventory.forEach(
+          gift=>{
+
+            if(gift.timer){
+
+              clearTimeout(
+                gift.timer
+              );
+
+            }
+
+            if(gift.element){
+
+              gift.element.remove();
+
+            }
+
+          }
+        );
+
       }
     );
 
@@ -4275,31 +4912,6 @@ document.getElementById(
     );
 
 
-    actors.forEach(actor=>{
-
-      actor.inventory.forEach(
-        gift=>{
-
-          if(gift.timer){
-
-            clearTimeout(
-              gift.timer
-            );
-
-          }
-
-          if(gift.element){
-
-            gift.element.remove();
-
-          }
-
-        }
-      );
-
-    });
-
-
     actors=[];
     accessories=[];
     furnitures=[];
@@ -4308,6 +4920,7 @@ document.getElementById(
     selectedActor=null;
     selectedAccessory=null;
     selectedFurniture=null;
+    selectedGift=null;
 
 
     titleInput.value="";
@@ -4326,6 +4939,10 @@ document.getElementById(
 
     titleWrap.style.backgroundImage="";
     diaryWrap.style.backgroundImage="";
+
+
+    titlePhotoImage=null;
+    diaryPhotoImage=null;
 
 
     titleWrap.style.background="#fff";
@@ -4351,9 +4968,7 @@ document.getElementById(
       "캐릭터를 선택해주세요.";
 
 
-    furnitureControl.classList.add(
-      "hidden"
-    );
+    hideObjectControls();
 
 
     featurePanels.forEach(
