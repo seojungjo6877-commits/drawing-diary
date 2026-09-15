@@ -56,11 +56,6 @@ textarea{
   background:#fff;
 }
 
-
-/* =========================
-   스테이지
-========================= */
-
 .stage{
   position:relative;
   width:100%;
@@ -104,11 +99,6 @@ textarea{
   opacity:.65;
 }
 
-
-/* =========================
-   악세사리
-========================= */
-
 .accessory{
   position:absolute;
   width:55px;
@@ -137,11 +127,6 @@ textarea{
   border-radius:8px;
 }
 
-
-/* =========================
-   가구
-========================= */
-
 .furniture{
   position:absolute;
   width:90px;
@@ -169,11 +154,6 @@ textarea{
   border-radius:10px;
 }
 
-
-/* =========================
-   상태
-========================= */
-
 .status{
   position:absolute;
   left:50%;
@@ -185,11 +165,6 @@ textarea{
   white-space:nowrap;
   z-index:100;
 }
-
-
-/* =========================
-   기본 UI
-========================= */
 
 .add-area{
   margin:12px 0 18px;
@@ -235,11 +210,6 @@ textarea{
   margin-top:10px;
 }
 
-
-/* =========================
-   컨트롤
-========================= */
-
 .control-box,
 .accessory-box,
 .furniture-box{
@@ -258,6 +228,10 @@ textarea{
   display:block;
 }
 
+/*
+  악세사리 박스 자체는 항상 유지.
+  아래의 조절창만 선택했을 때 표시.
+*/
 .accessory-control,
 .furniture-control{
   display:none;
@@ -382,10 +356,6 @@ button:disabled{
 ></textarea>
 
 
-<!-- =========================
-     배경
-========================= -->
-
 <div class="background-area">
 
 <select id="backgroundSelect" class="background-select">
@@ -413,10 +383,6 @@ button:disabled{
 </div>
 
 
-<!-- =========================
-     스테이지
-========================= -->
-
 <div class="stage" id="stage">
 
   <div class="status" id="status">
@@ -425,10 +391,6 @@ button:disabled{
 
 </div>
 
-
-<!-- =========================
-     캐릭터 추가
-========================= -->
 
 <div class="add-area">
 
@@ -447,10 +409,6 @@ button:disabled{
 
 </div>
 
-
-<!-- =========================
-     캐릭터 컨트롤
-========================= -->
 
 <div class="control-box" id="controlBox">
 
@@ -495,9 +453,7 @@ button:disabled{
 </div>
 
 
-<!-- =========================
-     악세사리 창
-========================= -->
+<!-- 악세사리 -->
 
 <div class="accessory-box">
 
@@ -557,7 +513,6 @@ button:disabled{
 
 </div>
 
-
 <label
   class="accessory-upload"
   for="accessoryFile"
@@ -573,8 +528,8 @@ button:disabled{
 
 
 <!--
-  악세사리를 선택했을 때만
-  이 창이 나타남
+  이 부분만 선택 시 추가로 나타남.
+  악세사리 창 자체는 계속 유지됨.
 -->
 
 <div
@@ -611,7 +566,6 @@ button:disabled{
 
 </div>
 
-
 <button id="lockAccessoryButton">
 🔒 악세사리 고정
 </button>
@@ -627,9 +581,7 @@ button:disabled{
 </div>
 
 
-<!-- =========================
-     가구
-========================= -->
+<!-- 가구 -->
 
 <div class="furniture-box">
 
@@ -689,7 +641,6 @@ button:disabled{
 
 </div>
 
-
 <label
   class="furniture-upload"
   for="furnitureFile"
@@ -702,7 +653,6 @@ button:disabled{
   type="file"
   accept="image/*"
 >
-
 
 <div
   class="furniture-control"
@@ -738,7 +688,6 @@ button:disabled{
 캐릭터, 악세사리, 가구를 손가락으로 끌어서 원하는 곳에 놓을 수 있어요.
 </div>
 
-
 <button id="save">
 저장
 </button>
@@ -756,88 +705,88 @@ button:disabled{
    요소
 ========================= */
 
-const dateElement=
+const dateElement =
 document.getElementById("date");
 
-const titleInput=
+const titleInput =
 document.getElementById("title");
 
-const diaryInput=
+const diaryInput =
 document.getElementById("diary");
 
-const stage=
+const stage =
 document.getElementById("stage");
 
-const status=
+const status =
 document.getElementById("status");
 
-const photoInput=
+const photoInput =
 document.getElementById("photo");
 
-const backgroundSelect=
+const backgroundSelect =
 document.getElementById("backgroundSelect");
 
-const backgroundFile=
+const backgroundFile =
 document.getElementById("backgroundFile");
 
-const controlBox=
+const controlBox =
 document.getElementById("controlBox");
 
-const pauseButton=
+const pauseButton =
 document.getElementById("pauseButton");
 
-const resumeButton=
+const resumeButton =
 document.getElementById("resumeButton");
 
-const bringActorFrontButton=
+const bringActorFrontButton =
 document.getElementById("bringActorFrontButton");
 
-const sendActorBackButton=
+const sendActorBackButton =
 document.getElementById("sendActorBackButton");
 
-const deleteActorButton=
+const deleteActorButton =
 document.getElementById("deleteActorButton");
 
-const sizeSlider=
+const sizeSlider =
 document.getElementById("sizeSlider");
 
-const accessoryFile=
+const accessoryFile =
 document.getElementById("accessoryFile");
 
-const accessoryControl=
+const accessoryControl =
 document.getElementById("accessoryControl");
 
-const accessorySizeSlider=
+const accessorySizeSlider =
 document.getElementById("accessorySizeSlider");
 
-const accessoryRotationSlider=
+const accessoryRotationSlider =
 document.getElementById("accessoryRotationSlider");
 
-const lockAccessoryButton=
+const lockAccessoryButton =
 document.getElementById("lockAccessoryButton");
 
-const deleteAccessoryButton=
+const deleteAccessoryButton =
 document.getElementById("deleteAccessoryButton");
 
-const furnitureFile=
+const furnitureFile =
 document.getElementById("furnitureFile");
 
-const furnitureControl=
+const furnitureControl =
 document.getElementById("furnitureControl");
 
-const furnitureSizeSlider=
+const furnitureSizeSlider =
 document.getElementById("furnitureSizeSlider");
 
-const lockFurnitureButton=
+const lockFurnitureButton =
 document.getElementById("lockFurnitureButton");
 
-const deleteFurnitureButton=
+const deleteFurnitureButton =
 document.getElementById("deleteFurnitureButton");
 
-const saveButton=
+const saveButton =
 document.getElementById("save");
 
-const clearAllButton=
+const clearAllButton =
 document.getElementById("clearAll");
 
 
@@ -845,135 +794,156 @@ document.getElementById("clearAll");
    데이터
 ========================= */
 
-const actors=[];
-const accessories=[];
-const furnitures=[];
+const actors = [];
+const accessories = [];
+const furnitures = [];
 
-let selectedActor=null;
-let selectedAccessory=null;
-let selectedFurniture=null;
+let selectedActor = null;
+let selectedAccessory = null;
+let selectedFurniture = null;
 
 
 /* =========================
    날짜
 ========================= */
 
-const now=new Date();
+const today = new Date();
 
-dateElement.textContent=
-now.getFullYear()+"년 "+
-(now.getMonth()+1)+"월 "+
-now.getDate()+"일";
+dateElement.textContent =
+today.getFullYear() +
+"년 " +
+(today.getMonth()+1) +
+"월 " +
+today.getDate() +
+"일";
 
 
 /* =========================
-   일기
+   일기 저장
 ========================= */
 
-titleInput.value=
-localStorage.getItem("diary-title")||"";
+titleInput.value =
+localStorage.getItem("diary-title") || "";
 
-diaryInput.value=
-localStorage.getItem("diary-text")||"";
+diaryInput.value =
+localStorage.getItem("diary-text") || "";
 
-titleInput.addEventListener("input",()=>{
-  localStorage.setItem(
-    "diary-title",
-    titleInput.value
-  );
-});
+titleInput.addEventListener(
+  "input",
+  () => {
+    localStorage.setItem(
+      "diary-title",
+      titleInput.value
+    );
+  }
+);
 
-diaryInput.addEventListener("input",()=>{
-  localStorage.setItem(
-    "diary-text",
-    diaryInput.value
-  );
-});
+diaryInput.addEventListener(
+  "input",
+  () => {
+    localStorage.setItem(
+      "diary-text",
+      diaryInput.value
+    );
+  }
+);
 
 
 /* =========================
    배경
 ========================= */
 
-let currentBackground={
+let currentBackground = {
   type:"plain",
   src:null
 };
 
 function applyBackground(type){
 
-  currentBackground={
+  currentBackground = {
     type:type,
     src:null
   };
 
-  stage.style.backgroundImage="";
+  stage.style.backgroundImage = "";
 
-  if(type==="plain"){
-    stage.style.background="#fafafa";
+  if(type === "plain"){
+    stage.style.background =
+      "#fafafa";
   }
 
-  else if(type==="sky"){
-    stage.style.background=
+  else if(type === "sky"){
+    stage.style.background =
       "linear-gradient(#bde8ff,#fff)";
   }
 
-  else if(type==="night"){
-    stage.style.background=
+  else if(type === "night"){
+    stage.style.background =
       "linear-gradient(#101528,#343b5c)";
   }
 
-  else if(type==="grass"){
-    stage.style.background=
+  else if(type === "grass"){
+    stage.style.background =
       "linear-gradient(#dff5d8 0%,#c9ebc1 65%,#a9d79e 65%,#a9d79e 100%)";
   }
 
-  else if(type==="pink"){
-    stage.style.background="#ffe8ef";
+  else if(type === "pink"){
+    stage.style.background =
+      "#ffe8ef";
   }
 
-  else if(type==="yellow"){
-    stage.style.background="#fff4b8";
+  else if(type === "yellow"){
+    stage.style.background =
+      "#fff4b8";
   }
 }
 
 backgroundSelect.addEventListener(
   "change",
-  e=>{
+  e => {
     applyBackground(e.target.value);
   }
 );
 
 backgroundFile.addEventListener(
   "change",
-  e=>{
+  e => {
 
-    const file=e.target.files[0];
+    const file =
+      e.target.files[0];
 
     if(!file)return;
 
-    const reader=new FileReader();
+    const reader =
+      new FileReader();
 
-    reader.onload=ev=>{
+    reader.onload =
+      ev => {
 
-      currentBackground={
-        type:"image",
-        src:ev.target.result
+        currentBackground = {
+          type:"image",
+          src:ev.target.result
+        };
+
+        stage.style.background =
+          "none";
+
+        stage.style.backgroundImage =
+          `url("${ev.target.result}")`;
+
+        stage.style.backgroundSize =
+          "cover";
+
+        stage.style.backgroundPosition =
+          "center";
+
+        stage.style.backgroundRepeat =
+          "no-repeat";
       };
-
-      stage.style.background="none";
-
-      stage.style.backgroundImage=
-        `url("${ev.target.result}")`;
-
-      stage.style.backgroundSize="cover";
-      stage.style.backgroundPosition="center";
-      stage.style.backgroundRepeat="no-repeat";
-    };
 
     reader.readAsDataURL(file);
 
-    backgroundFile.value="";
+    backgroundFile.value = "";
   }
 );
 
@@ -981,7 +951,7 @@ applyBackground("plain");
 
 
 /* =========================
-   선택 해제
+   전체 선택 해제
 ========================= */
 
 function clearSelections(){
@@ -1001,12 +971,14 @@ function clearSelections(){
       .classList.remove("selected");
   }
 
-  selectedActor=null;
-  selectedAccessory=null;
-  selectedFurniture=null;
+  selectedActor = null;
+  selectedAccessory = null;
+  selectedFurniture = null;
 
   controlBox.classList.remove("show");
+
   accessoryControl.classList.remove("show");
+
   furnitureControl.classList.remove("show");
 }
 
@@ -1019,17 +991,17 @@ function updateStatus(){
 
   if(selectedAccessory){
 
-    status.textContent=
+    status.textContent =
       selectedAccessory.locked
       ? "선택한 악세사리가 고정되어 있어요"
-      : "선택한 악세사리를 조절할 수 있어요";
+      : "선택한 악세사리 · 크기와 각도를 조절할 수 있어요";
 
     return;
   }
 
   if(selectedFurniture){
 
-    status.textContent=
+    status.textContent =
       selectedFurniture.locked
       ? "선택한 가구가 고정되어 있어요"
       : "선택한 가구 · 끌어서 이동할 수 있어요";
@@ -1039,7 +1011,7 @@ function updateStatus(){
 
   if(selectedActor){
 
-    status.textContent=
+    status.textContent =
       selectedActor.paused
       ? "선택한 캐릭터가 멈춰 있어요"
       : "선택한 캐릭터 · 끌어서 이동할 수 있어요";
@@ -1047,8 +1019,8 @@ function updateStatus(){
     return;
   }
 
-  status.textContent=
-    actors.length===0
+  status.textContent =
+    actors.length === 0
     ? "캐릭터를 추가해보세요"
     : "캐릭터들이 자유롭게 움직이고 있어요";
 }
@@ -1062,13 +1034,17 @@ function selectActor(actor){
 
   clearSelections();
 
-  selectedActor=actor;
+  selectedActor = actor;
 
-  actor.element.classList.add("selected");
+  actor.element.classList.add(
+    "selected"
+  );
 
-  controlBox.classList.add("show");
+  controlBox.classList.add(
+    "show"
+  );
 
-  sizeSlider.value=
+  sizeSlider.value =
     String(actor.size);
 
   updateStatus();
@@ -1079,26 +1055,53 @@ function selectActor(actor){
    악세사리 선택
 ========================= */
 
-/*
-  중요:
-  악세사리는 다시 눌러도 선택 해제되지 않음.
-  고정 버튼을 눌러야 선택 해제됨.
-*/
-
 function selectAccessory(a){
 
-  clearSelections();
+  /*
+    다른 선택만 해제.
+    악세사리 박스 자체는 건드리지 않는다.
+  */
 
-  selectedAccessory=a;
+  if(selectedActor){
+    selectedActor.element
+      .classList.remove("selected");
+  }
 
-  a.element.classList.add("selected");
+  if(selectedFurniture){
+    selectedFurniture.element
+      .classList.remove("selected");
+  }
 
-  accessoryControl.classList.add("show");
+  if(
+    selectedAccessory &&
+    selectedAccessory !== a
+  ){
+    selectedAccessory.element
+      .classList.remove("selected");
+  }
 
-  accessorySizeSlider.value=
+  selectedActor = null;
+  selectedFurniture = null;
+
+  selectedAccessory = a;
+
+  a.element.classList.add(
+    "selected"
+  );
+
+  /*
+    여기서 조절창만 표시.
+    accessory-box는 계속 보인다.
+  */
+
+  accessoryControl.classList.add(
+    "show"
+  );
+
+  accessorySizeSlider.value =
     String(a.size);
 
-  accessoryRotationSlider.value=
+  accessoryRotationSlider.value =
     String(a.rotation);
 
   updateAccessoryLockButton();
@@ -1115,13 +1118,17 @@ function selectFurniture(f){
 
   clearSelections();
 
-  selectedFurniture=f;
+  selectedFurniture = f;
 
-  f.element.classList.add("selected");
+  f.element.classList.add(
+    "selected"
+  );
 
-  furnitureControl.classList.add("show");
+  furnitureControl.classList.add(
+    "show"
+  );
 
-  furnitureSizeSlider.value=
+  furnitureSizeSlider.value =
     String(f.size);
 
   updateFurnitureLockButton();
@@ -1131,18 +1138,18 @@ function selectFurniture(f){
 
 
 /* =========================
-   이모지 SVG
+   이모지 이미지
 ========================= */
 
 function emojiSVG(emoji){
 
-  return "data:image/svg+xml;charset=utf-8,"+
+  return "data:image/svg+xml;charset=utf-8," +
     encodeURIComponent(
 `<svg xmlns="http://www.w3.org/2000/svg"
 width="300"
 height="300">
 <text x="150"
-y="190"
+y="195"
 font-size="170"
 text-anchor="middle">${emoji}</text>
 </svg>`
@@ -1156,35 +1163,42 @@ text-anchor="middle">${emoji}</text>
 
 function createPersonality(){
 
-  const types=[
+  const types = [
+
     {
       speed:.6,
       runSpeed:1.5,
       sleepChance:.3,
       runChance:.15
     },
+
     {
       speed:.9,
       runSpeed:2.2,
       sleepChance:.1,
       runChance:.45
     },
+
     {
       speed:.5,
       runSpeed:1.2,
       sleepChance:.55,
       runChance:.05
     },
+
     {
       speed:1,
       runSpeed:2.5,
       sleepChance:.15,
       runChance:.4
     }
+
   ];
 
   return types[
-    Math.floor(Math.random()*types.length)
+    Math.floor(
+      Math.random()*types.length
+    )
   ];
 }
 
@@ -1195,101 +1209,117 @@ function createPersonality(){
 
 photoInput.addEventListener(
   "change",
-  e=>{
+  e => {
 
-    const file=e.target.files[0];
+    const file =
+      e.target.files[0];
 
     if(!file)return;
 
-    const reader=new FileReader();
+    const reader =
+      new FileReader();
 
-    reader.onload=ev=>{
+    reader.onload =
+      ev => {
 
-      const img=document.createElement("img");
+        const img =
+          document.createElement("img");
 
-      img.className="actor";
-      img.src=ev.target.result;
+        img.className =
+          "actor";
 
-      const p=createPersonality();
+        img.src =
+          ev.target.result;
 
-      const actor={
+        const original =
+          new Image();
 
-        element:img,
+        const personality =
+          createPersonality();
 
-        x:30,
-        y:30,
+        const actor = {
 
-        targetX:30,
-        targetY:30,
+          element:img,
 
-        size:100,
+          x:30,
+          y:30,
 
-        speed:p.speed,
-        runSpeed:p.runSpeed,
+          targetX:30,
+          targetY:30,
 
-        sleepChance:p.sleepChance,
-        runChance:p.runChance,
+          size:100,
 
-        paused:false,
-        dragging:false,
+          speed:personality.speed,
+          runSpeed:personality.runSpeed,
 
-        state:"walking",
+          sleepChance:
+            personality.sleepChance,
 
-        nextAction:
-          Date.now()+1000,
+          runChance:
+            personality.runChance,
 
-        originalImage:null
+          paused:false,
+          dragging:false,
+
+          state:"walking",
+
+          nextAction:
+            Date.now()+1000,
+
+          originalImage:null
+        };
+
+        original.onload =
+          () => {
+            actor.originalImage =
+              original;
+          };
+
+        original.src =
+          ev.target.result;
+
+        actor.x =
+          20 +
+          Math.random() *
+          Math.max(
+            1,
+            stage.clientWidth-130
+          );
+
+        actor.y =
+          20 +
+          Math.random() *
+          Math.max(
+            1,
+            stage.clientHeight-130
+          );
+
+        actor.targetX =
+          actor.x;
+
+        actor.targetY =
+          actor.y;
+
+        img.style.left =
+          actor.x+"px";
+
+        img.style.top =
+          actor.y+"px";
+
+        actors.push(actor);
+
+        stage.appendChild(img);
+
+        enableActorDrag(actor);
+
+        selectActor(actor);
+
+        updateStatus();
       };
-
-      const original=
-        new Image();
-
-      original.onload=()=>{
-        actor.originalImage=original;
-      };
-
-      original.src=
-        ev.target.result;
-
-      actor.x=
-        20+
-        Math.random()*
-        Math.max(
-          1,
-          stage.clientWidth-130
-        );
-
-      actor.y=
-        20+
-        Math.random()*
-        Math.max(
-          1,
-          stage.clientHeight-130
-        );
-
-      actor.targetX=actor.x;
-      actor.targetY=actor.y;
-
-      img.style.left=
-        actor.x+"px";
-
-      img.style.top=
-        actor.y+"px";
-
-      actors.push(actor);
-
-      stage.appendChild(img);
-
-      enableActorDrag(actor);
-
-      selectActor(actor);
-
-      updateStatus();
-    };
 
     reader.readAsDataURL(file);
 
-    photoInput.value="";
+    photoInput.value = "";
   }
 );
 
@@ -1300,32 +1330,41 @@ photoInput.addEventListener(
 
 function enableActorDrag(actor){
 
-  const el=actor.element;
+  const el =
+    actor.element;
 
-  let startPointerX=0;
-  let startPointerY=0;
+  let startPointerX = 0;
+  let startPointerY = 0;
 
-  let startX=0;
-  let startY=0;
+  let startX = 0;
+  let startY = 0;
 
   el.addEventListener(
     "pointerdown",
-    e=>{
+    e => {
 
       e.preventDefault();
       e.stopPropagation();
 
       selectActor(actor);
 
-      actor.dragging=true;
+      actor.dragging = true;
 
-      startPointerX=e.clientX;
-      startPointerY=e.clientY;
+      startPointerX =
+        e.clientX;
 
-      startX=actor.x;
-      startY=actor.y;
+      startPointerY =
+        e.clientY;
 
-      el.classList.add("dragging");
+      startX =
+        actor.x;
+
+      startY =
+        actor.y;
+
+      el.classList.add(
+        "dragging"
+      );
 
       try{
         el.setPointerCapture(
@@ -1335,36 +1374,37 @@ function enableActorDrag(actor){
     }
   );
 
-
   el.addEventListener(
     "pointermove",
-    e=>{
+    e => {
 
       if(!actor.dragging)return;
 
       e.preventDefault();
 
-      const dx=
-        e.clientX-startPointerX;
+      const dx =
+        e.clientX -
+        startPointerX;
 
-      const dy=
-        e.clientY-startPointerY;
+      const dy =
+        e.clientY -
+        startPointerY;
 
-      const maxX=
+      const maxX =
         Math.max(
           0,
-          stage.clientWidth-
+          stage.clientWidth -
           el.offsetWidth
         );
 
-      const maxY=
+      const maxY =
         Math.max(
           0,
-          stage.clientHeight-
+          stage.clientHeight -
           el.offsetHeight
         );
 
-      actor.x=
+      actor.x =
         Math.max(
           0,
           Math.min(
@@ -1373,7 +1413,7 @@ function enableActorDrag(actor){
           )
         );
 
-      actor.y=
+      actor.y =
         Math.max(
           0,
           Math.min(
@@ -1382,25 +1422,29 @@ function enableActorDrag(actor){
           )
         );
 
-      actor.targetX=actor.x;
-      actor.targetY=actor.y;
+      actor.targetX =
+        actor.x;
 
-      el.style.left=
+      actor.targetY =
+        actor.y;
+
+      el.style.left =
         actor.x+"px";
 
-      el.style.top=
+      el.style.top =
         actor.y+"px";
 
-      updateAttachedAccessories(actor);
+      updateAttachedAccessories(
+        actor
+      );
     }
   );
 
-
   el.addEventListener(
     "pointerup",
-    e=>{
+    e => {
 
-      actor.dragging=false;
+      actor.dragging = false;
 
       el.classList.remove(
         "dragging"
@@ -1422,53 +1466,56 @@ function enableActorDrag(actor){
 
 sizeSlider.addEventListener(
   "input",
-  ()=>{
+  () => {
 
     if(!selectedActor)return;
 
-    const a=selectedActor;
+    const a =
+      selectedActor;
 
-    const oldSize=
+    const oldSize =
       a.element.offsetWidth;
 
-    const cx=
-      a.x+oldSize/2;
+    const centerX =
+      a.x + oldSize/2;
 
-    const cy=
-      a.y+oldSize/2;
+    const centerY =
+      a.y + oldSize/2;
 
-    a.size=
+    a.size =
       Number(sizeSlider.value);
 
-    const newSize=
+    const newSize =
       90*a.size/100;
 
-    a.element.style.width=
+    a.element.style.width =
       newSize+"px";
 
-    a.element.style.height=
+    a.element.style.height =
       newSize+"px";
 
-    a.x=Math.max(
-      0,
-      Math.min(
-        cx-newSize/2,
-        stage.clientWidth-newSize
-      )
-    );
+    a.x =
+      Math.max(
+        0,
+        Math.min(
+          centerX-newSize/2,
+          stage.clientWidth-newSize
+        )
+      );
 
-    a.y=Math.max(
-      0,
-      Math.min(
-        cy-newSize/2,
-        stage.clientHeight-newSize
-      )
-    );
+    a.y =
+      Math.max(
+        0,
+        Math.min(
+          centerY-newSize/2,
+          stage.clientHeight-newSize
+        )
+      );
 
-    a.element.style.left=
+    a.element.style.left =
       a.x+"px";
 
-    a.element.style.top=
+    a.element.style.top =
       a.y+"px";
 
     updateAttachedAccessories(a);
@@ -1483,32 +1530,35 @@ sizeSlider.addEventListener(
 function chooseNewAction(a){
 
   if(
-    a.paused||
+    a.paused ||
     a.dragging
   )return;
 
-  const r=Math.random();
+  const r =
+    Math.random();
 
   if(
-    r<a.sleepChance
+    r < a.sleepChance
   ){
 
-    a.state="sleeping";
+    a.state =
+      "sleeping";
 
     a.element.classList.add(
       "sleeping"
     );
 
-    a.nextAction=
-      Date.now()+
-      2000+
+    a.nextAction =
+      Date.now() +
+      2000 +
       Math.random()*3000;
 
     return;
   }
 
-  a.state=
-    r<a.sleepChance+a.runChance
+  a.state =
+    r <
+    a.sleepChance+a.runChance
     ? "running"
     : "walking";
 
@@ -1516,84 +1566,89 @@ function chooseNewAction(a){
     "sleeping"
   );
 
-  const maxX=
+  const maxX =
     Math.max(
       0,
-      stage.clientWidth-
+      stage.clientWidth -
       a.element.offsetWidth
     );
 
-  const maxY=
+  const maxY =
     Math.max(
       0,
-      stage.clientHeight-
+      stage.clientHeight -
       a.element.offsetHeight
     );
 
-  a.targetX=
+  a.targetX =
     Math.random()*maxX;
 
-  a.targetY=
+  a.targetY =
     Math.random()*maxY;
 
-  a.nextAction=
-    Date.now()+
-    2000+
+  a.nextAction =
+    Date.now() +
+    2000 +
     Math.random()*3000;
 }
 
 
 function animate(){
 
-  const now=Date.now();
+  const now =
+    Date.now();
 
-  for(const a of actors){
+  for(
+    const a of actors
+  ){
 
     if(
-      a.paused||
+      a.paused ||
       a.dragging
     )continue;
 
-    if(now>=a.nextAction){
+    if(
+      now >= a.nextAction
+    ){
       chooseNewAction(a);
     }
 
     if(
-      a.state==="sleeping"
+      a.state === "sleeping"
     )continue;
 
-    const dx=
+    const dx =
       a.targetX-a.x;
 
-    const dy=
+    const dy =
       a.targetY-a.y;
 
-    const distance=
+    const distance =
       Math.hypot(dx,dy);
 
-    if(distance<1)continue;
+    if(distance < 1)continue;
 
-    const speed=
-      a.state==="running"
+    const speed =
+      a.state === "running"
       ? a.runSpeed
       : a.speed;
 
-    const step=
+    const step =
       Math.min(
         speed,
         distance
       );
 
-    a.x+=
+    a.x +=
       dx/distance*step;
 
-    a.y+=
+    a.y +=
       dy/distance*step;
 
-    a.element.style.left=
+    a.element.style.left =
       a.x+"px";
 
-    a.element.style.top=
+    a.element.style.top =
       a.y+"px";
 
     updateAttachedAccessories(a);
@@ -1624,39 +1679,40 @@ function createAccessory(
     return;
   }
 
-  const owner=
+  const owner =
     selectedActor;
 
-  const img=
+  const img =
     document.createElement("img");
 
-  img.className=
+  img.className =
     "accessory";
 
-  img.src=src;
+  img.src =
+    src;
 
-  const size=55;
+  const size = 55;
 
-  const x=
-    owner.x+
+  const x =
+    owner.x +
     (owner.element.offsetWidth-size)/2;
 
-  const y=
+  const y =
     owner.y-15;
 
-  img.style.width=
+  img.style.width =
     size+"px";
 
-  img.style.height=
+  img.style.height =
     size+"px";
 
-  img.style.left=
+  img.style.left =
     x+"px";
 
-  img.style.top=
+  img.style.top =
     y+"px";
 
-  const a={
+  const a = {
 
     element:img,
 
@@ -1686,20 +1742,20 @@ function createAccessory(
     emoji:emoji
   };
 
-
   if(file){
 
-    const original=
+    const original =
       new Image();
 
-    original.onload=()=>{
-      a.originalImage=
-        original;
-    };
+    original.onload =
+      () => {
+        a.originalImage =
+          original;
+      };
 
-    original.src=src;
+    original.src =
+      src;
   }
-
 
   accessories.push(a);
 
@@ -1719,13 +1775,15 @@ function createAccessory(
 
 document
 .querySelectorAll(".accessory-choice")
-.forEach(button=>{
+.forEach(button => {
 
   button.addEventListener(
     "click",
-    e=>{
+    e => {
 
       e.preventDefault();
+
+      e.stopPropagation();
 
       createAccessory(
         emojiSVG(
@@ -1746,101 +1804,92 @@ document
 
 accessoryFile.addEventListener(
   "change",
-  e=>{
+  e => {
 
-    const file=e.target.files[0];
+    const file =
+      e.target.files[0];
 
     if(!file)return;
 
-    const reader=
+    const reader =
       new FileReader();
 
-    reader.onload=ev=>{
+    reader.onload =
+      ev => {
 
-      createAccessory(
-        ev.target.result,
-        file,
-        null
-      );
-    };
+        createAccessory(
+          ev.target.result,
+          file,
+          null
+        );
+      };
 
     reader.readAsDataURL(file);
 
-    accessoryFile.value="";
+    accessoryFile.value = "";
   }
 );
 
 
 /* =========================
-   악세사리 드래그
+   악세사리 이동
 ========================= */
-
-/*
-  핵심:
-  - 처음 누르면 선택
-  - 선택된 상태에서 다시 눌러도 선택 유지
-  - 고정되어 있으면 이동 안 됨
-  - 고정 해제하면 다시 이동 가능
-*/
 
 function enableAccessoryDrag(a){
 
-  const el=a.element;
+  const el =
+    a.element;
 
-  let active=false;
+  let active = false;
+  let moved = false;
 
-  let moved=false;
+  let startPointerX = 0;
+  let startPointerY = 0;
 
-  let startPointerX=0;
-  let startPointerY=0;
-
-  let startX=0;
-  let startY=0;
-
+  let startX = 0;
+  let startY = 0;
 
   el.addEventListener(
     "pointerdown",
-    e=>{
+    e => {
 
       e.preventDefault();
       e.stopPropagation();
 
-      active=true;
-      moved=false;
-
       /*
-        어떤 악세사리를 누르든
-        무조건 선택 상태로 만든다.
+        악세사리를 누르면
+        항상 선택 상태.
       */
 
       if(
-        selectedAccessory!==a
+        selectedAccessory !== a
       ){
         selectAccessory(a);
       }
 
-      /*
-        고정된 악세사리는
-        선택만 되고 이동하지 않음.
-      */
+      active = true;
+      moved = false;
 
       if(a.locked){
 
-        a.dragging=false;
+        a.dragging = false;
 
         return;
       }
 
-      startPointerX=
+      startPointerX =
         e.clientX;
 
-      startPointerY=
+      startPointerY =
         e.clientY;
 
-      startX=a.x;
-      startY=a.y;
+      startX =
+        a.x;
 
-      a.dragging=false;
+      startY =
+        a.y;
+
+      a.dragging = false;
 
       try{
         el.setPointerCapture(
@@ -1853,29 +1902,29 @@ function enableAccessoryDrag(a){
 
   el.addEventListener(
     "pointermove",
-    e=>{
+    e => {
 
       if(
-        !active||
+        !active ||
         a.locked
       )return;
 
-      const dx=
+      const dx =
         e.clientX-startPointerX;
 
-      const dy=
+      const dy =
         e.clientY-startPointerY;
 
       if(
-        !moved&&
+        !moved &&
         Math.hypot(dx,dy)<5
       ){
         return;
       }
 
-      moved=true;
+      moved = true;
 
-      a.dragging=true;
+      a.dragging = true;
 
       el.classList.add(
         "dragging"
@@ -1884,21 +1933,21 @@ function enableAccessoryDrag(a){
       e.preventDefault();
       e.stopPropagation();
 
-      const maxX=
+      const maxX =
         Math.max(
           0,
-          stage.clientWidth-
+          stage.clientWidth -
           el.offsetWidth
         );
 
-      const maxY=
+      const maxY =
         Math.max(
           0,
-          stage.clientHeight-
+          stage.clientHeight -
           el.offsetHeight
         );
 
-      a.x=
+      a.x =
         Math.max(
           0,
           Math.min(
@@ -1907,7 +1956,7 @@ function enableAccessoryDrag(a){
           )
         );
 
-      a.y=
+      a.y =
         Math.max(
           0,
           Math.min(
@@ -1916,16 +1965,16 @@ function enableAccessoryDrag(a){
           )
         );
 
-      a.relativeX=
+      a.relativeX =
         a.x-a.owner.x;
 
-      a.relativeY=
+      a.relativeY =
         a.y-a.owner.y;
 
-      el.style.left=
+      el.style.left =
         a.x+"px";
 
-      el.style.top=
+      el.style.top =
         a.y+"px";
     }
   );
@@ -1933,21 +1982,21 @@ function enableAccessoryDrag(a){
 
   el.addEventListener(
     "pointerup",
-    e=>{
+    e => {
 
       if(!active)return;
 
-      active=false;
+      active = false;
 
-      a.dragging=false;
+      a.dragging = false;
 
       el.classList.remove(
         "dragging"
       );
 
       /*
-        여기서는 선택 해제를 하지 않는다.
-        선택 해제는 고정 버튼으로만 한다.
+        다시 눌러도 선택 해제하지 않음.
+        고정 버튼으로만 해제.
       */
 
       try{
@@ -1961,11 +2010,11 @@ function enableAccessoryDrag(a){
 
   el.addEventListener(
     "pointercancel",
-    e=>{
+    e => {
 
-      active=false;
+      active = false;
 
-      a.dragging=false;
+      a.dragging = false;
 
       el.classList.remove(
         "dragging"
@@ -1982,69 +2031,69 @@ function enableAccessoryDrag(a){
 
 
 /* =========================
-   악세사리 크기
+   악세사리 크기 조절
 ========================= */
 
 accessorySizeSlider.addEventListener(
   "input",
-  e=>{
+  e => {
 
     if(!selectedAccessory)return;
 
-    const a=
+    const a =
       selectedAccessory;
 
-    const oldWidth=
+    const oldWidth =
       a.element.offsetWidth;
 
-    const oldHeight=
+    const oldHeight =
       a.element.offsetHeight;
 
-    const centerX=
+    const centerX =
       a.x+oldWidth/2;
 
-    const centerY=
+    const centerY =
       a.y+oldHeight/2;
 
-    a.size=
+    a.size =
       Number(e.target.value);
 
-    const newSize=
-      55*(a.size/100);
-
     /*
-      실제 width/height 변경
+      실제 이미지 크기를 변경
     */
 
-    a.element.style.width=
+    const newSize =
+      55*a.size/100;
+
+    a.element.style.width =
       newSize+"px";
 
-    a.element.style.height=
+    a.element.style.height =
       newSize+"px";
 
     /*
-      가운데 기준으로 커지고 작아짐
+      가운데 기준으로 확대/축소
     */
 
-    a.x=
+    a.x =
       centerX-newSize/2;
 
-    a.y=
+    a.y =
       centerY-newSize/2;
 
-    const maxX=
+    const maxX =
       Math.max(
         0,
         stage.clientWidth-newSize
       );
 
-    const maxY=
+    const maxY =
       Math.max(
         0,
         stage.clientHeight-newSize
       );
 
-    a.x=
+    a.x =
       Math.max(
         0,
         Math.min(
@@ -2053,7 +2102,7 @@ accessorySizeSlider.addEventListener(
         )
       );
 
-    a.y=
+    a.y =
       Math.max(
         0,
         Math.min(
@@ -2062,20 +2111,21 @@ accessorySizeSlider.addEventListener(
         )
       );
 
-    a.element.style.left=
+    a.element.style.left =
       a.x+"px";
 
-    a.element.style.top=
+    a.element.style.top =
       a.y+"px";
 
-    a.relativeX=
+    a.relativeX =
       a.x-a.owner.x;
 
-    a.relativeY=
+    a.relativeY =
       a.y-a.owner.y;
 
     /*
-      기존 각도 유지
+      크기를 바꿔도
+      현재 각도 유지
     */
 
     applyAccessoryTransform(a);
@@ -2084,24 +2134,24 @@ accessorySizeSlider.addEventListener(
 
 
 /* =========================
-   악세사리 각도
+   악세사리 각도 조절
 ========================= */
 
 accessoryRotationSlider.addEventListener(
   "input",
-  e=>{
+  e => {
 
     if(!selectedAccessory)return;
 
-    const a=
+    const a =
       selectedAccessory;
 
-    a.rotation=
+    a.rotation =
       Number(e.target.value);
 
     /*
-      크기는 건드리지 않고
-      각도만 변경
+      각도만 변경.
+      크기에는 영향 없음.
     */
 
     applyAccessoryTransform(a);
@@ -2110,17 +2160,17 @@ accessoryRotationSlider.addEventListener(
 
 
 /* =========================
-   실제 악세사리 회전
+   악세사리 회전 적용
 ========================= */
 
 function applyAccessoryTransform(a){
 
   if(
-    !a||
+    !a ||
     !a.element
   )return;
 
-  a.element.style.transform=
+  a.element.style.transform =
     "rotate("+
     a.rotation+
     "deg)";
@@ -2131,18 +2181,11 @@ function applyAccessoryTransform(a){
    악세사리 고정
 ========================= */
 
-/*
-  고정 버튼을 누르면:
-  1. 고정
-  2. 선택 해제
-  3. 악세사리 조절창 닫기
-*/
-
 function updateAccessoryLockButton(){
 
   if(!selectedAccessory)return;
 
-  lockAccessoryButton.textContent=
+  lockAccessoryButton.textContent =
     selectedAccessory.locked
     ? "🔓 악세사리 고정 해제"
     : "🔒 악세사리 고정";
@@ -2157,49 +2200,51 @@ function updateAccessoryLockButton(){
 
 lockAccessoryButton.addEventListener(
   "click",
-  e=>{
+  e => {
 
     e.preventDefault();
     e.stopPropagation();
 
     if(!selectedAccessory)return;
 
-    const a=
+    const a =
       selectedAccessory;
 
     /*
-      고정 해제
+      이미 고정되어 있으면
+      고정 해제.
     */
 
     if(a.locked){
 
-      a.locked=false;
+      a.locked = false;
 
       a.element.classList.remove(
         "locked"
       );
 
-      /*
-        고정 해제하면
-        다시 선택된 상태 유지
-      */
-
-      selectedAccessory=a;
+      selectedAccessory = a;
 
       a.element.classList.add(
         "selected"
       );
 
-      accessoryControl
-        .classList.add("show");
+      /*
+        악세사리 조절창 다시 표시
+      */
 
-      accessorySizeSlider.value=
+      accessoryControl.classList.add(
+        "show"
+      );
+
+      accessorySizeSlider.value =
         String(a.size);
 
-      accessoryRotationSlider.value=
+      accessoryRotationSlider.value =
         String(a.rotation);
 
       updateAccessoryLockButton();
+
       updateStatus();
 
       return;
@@ -2207,12 +2252,12 @@ lockAccessoryButton.addEventListener(
 
 
     /*
-      고정
+      고정.
     */
 
-    a.locked=true;
+    a.locked = true;
 
-    a.dragging=false;
+    a.dragging = false;
 
     a.element.classList.remove(
       "dragging"
@@ -2220,17 +2265,23 @@ lockAccessoryButton.addEventListener(
 
     /*
       고정하는 순간
-      선택 해제
+      선택 해제.
     */
 
     a.element.classList.remove(
       "selected"
     );
 
-    selectedAccessory=null;
+    selectedAccessory = null;
 
-    accessoryControl
-      .classList.remove("show");
+    /*
+      조절창만 닫음.
+      악세사리 박스는 그대로 유지.
+    */
+
+    accessoryControl.classList.remove(
+      "show"
+    );
 
     updateStatus();
   }
@@ -2243,29 +2294,34 @@ lockAccessoryButton.addEventListener(
 
 deleteAccessoryButton.addEventListener(
   "click",
-  e=>{
+  e => {
 
     e.preventDefault();
     e.stopPropagation();
 
     if(!selectedAccessory)return;
 
-    const a=
+    const a =
       selectedAccessory;
 
     a.element.remove();
 
-    const index=
+    const index =
       accessories.indexOf(a);
 
-    if(index!==-1){
+    if(index !== -1){
+
       accessories.splice(
         index,
         1
       );
     }
 
-    clearSelections();
+    selectedAccessory = null;
+
+    accessoryControl.classList.remove(
+      "show"
+    );
 
     updateStatus();
   }
@@ -2285,22 +2341,22 @@ function updateAttachedAccessories(
   ){
 
     if(
-      a.owner===actor &&
+      a.owner === actor &&
       !a.dragging
     ){
 
-      a.x=
+      a.x =
         actor.x+
         a.relativeX;
 
-      a.y=
+      a.y =
         actor.y+
         a.relativeY;
 
-      a.element.style.left=
+      a.element.style.left =
         a.x+"px";
 
-      a.element.style.top=
+      a.element.style.top =
         a.y+"px";
     }
   }
@@ -2317,43 +2373,44 @@ function createFurniture(
   emoji=null
 ){
 
-  const img=
+  const img =
     document.createElement("img");
 
-  img.className=
+  img.className =
     "furniture";
 
-  img.src=src;
+  img.src =
+    src;
 
-  const size=90;
+  const size = 90;
 
-  const x=
-    Math.random()*
+  const x =
+    Math.random() *
     Math.max(
       1,
       stage.clientWidth-size
     );
 
-  const y=
-    Math.random()*
+  const y =
+    Math.random() *
     Math.max(
       1,
       stage.clientHeight-size
     );
 
-  img.style.width=
+  img.style.width =
     size+"px";
 
-  img.style.height=
+  img.style.height =
     size+"px";
 
-  img.style.left=
+  img.style.left =
     x+"px";
 
-  img.style.top=
+  img.style.top =
     y+"px";
 
-  const f={
+  const f = {
 
     element:img,
 
@@ -2373,20 +2430,20 @@ function createFurniture(
     emoji:emoji
   };
 
-
   if(file){
 
-    const original=
+    const original =
       new Image();
 
-    original.onload=()=>{
-      f.originalImage=
-        original;
-    };
+    original.onload =
+      () => {
+        f.originalImage =
+          original;
+      };
 
-    original.src=src;
+    original.src =
+      src;
   }
-
 
   furnitures.push(f);
 
@@ -2404,11 +2461,11 @@ function createFurniture(
 
 document
 .querySelectorAll(".furniture-choice")
-.forEach(button=>{
+.forEach(button => {
 
   button.addEventListener(
     "click",
-    e=>{
+    e => {
 
       e.preventDefault();
 
@@ -2431,49 +2488,51 @@ document
 
 furnitureFile.addEventListener(
   "change",
-  e=>{
+  e => {
 
-    const file=
+    const file =
       e.target.files[0];
 
     if(!file)return;
 
-    const reader=
+    const reader =
       new FileReader();
 
-    reader.onload=ev=>{
+    reader.onload =
+      ev => {
 
-      createFurniture(
-        ev.target.result,
-        file,
-        null
-      );
-    };
+        createFurniture(
+          ev.target.result,
+          file,
+          null
+        );
+      };
 
     reader.readAsDataURL(file);
 
-    furnitureFile.value="";
+    furnitureFile.value = "";
   }
 );
 
 
 /* =========================
-   가구 드래그
+   가구 이동
 ========================= */
 
 function enableFurnitureDrag(f){
 
-  const el=f.element;
+  const el =
+    f.element;
 
-  let startPointerX=0;
-  let startPointerY=0;
+  let startPointerX = 0;
+  let startPointerY = 0;
 
-  let startX=0;
-  let startY=0;
+  let startX = 0;
+  let startY = 0;
 
   el.addEventListener(
     "pointerdown",
-    e=>{
+    e => {
 
       e.preventDefault();
       e.stopPropagation();
@@ -2482,18 +2541,24 @@ function enableFurnitureDrag(f){
 
       if(f.locked){
 
-        f.dragging=false;
+        f.dragging = false;
 
         return;
       }
 
-      f.dragging=true;
+      f.dragging = true;
 
-      startPointerX=e.clientX;
-      startPointerY=e.clientY;
+      startPointerX =
+        e.clientX;
 
-      startX=f.x;
-      startY=f.y;
+      startPointerY =
+        e.clientY;
+
+      startX =
+        f.x;
+
+      startY =
+        f.y;
 
       el.classList.add(
         "dragging"
@@ -2510,36 +2575,36 @@ function enableFurnitureDrag(f){
 
   el.addEventListener(
     "pointermove",
-    e=>{
+    e => {
 
       if(
-        !f.dragging||
+        !f.dragging ||
         f.locked
       )return;
 
       e.preventDefault();
 
-      const dx=
+      const dx =
         e.clientX-startPointerX;
 
-      const dy=
+      const dy =
         e.clientY-startPointerY;
 
-      const maxX=
+      const maxX =
         Math.max(
           0,
           stage.clientWidth-
           el.offsetWidth
         );
 
-      const maxY=
+      const maxY =
         Math.max(
           0,
           stage.clientHeight-
           el.offsetHeight
         );
 
-      f.x=
+      f.x =
         Math.max(
           0,
           Math.min(
@@ -2548,7 +2613,7 @@ function enableFurnitureDrag(f){
           )
         );
 
-      f.y=
+      f.y =
         Math.max(
           0,
           Math.min(
@@ -2557,10 +2622,10 @@ function enableFurnitureDrag(f){
           )
         );
 
-      el.style.left=
+      el.style.left =
         f.x+"px";
 
-      el.style.top=
+      el.style.top =
         f.y+"px";
     }
   );
@@ -2568,9 +2633,9 @@ function enableFurnitureDrag(f){
 
   el.addEventListener(
     "pointerup",
-    e=>{
+    e => {
 
-      f.dragging=false;
+      f.dragging = false;
 
       el.classList.remove(
         "dragging"
@@ -2592,35 +2657,35 @@ function enableFurnitureDrag(f){
 
 furnitureSizeSlider.addEventListener(
   "input",
-  e=>{
+  e => {
 
     if(!selectedFurniture)return;
 
-    const f=
+    const f =
       selectedFurniture;
 
-    const oldSize=
+    const oldSize =
       f.element.offsetWidth;
 
-    const centerX=
+    const centerX =
       f.x+oldSize/2;
 
-    const centerY=
+    const centerY =
       f.y+oldSize/2;
 
-    f.size=
+    f.size =
       Number(e.target.value);
 
-    const newSize=
+    const newSize =
       90*(f.size/100);
 
-    f.element.style.width=
+    f.element.style.width =
       newSize+"px";
 
-    f.element.style.height=
+    f.element.style.height =
       newSize+"px";
 
-    f.x=
+    f.x =
       Math.max(
         0,
         Math.min(
@@ -2629,7 +2694,7 @@ furnitureSizeSlider.addEventListener(
         )
       );
 
-    f.y=
+    f.y =
       Math.max(
         0,
         Math.min(
@@ -2638,10 +2703,10 @@ furnitureSizeSlider.addEventListener(
         )
       );
 
-    f.element.style.left=
+    f.element.style.left =
       f.x+"px";
 
-    f.element.style.top=
+    f.element.style.top =
       f.y+"px";
   }
 );
@@ -2655,7 +2720,7 @@ function updateFurnitureLockButton(){
 
   if(!selectedFurniture)return;
 
-  lockFurnitureButton.textContent=
+  lockFurnitureButton.textContent =
     selectedFurniture.locked
     ? "🔓 가구 고정 해제"
     : "🔒 가구 고정";
@@ -2670,19 +2735,20 @@ function updateFurnitureLockButton(){
 
 lockFurnitureButton.addEventListener(
   "click",
-  e=>{
+  e => {
 
     e.preventDefault();
     e.stopPropagation();
 
     if(!selectedFurniture)return;
 
-    const f=
+    const f =
       selectedFurniture;
 
-    f.locked=!f.locked;
+    f.locked =
+      !f.locked;
 
-    f.dragging=false;
+    f.dragging = false;
 
     f.element.classList.remove(
       "dragging"
@@ -2708,22 +2774,23 @@ lockFurnitureButton.addEventListener(
 
 deleteFurnitureButton.addEventListener(
   "click",
-  e=>{
+  e => {
 
     e.preventDefault();
     e.stopPropagation();
 
     if(!selectedFurniture)return;
 
-    const f=
+    const f =
       selectedFurniture;
 
     f.element.remove();
 
-    const index=
+    const index =
       furnitures.indexOf(f);
 
-    if(index!==-1){
+    if(index !== -1){
+
       furnitures.splice(
         index,
         1
@@ -2743,13 +2810,13 @@ deleteFurnitureButton.addEventListener(
 
 pauseButton.addEventListener(
   "click",
-  ()=>{
+  () => {
 
     if(!selectedActor)return;
 
-    selectedActor.paused=true;
+    selectedActor.paused = true;
 
-    selectedActor.state=
+    selectedActor.state =
       "sleeping";
 
     selectedActor.element
@@ -2763,18 +2830,18 @@ pauseButton.addEventListener(
 
 
 /* =========================
-   캐릭터 다시 움직임
+   캐릭터 다시 움직이기
 ========================= */
 
 resumeButton.addEventListener(
   "click",
-  ()=>{
+  () => {
 
     if(!selectedActor)return;
 
-    selectedActor.paused=false;
+    selectedActor.paused = false;
 
-    selectedActor.state=
+    selectedActor.state =
       "walking";
 
     selectedActor.element
@@ -2782,7 +2849,7 @@ resumeButton.addEventListener(
         "sleeping"
       );
 
-    selectedActor.nextAction=
+    selectedActor.nextAction =
       Date.now()+300;
 
     updateStatus();
@@ -2791,32 +2858,27 @@ resumeButton.addEventListener(
 
 
 /* =========================
-   캐릭터 앞으로
+   앞으로 / 뒤로
 ========================= */
 
 bringActorFrontButton.addEventListener(
   "click",
-  ()=>{
+  () => {
 
     if(!selectedActor)return;
 
-    selectedActor.element.style.zIndex=
+    selectedActor.element.style.zIndex =
       30;
   }
 );
 
-
-/* =========================
-   캐릭터 뒤로
-========================= */
-
 sendActorBackButton.addEventListener(
   "click",
-  ()=>{
+  () => {
 
     if(!selectedActor)return;
 
-    selectedActor.element.style.zIndex=
+    selectedActor.element.style.zIndex =
       15;
   }
 );
@@ -2828,15 +2890,15 @@ sendActorBackButton.addEventListener(
 
 deleteActorButton.addEventListener(
   "click",
-  ()=>{
+  () => {
 
     if(!selectedActor)return;
 
-    const actor=
+    const actor =
       selectedActor;
 
     /*
-      해당 캐릭터의 악세사리만 삭제
+      해당 캐릭터의 악세사리 삭제
     */
 
     for(
@@ -2846,7 +2908,7 @@ deleteActorButton.addEventListener(
     ){
 
       if(
-        accessories[i].owner===
+        accessories[i].owner ===
         actor
       ){
 
@@ -2863,10 +2925,10 @@ deleteActorButton.addEventListener(
 
     actor.element.remove();
 
-    const index=
+    const index =
       actors.indexOf(actor);
 
-    if(index!==-1){
+    if(index !== -1){
 
       actors.splice(
         index,
@@ -2882,24 +2944,25 @@ deleteActorButton.addEventListener(
 
 
 /* =========================
-   이미지 로드
+   원본 이미지
 ========================= */
 
 function loadImage(src){
 
   return new Promise(
-    (resolve,reject)=>{
+    (resolve,reject) => {
 
-      const img=
+      const img =
         new Image();
 
-      img.onload=()=>{
-        resolve(img);
-      };
+      img.onload =
+        () => resolve(img);
 
-      img.onerror=reject;
+      img.onerror =
+        reject;
 
-      img.src=src;
+      img.src =
+        src;
     }
   );
 }
@@ -2918,7 +2981,7 @@ async function getOriginalImage(item){
 
 
 /* =========================
-   텍스트 줄바꿈
+   글 줄바꿈
 ========================= */
 
 function wrapText(
@@ -2927,42 +2990,42 @@ function wrapText(
   maxWidth
 ){
 
-  const lines=[];
+  const lines = [];
 
   for(
     const paragraph of
     String(text).split("\n")
   ){
 
-    if(paragraph===""){
+    if(paragraph === ""){
 
       lines.push("");
 
       continue;
     }
 
-    let line="";
+    let line = "";
 
     for(
       const char of paragraph
     ){
 
-      const test=
+      const test =
         line+char;
 
       if(
         ctx.measureText(test)
-        .width>maxWidth &&
+        .width > maxWidth &&
         line
       ){
 
         lines.push(line);
 
-        line=char;
+        line = char;
 
       }else{
 
-        line=test;
+        line = test;
       }
     }
 
@@ -2979,72 +3042,77 @@ function wrapText(
 
 saveButton.addEventListener(
   "click",
-  async()=>{
+  async() => {
 
-    saveButton.disabled=true;
+    saveButton.disabled = true;
 
     try{
 
-      const S=3;
+      const S = 3;
 
-      const W=900;
+      const W = 900;
 
-      const stageW=760;
-      const stageH=650;
+      const stageW = 760;
+      const stageH = 650;
 
-      const margin=70;
+      const margin = 70;
 
-      const temp=
+      const temp =
         document.createElement(
           "canvas"
         );
 
-      const tempCtx=
+      const tempCtx =
         temp.getContext("2d");
 
-      tempCtx.font=
+      tempCtx.font =
         "32px sans-serif";
 
-      const lines=
+      const lines =
         wrapText(
           tempCtx,
-          diaryInput.value||
+          diaryInput.value ||
           "오늘의 일기를 써보세요.",
           W-margin*2
         );
 
-      const diaryH=
+      const diaryH =
         Math.max(
           170,
           lines.length*52+90
         );
 
-      const H=
+      const H =
         150+
         155+
         diaryH+
         stageH+
         120;
 
-      const canvas=
+      const canvas =
         document.createElement(
           "canvas"
         );
 
-      canvas.width=W*S;
-      canvas.height=H*S;
+      canvas.width =
+        W*S;
 
-      const ctx=
+      canvas.height =
+        H*S;
+
+      const ctx =
         canvas.getContext("2d");
 
       ctx.scale(S,S);
 
-      ctx.imageSmoothingEnabled=true;
+      ctx.imageSmoothingEnabled =
+        true;
 
-      ctx.imageSmoothingQuality=
+      ctx.imageSmoothingQuality =
         "high";
 
-      ctx.fillStyle="#fff";
+      ctx.fillStyle =
+        "#fff";
 
       ctx.fillRect(
         0,
@@ -3053,15 +3121,16 @@ saveButton.addEventListener(
         H
       );
 
+      ctx.textAlign =
+        "center";
 
-      /* 제목 */
+      ctx.textBaseline =
+        "middle";
 
-      ctx.textAlign="center";
-      ctx.textBaseline="middle";
+      ctx.fillStyle =
+        "#111";
 
-      ctx.fillStyle="#111";
-
-      ctx.font=
+      ctx.font =
         "bold 52px sans-serif";
 
       ctx.fillText(
@@ -3070,10 +3139,11 @@ saveButton.addEventListener(
         65
       );
 
-      ctx.font=
+      ctx.font =
         "25px sans-serif";
 
-      ctx.fillStyle="#777";
+      ctx.fillStyle =
+        "#777";
 
       ctx.fillText(
         dateElement.textContent,
@@ -3081,19 +3151,18 @@ saveButton.addEventListener(
         115
       );
 
+      let y = 150;
 
-      let y=150;
+      ctx.textAlign =
+        "left";
 
+      ctx.fillStyle =
+        "#fafafa";
 
-      /* 제목 */
+      ctx.strokeStyle =
+        "#ddd";
 
-      ctx.textAlign="left";
-
-      ctx.fillStyle="#fafafa";
-
-      ctx.strokeStyle="#ddd";
-
-      ctx.lineWidth=2;
+      ctx.lineWidth = 2;
 
       ctx.beginPath();
 
@@ -3108,9 +3177,10 @@ saveButton.addEventListener(
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle="#777";
+      ctx.fillStyle =
+        "#777";
 
-      ctx.font=
+      ctx.font =
         "20px sans-serif";
 
       ctx.fillText(
@@ -3119,24 +3189,23 @@ saveButton.addEventListener(
         y+30
       );
 
-      ctx.fillStyle="#111";
+      ctx.fillStyle =
+        "#111";
 
-      ctx.font=
+      ctx.font =
         "bold 44px sans-serif";
 
       ctx.fillText(
-        titleInput.value||
+        titleInput.value ||
         "오늘의 제목",
         margin+30,
         y+82
       );
 
-      y+=155;
+      y += 155;
 
-
-      /* 일기 */
-
-      ctx.fillStyle="#fff";
+      ctx.fillStyle =
+        "#fff";
 
       ctx.beginPath();
 
@@ -3151,9 +3220,10 @@ saveButton.addEventListener(
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle="#777";
+      ctx.fillStyle =
+        "#777";
 
-      ctx.font=
+      ctx.font =
         "20px sans-serif";
 
       ctx.fillText(
@@ -3162,12 +3232,13 @@ saveButton.addEventListener(
         y+32
       );
 
-      ctx.fillStyle="#111";
+      ctx.fillStyle =
+        "#111";
 
-      ctx.font=
+      ctx.font =
         "32px sans-serif";
 
-      let textY=
+      let textY =
         y+80;
 
       for(
@@ -3180,19 +3251,15 @@ saveButton.addEventListener(
           textY
         );
 
-        textY+=52;
+        textY += 52;
       }
 
-      y+=
-        diaryH+25;
+      y += diaryH+25;
 
-
-      /* 스테이지 */
-
-      const sx=
+      const sx =
         (W-stageW)/2;
 
-      const sy=y;
+      const sy = y;
 
       ctx.save();
 
@@ -3212,34 +3279,37 @@ saveButton.addEventListener(
       /* 배경 */
 
       if(
-        currentBackground.type===
+        currentBackground.type ===
         "image" &&
         currentBackground.src
       ){
 
-        const bg=
+        const bg =
           await loadImage(
             currentBackground.src
           );
 
-        const ratio=
+        const ratio =
           bg.naturalWidth/
           bg.naturalHeight;
 
-        const targetRatio=
+        const targetRatio =
           stageW/stageH;
 
-        let dw,dh;
+        let dw;
+        let dh;
 
-        if(ratio>targetRatio){
+        if(
+          ratio > targetRatio
+        ){
 
-          dh=stageH;
-          dw=dh*ratio;
+          dh = stageH;
+          dw = dh*ratio;
 
         }else{
 
-          dw=stageW;
-          dh=dw/ratio;
+          dw = stageW;
+          dh = dw/ratio;
         }
 
         ctx.drawImage(
@@ -3253,11 +3323,11 @@ saveButton.addEventListener(
       }else{
 
         if(
-          currentBackground.type===
+          currentBackground.type ===
           "sky"
         ){
 
-          const g=
+          const g =
             ctx.createLinearGradient(
               0,
               sy,
@@ -3275,16 +3345,16 @@ saveButton.addEventListener(
             "#fff"
           );
 
-          ctx.fillStyle=g;
+          ctx.fillStyle = g;
 
         }
 
         else if(
-          currentBackground.type===
+          currentBackground.type ===
           "night"
         ){
 
-          const g=
+          const g =
             ctx.createLinearGradient(
               0,
               sy,
@@ -3302,16 +3372,16 @@ saveButton.addEventListener(
             "#343b5c"
           );
 
-          ctx.fillStyle=g;
+          ctx.fillStyle = g;
 
         }
 
         else if(
-          currentBackground.type===
+          currentBackground.type ===
           "grass"
         ){
 
-          const g=
+          const g =
             ctx.createLinearGradient(
               0,
               sy,
@@ -3339,33 +3409,33 @@ saveButton.addEventListener(
             "#a9d79e"
           );
 
-          ctx.fillStyle=g;
+          ctx.fillStyle = g;
 
         }
 
         else if(
-          currentBackground.type===
+          currentBackground.type ===
           "pink"
         ){
 
-          ctx.fillStyle=
+          ctx.fillStyle =
             "#ffe8ef";
 
         }
 
         else if(
-          currentBackground.type===
+          currentBackground.type ===
           "yellow"
         ){
 
-          ctx.fillStyle=
+          ctx.fillStyle =
             "#fff4b8";
 
         }
 
         else{
 
-          ctx.fillStyle=
+          ctx.fillStyle =
             "#fafafa";
         }
 
@@ -3378,11 +3448,13 @@ saveButton.addEventListener(
       }
 
 
-      const scaleX=
-        stageW/stage.clientWidth;
+      const scaleX =
+        stageW/
+        stage.clientWidth;
 
-      const scaleY=
-        stageH/stage.clientHeight;
+      const scaleY =
+        stageH/
+        stage.clientHeight;
 
 
       /* 가구 */
@@ -3393,31 +3465,34 @@ saveButton.addEventListener(
 
         try{
 
-          const img=
+          const img =
             await getOriginalImage(f);
 
-          const w=
+          const w =
             f.element.offsetWidth;
 
-          const h=
+          const h =
             f.element.offsetHeight;
 
-          const iw=
-            img.naturalWidth||
+          const iw =
+            img.naturalWidth ||
             img.width;
 
-          const ih=
-            img.naturalHeight||
+          const ih =
+            img.naturalHeight ||
             img.height;
 
-          const fit=
+          const fit =
             Math.min(
               w/iw,
               h/ih
             );
 
-          const dw=iw*fit;
-          const dh=ih*fit;
+          const dw =
+            iw*fit;
+
+          const dh =
+            ih*fit;
 
           ctx.drawImage(
             img,
@@ -3443,33 +3518,36 @@ saveButton.addEventListener(
 
         try{
 
-          const img=
+          const img =
             await getOriginalImage(
               actor
             );
 
-          const w=
+          const w =
             actor.element.offsetWidth;
 
-          const h=
+          const h =
             actor.element.offsetHeight;
 
-          const iw=
-            img.naturalWidth||
+          const iw =
+            img.naturalWidth ||
             img.width;
 
-          const ih=
-            img.naturalHeight||
+          const ih =
+            img.naturalHeight ||
             img.height;
 
-          const fit=
+          const fit =
             Math.min(
               w/iw,
               h/ih
             );
 
-          const dw=iw*fit;
-          const dh=ih*fit;
+          const dw =
+            iw*fit;
+
+          const dh =
+            ih*fit;
 
           ctx.drawImage(
             img,
@@ -3495,47 +3573,50 @@ saveButton.addEventListener(
 
         try{
 
-          const img=
+          const img =
             await getOriginalImage(a);
 
-          const w=
+          const w =
             a.element.offsetWidth;
 
-          const h=
+          const h =
             a.element.offsetHeight;
 
-          const iw=
-            img.naturalWidth||
+          const iw =
+            img.naturalWidth ||
             img.width;
 
-          const ih=
-            img.naturalHeight||
+          const ih =
+            img.naturalHeight ||
             img.height;
 
-          const fit=
+          const fit =
             Math.min(
               w/iw,
               h/ih
             );
 
-          const dw=iw*fit;
-          const dh=ih*fit;
+          const dw =
+            iw*fit;
 
-          const px=
+          const dh =
+            ih*fit;
+
+          const px =
             sx+
             a.x*scaleX+
             (w-dw)/2*scaleX;
 
-          const py=
+          const py =
             sy+
             a.y*scaleY+
             (h-dh)/2*scaleY;
 
-          const cx=
+          const cx =
             px+
             dw*scaleX/2;
 
-          const cy=
+          const cy =
             py+
             dh*scaleY/2;
 
@@ -3566,9 +3647,6 @@ saveButton.addEventListener(
 
       ctx.restore();
 
-
-      /* 테두리 */
-
       ctx.beginPath();
 
       ctx.roundRect(
@@ -3579,25 +3657,24 @@ saveButton.addEventListener(
         24
       );
 
-      ctx.strokeStyle="#ddd";
+      ctx.strokeStyle =
+        "#ddd";
 
-      ctx.lineWidth=2;
+      ctx.lineWidth = 2;
 
       ctx.stroke();
 
 
-      /* 이미지 저장 */
-
-      const blob=
+      const blob =
         await new Promise(
-          resolve=>
+          resolve =>
             canvas.toBlob(
               resolve,
               "image/png"
             )
         );
 
-      const file=
+      const file =
         new File(
           [blob],
           "그림일기.png",
@@ -3608,8 +3685,8 @@ saveButton.addEventListener(
 
 
       if(
-        navigator.share&&
-        navigator.canShare&&
+        navigator.share &&
+        navigator.canShare &&
         navigator.canShare({
           files:[file]
         })
@@ -3627,7 +3704,7 @@ saveButton.addEventListener(
         }catch(e){
 
           if(
-            e.name===
+            e.name ===
             "AbortError"
           ){
             return;
@@ -3636,19 +3713,19 @@ saveButton.addEventListener(
       }
 
 
-      const url=
+      const url =
         URL.createObjectURL(
           blob
         );
 
-      const link=
+      const link =
         document.createElement(
           "a"
         );
 
-      link.href=url;
+      link.href = url;
 
-      link.download=
+      link.download =
         "그림일기.png";
 
       document.body.appendChild(
@@ -3660,7 +3737,7 @@ saveButton.addEventListener(
       link.remove();
 
       setTimeout(
-        ()=>{
+        () => {
           URL.revokeObjectURL(
             url
           );
@@ -3678,7 +3755,7 @@ saveButton.addEventListener(
 
     }finally{
 
-      saveButton.disabled=false;
+      saveButton.disabled = false;
     }
   }
 );
@@ -3690,10 +3767,10 @@ saveButton.addEventListener(
 
 clearAllButton.addEventListener(
   "click",
-  ()=>{
+  () => {
 
-    titleInput.value="";
-    diaryInput.value="";
+    titleInput.value = "";
+    diaryInput.value = "";
 
     localStorage.removeItem(
       "diary-title"
@@ -3702,7 +3779,6 @@ clearAllButton.addEventListener(
     localStorage.removeItem(
       "diary-text"
     );
-
 
     for(
       const a of actors
@@ -3722,11 +3798,9 @@ clearAllButton.addEventListener(
       f.element.remove();
     }
 
-
-    actors.length=0;
-    accessories.length=0;
-    furnitures.length=0;
-
+    actors.length = 0;
+    accessories.length = 0;
+    furnitures.length = 0;
 
     clearSelections();
 
@@ -3735,7 +3809,9 @@ clearAllButton.addEventListener(
 );
 
 
-/* 시작 */
+/* =========================
+   시작
+========================= */
 
 updateStatus();
 
