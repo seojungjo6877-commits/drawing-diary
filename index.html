@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -96,13 +95,8 @@ textarea {
   -webkit-user-select: none;
 
   touch-action: none;
-
   cursor: grab;
 
-  /*
-    브라우저가 불필요하게 이미지를
-    흐리게 처리하는 것을 최소화
-  */
   image-rendering: auto;
 }
 
@@ -124,10 +118,6 @@ textarea {
   opacity: 1;
 }
 
-.actor.together {
-  opacity: 0.9;
-}
-
 .status {
   position: absolute;
   left: 50%;
@@ -139,7 +129,6 @@ textarea {
   color: #777;
 
   pointer-events: none;
-
   white-space: nowrap;
 }
 
@@ -161,7 +150,6 @@ textarea {
   color: #111;
 
   font-size: 15px;
-
   text-align: center;
 
   cursor: pointer;
@@ -212,9 +200,7 @@ button:disabled {
 
 .control-title {
   font-size: 13px;
-
   color: #666;
-
   margin-bottom: 5px;
 }
 
@@ -224,17 +210,13 @@ button:disabled {
 
 .size-label {
   font-size: 13px;
-
   color: #666;
-
   margin-bottom: 5px;
 }
 
 #sizeSlider {
   width: 100%;
-
   margin: 0;
-
   accent-color: #777;
 }
 
@@ -253,8 +235,8 @@ button:disabled {
 }
 
 </style>
-
 </head>
+
 
 <body>
 
@@ -353,7 +335,6 @@ id="deleteActorButton"
 <div class="size-label">
 크기
 </div>
-
 
 <input
 type="range"
@@ -489,7 +470,7 @@ diaryInput.value
 
 
 /* =================================================
-   캐릭터 배열
+   캐릭터
 ================================================= */
 
 const actors = [];
@@ -532,7 +513,7 @@ img.src =
 e.target.result;
 
 
-/* 화면 표시 크기 */
+/* 화면 표시용 크기 */
 
 const baseSize =
 90;
@@ -573,17 +554,11 @@ startY + "px";
 
 
 /* =================================================
-   중요:
-   원본 이미지 해상도를 별도로 보관
+   중요
+
+   file 자체를 보관한다.
+   화면의 90px 이미지는 저장에 사용하지 않는다.
 ================================================= */
-
-const originalImage =
-new Image();
-
-
-originalImage.src =
-e.target.result;
-
 
 const personality =
 createPersonality();
@@ -594,23 +569,27 @@ const actor = {
 element: img,
 
 /*
-  저장할 때 사용하는
-  원본 이미지
+  ★ 업로드한 원본 파일
 */
-originalImage: originalImage,
+originalFile: file,
 
 /*
-  현재 화면 위치
+  ★ 원본 이미지
 */
+originalImage: null,
+
+/*
+  원본 해상도
+*/
+naturalWidth: 0,
+naturalHeight: 0,
+
 x: startX,
 y: startY,
 
 targetX: startX,
 targetY: startY,
 
-/*
-  현재 화면 크기
-*/
 size: 100,
 
 speed:
@@ -642,6 +621,33 @@ Math.random() * 2000
 };
 
 
+/* =================================================
+   원본 파일을 저장용 Image로 읽음
+================================================= */
+
+const originalImage =
+new Image();
+
+
+originalImage.onload =
+function() {
+
+actor.originalImage =
+originalImage;
+
+actor.naturalWidth =
+originalImage.naturalWidth;
+
+actor.naturalHeight =
+originalImage.naturalHeight;
+
+};
+
+
+originalImage.src =
+e.target.result;
+
+
 actors.push(actor);
 
 stage.appendChild(img);
@@ -657,7 +663,14 @@ updateStatus();
 
 reader.readAsDataURL(file);
 
-photoInput.value = "";
+
+/*
+  같은 파일을 다시 선택해도
+  change 이벤트가 발생하도록 초기화
+*/
+
+photoInput.value =
+"";
 
 });
 
@@ -748,14 +761,13 @@ types.length
 
 
 /* =================================================
-   캐릭터 크기
+   크기
 ================================================= */
 
 function applyActorSize(actor) {
 
 const scale =
 actor.size / 100;
-
 
 const baseSize =
 90;
@@ -793,10 +805,6 @@ actor.y =
 centerY -
 newSize / 2;
 
-
-/*
-  스테이지 밖으로 나가지 않게
-*/
 
 const maxX =
 Math.max(
@@ -847,7 +855,7 @@ actor.y + "px";
 
 
 /* =================================================
-   크기 슬라이더
+   크기 조절
 ================================================= */
 
 sizeSlider.addEventListener(
@@ -873,16 +881,10 @@ selectedActor
 
 
 /* =================================================
-   캐릭터 선택
+   선택
 ================================================= */
 
 function selectActor(actor) {
-
-
-/*
-  같은 캐릭터를 다시 누르면
-  선택 취소
-*/
 
 if (
 selectedActor === actor
@@ -892,7 +894,8 @@ actor.element.classList.remove(
 "selected"
 );
 
-selectedActor = null;
+selectedActor =
+null;
 
 controlBox.classList.remove(
 "show"
@@ -905,10 +908,6 @@ return false;
 }
 
 
-/*
-  기존 선택 해제
-*/
-
 if (selectedActor) {
 
 selectedActor.element.classList.remove(
@@ -917,10 +916,6 @@ selectedActor.element.classList.remove(
 
 }
 
-
-/*
-  새 캐릭터 선택
-*/
 
 selectedActor =
 actor;
@@ -935,10 +930,6 @@ controlBox.classList.add(
 "show"
 );
 
-
-/*
-  현재 크기를 슬라이더에 표시
-*/
 
 sizeSlider.value =
 actor.size;
@@ -960,9 +951,7 @@ function enableDragging(actor) {
 const element =
 actor.element;
 
-
 let offsetX = 0;
-
 let offsetY = 0;
 
 
@@ -1113,7 +1102,6 @@ newX;
 actor.y =
 newY;
 
-
 actor.targetX =
 newX;
 
@@ -1205,7 +1193,7 @@ updateStatus();
 
 
 /* =================================================
-   캐릭터 멈추기
+   멈추기
 ================================================= */
 
 pauseButton.addEventListener(
@@ -1213,7 +1201,6 @@ pauseButton.addEventListener(
 function(e) {
 
 e.preventDefault();
-
 e.stopPropagation();
 
 
@@ -1228,11 +1215,6 @@ selectedActor;
 
 actor.paused =
 true;
-
-
-actor.dragging =
-false;
-
 
 actor.state =
 "paused";
@@ -1268,7 +1250,6 @@ resumeButton.addEventListener(
 function(e) {
 
 e.preventDefault();
-
 e.stopPropagation();
 
 
@@ -1283,7 +1264,6 @@ selectedActor;
 
 actor.paused =
 false;
-
 
 actor.state =
 "walking";
@@ -1302,7 +1282,7 @@ updateStatus();
 
 
 /* =================================================
-   선택한 캐릭터 삭제
+   선택 캐릭터 삭제
 ================================================= */
 
 deleteActorButton.addEventListener(
@@ -1310,7 +1290,6 @@ deleteActorButton.addEventListener(
 function(e) {
 
 e.preventDefault();
-
 e.stopPropagation();
 
 
@@ -1323,16 +1302,8 @@ const actor =
 selectedActor;
 
 
-/*
-  화면에서 제거
-*/
-
 actor.element.remove();
 
-
-/*
-  배열에서 제거
-*/
 
 const index =
 actors.indexOf(actor);
@@ -1347,10 +1318,6 @@ index,
 
 }
 
-
-/*
-  선택 해제
-*/
 
 selectedActor =
 null;
@@ -1375,21 +1342,11 @@ clearAllButton.addEventListener(
 function(e) {
 
 e.preventDefault();
-
 e.stopPropagation();
 
 
-/*
-  제목 삭제
-*/
-
 titleInput.value =
 "";
-
-
-/*
-  일기 삭제
-*/
 
 diaryInput.value =
 "";
@@ -1404,10 +1361,6 @@ localStorage.removeItem(
 );
 
 
-/*
-  모든 캐릭터 삭제
-*/
-
 for (
 const actor of actors
 ) {
@@ -1417,17 +1370,9 @@ actor.element.remove();
 }
 
 
-/*
-  배열 비우기
-*/
-
 actors.length =
 0;
 
-
-/*
-  선택 해제
-*/
 
 selectedActor =
 null;
@@ -1437,10 +1382,6 @@ controlBox.classList.remove(
 "show"
 );
 
-
-/*
-  파일 선택 초기화
-*/
 
 photoInput.value =
 "";
@@ -1452,7 +1393,7 @@ updateStatus();
 
 
 /* =================================================
-   행동 선택
+   행동
 ================================================= */
 
 function chooseNewAction(actor) {
@@ -1498,7 +1439,7 @@ walk(actor);
 
 
 /* =================================================
-   졸기
+   잠
 ================================================= */
 
 function sleep(actor) {
@@ -1616,7 +1557,7 @@ Math.random() * 2200;
 
 
 /* =================================================
-   랜덤 목적지
+   목적지
 ================================================= */
 
 function setRandomTarget(actor) {
@@ -1646,7 +1587,7 @@ Math.random() * maxY;
 
 
 /* =================================================
-   자동 움직임
+   움직임
 ================================================= */
 
 function updateActors() {
@@ -1662,7 +1603,6 @@ const actor of actors
 if (actor.paused) {
 continue;
 }
-
 
 if (actor.dragging) {
 continue;
@@ -1683,9 +1623,7 @@ if (
 actor.state ===
 "sleeping"
 ) {
-
 continue;
-
 }
 
 
@@ -1882,7 +1820,7 @@ return "쉬고 있어요";
 
 
 /* =================================================
-   저장용 줄바꿈
+   글 줄바꿈
 ================================================= */
 
 function getWrappedLines(
@@ -1935,7 +1873,6 @@ line =
 char;
 
 }
-
 else {
 
 line =
@@ -1971,18 +1908,15 @@ r
 
 ctx.beginPath();
 
-
 ctx.moveTo(
 x + r,
 y
 );
 
-
 ctx.lineTo(
 x + w - r,
 y
 );
-
 
 ctx.quadraticCurveTo(
 x + w,
@@ -1991,12 +1925,10 @@ x + w,
 y + r
 );
 
-
 ctx.lineTo(
 x + w,
 y + h - r
 );
-
 
 ctx.quadraticCurveTo(
 x + w,
@@ -2005,12 +1937,10 @@ x + w - r,
 y + h
 );
 
-
 ctx.lineTo(
 x + r,
 y + h
 );
-
 
 ctx.quadraticCurveTo(
 x,
@@ -2019,12 +1949,10 @@ x,
 y + h - r
 );
 
-
 ctx.lineTo(
 x,
 y + r
 );
-
 
 ctx.quadraticCurveTo(
 x,
@@ -2032,7 +1960,6 @@ y,
 x + r,
 y
 );
-
 
 ctx.closePath();
 
@@ -2040,7 +1967,54 @@ ctx.closePath();
 
 
 /* =================================================
-   이미지 불러오기
+   원본 이미지 준비
+================================================= */
+
+async function getOriginalImage(actor) {
+
+if (
+actor.originalImage &&
+actor.originalImage.complete &&
+actor.originalImage.naturalWidth > 0
+) {
+
+return actor.originalImage;
+
+}
+
+
+/*
+  ★ 파일 자체에서 다시 읽는다.
+  화면에 표시된 90px 이미지와 무관함.
+*/
+
+if (
+actor.originalFile
+) {
+
+const bitmap =
+await createImageBitmap(
+actor.originalFile
+);
+
+return bitmap;
+
+}
+
+
+/*
+  마지막 예비 방법
+*/
+
+return await loadImage(
+actor.element.src
+);
+
+}
+
+
+/* =================================================
+   이미지 로드
 ================================================= */
 
 function loadImage(src) {
@@ -2089,7 +2063,6 @@ saveButton.addEventListener(
 async function(e) {
 
 e.preventDefault();
-
 e.stopPropagation();
 
 
@@ -2115,8 +2088,6 @@ saveButton.textContent =
 try {
 
 
-/* 일기 저장 */
-
 localStorage.setItem(
 "diary-title",
 titleInput.value
@@ -2129,23 +2100,39 @@ diaryInput.value
 
 
 /* =================================================
-   출력 이미지
+   ★ 논리적 크기
 ================================================= */
 
-const outputWidth =
+const logicalWidth =
 900;
-
 
 const margin =
 70;
 
-
 const contentWidth =
-outputWidth -
+logicalWidth -
 margin * 2;
 
 
-/* 글씨 */
+/* =================================================
+   ★ 3배 해상도
+
+   기존:
+   900 × 높이
+
+   변경:
+   2700 × 높이
+
+   즉 저장 PNG 자체가 훨씬 큰 해상도
+================================================= */
+
+const QUALITY_SCALE =
+3;
+
+
+/* =================================================
+   글씨
+================================================= */
 
 const titleFont =
 "bold 44px sans-serif";
@@ -2156,8 +2143,6 @@ const diaryFont =
 const dateFont =
 "25px sans-serif";
 
-
-/* 측정 */
 
 const measureCanvas =
 document.createElement("canvas");
@@ -2182,8 +2167,6 @@ contentWidth
 const diaryLineHeight =
 52;
 
-
-/* 영역 */
 
 const topArea =
 150;
@@ -2214,9 +2197,7 @@ const sectionGap =
 25;
 
 
-/* 최종 높이 */
-
-const outputHeight =
+const logicalHeight =
 topArea +
 titleArea +
 contentHeight +
@@ -2226,7 +2207,7 @@ sectionGap * 3 +
 
 
 /* =================================================
-   캔버스
+   ★ 실제 캔버스는 3배
 ================================================= */
 
 const canvas =
@@ -2234,10 +2215,12 @@ document.createElement("canvas");
 
 
 canvas.width =
-outputWidth;
+logicalWidth *
+QUALITY_SCALE;
 
 canvas.height =
-outputHeight;
+logicalHeight *
+QUALITY_SCALE;
 
 
 const ctx =
@@ -2245,8 +2228,15 @@ canvas.getContext("2d");
 
 
 /*
-  고품질 이미지 보간
+  좌표는 기존처럼 900 기준으로 사용
+  실제 픽셀만 3배가 됨
 */
+
+ctx.scale(
+QUALITY_SCALE,
+QUALITY_SCALE
+);
+
 
 ctx.imageSmoothingEnabled =
 true;
@@ -2255,35 +2245,33 @@ ctx.imageSmoothingQuality =
 "high";
 
 
-/* 배경 */
+/* =================================================
+   배경
+================================================= */
 
 ctx.fillStyle =
 "#fff";
 
-
 ctx.fillRect(
 0,
 0,
-outputWidth,
-outputHeight
+logicalWidth,
+logicalHeight
 );
-
-
-ctx.textBaseline =
-"middle";
 
 
 /* =================================================
    오늘의 일기
 ================================================= */
 
+ctx.textBaseline =
+"middle";
+
 ctx.textAlign =
 "center";
 
-
 ctx.fillStyle =
 "#111";
-
 
 ctx.font =
 "bold 52px sans-serif";
@@ -2291,7 +2279,7 @@ ctx.font =
 
 ctx.fillText(
 "오늘의 일기",
-outputWidth / 2,
+logicalWidth / 2,
 70
 );
 
@@ -2299,14 +2287,13 @@ outputWidth / 2,
 ctx.font =
 dateFont;
 
-
 ctx.fillStyle =
 "#777";
 
 
 ctx.fillText(
 dateElement.textContent,
-outputWidth / 2,
+logicalWidth / 2,
 120
 );
 
@@ -2379,7 +2366,7 @@ currentY + 82
 
 
 /* =================================================
-   일기 내용
+   일기
 ================================================= */
 
 currentY +=
@@ -2426,8 +2413,6 @@ currentY + 32
 );
 
 
-/* 내용 */
-
 ctx.fillStyle =
 "#111";
 
@@ -2465,10 +2450,9 @@ sectionGap;
 
 
 const stageX =
-(outputWidth -
+(logicalWidth -
 stageOutputWidth) /
 2;
-
 
 const stageY =
 currentY;
@@ -2478,13 +2462,14 @@ const scaleX =
 stageOutputWidth /
 stage.clientWidth;
 
-
 const scaleY =
 stageOutputHeight /
 stage.clientHeight;
 
 
-/* 배경 */
+/* =================================================
+   스테이지
+================================================= */
 
 ctx.save();
 
@@ -2518,7 +2503,7 @@ ctx.clip();
 
 
 /* =================================================
-   캐릭터 저장
+   ★ 캐릭터 저장
 ================================================= */
 
 for (
@@ -2529,140 +2514,170 @@ try {
 
 
 /*
-  핵심:
-  화면의 90px 이미지를 확대하지 않고
-  원본 이미지를 직접 사용
+  ★ 화면에 표시된 img가 아니라
+  ★ 업로드한 원본 파일에서 가져온다.
 */
 
-let image =
-actor.originalImage;
+const image =
+await getOriginalImage(actor);
 
 
 /*
-  혹시 원본 이미지가 아직 로딩 중이면
-  기존 src를 이용해 다시 로드
+  원본 해상도
 */
 
-if (
-!image.complete ||
-image.naturalWidth === 0
-) {
+const naturalWidth =
+image.naturalWidth ||
+image.width;
 
-image =
-await loadImage(
-actor.element.src
-);
-
-}
+const naturalHeight =
+image.naturalHeight ||
+image.height;
 
 
 /*
-  화면에서의 현재 크기
+  현재 화면에서 캐릭터가 차지하는
+  '90px 박스'의 크기
 */
 
-const displayedWidth =
+const boxWidth =
 actor.element.offsetWidth;
 
-const displayedHeight =
+const boxHeight =
 actor.element.offsetHeight;
 
 
 /*
-  저장 영역의 크기
-
-  화면 위치/크기만 확대하고
-  실제 픽셀은 원본 이미지에서 가져옴
+  ★ object-fit: contain과 동일하게
+  원본 비율을 유지하면서 박스 안에 맞춤
 */
 
-const x =
+const fitScale =
+Math.min(
+boxWidth / naturalWidth,
+boxHeight / naturalHeight
+);
+
+
+const displayedImageWidth =
+naturalWidth *
+fitScale;
+
+const displayedImageHeight =
+naturalHeight *
+fitScale;
+
+
+/*
+  화면의 90px 박스 안에서
+  실제 이미지가 가운데에 들어간 위치
+*/
+
+const offsetX =
+(boxWidth -
+displayedImageWidth) /
+2;
+
+const offsetY =
+(boxHeight -
+displayedImageHeight) /
+2;
+
+
+/*
+  스테이지 위치
+*/
+
+const boxX =
 stageX +
 actor.x *
 scaleX;
 
-
-const y =
+const boxY =
 stageY +
 actor.y *
 scaleY;
 
 
-const width =
-displayedWidth *
-scaleX;
-
-
-const height =
-displayedHeight *
-scaleY;
-
-
 /*
-  원본 비율 유지
+  ★ 캐릭터 자체는 비율이 절대
+  찌그러지지 않도록 동일한 배율 사용
+
+  3배 해상도는 이미
+  canvas 전체에 적용되어 있음.
 */
 
-const originalRatio =
-image.naturalWidth /
-image.naturalHeight;
-
-
-let drawWidth =
-width;
-
-let drawHeight =
-height;
+const uniformScale =
+Math.min(
+scaleX,
+scaleY
+);
 
 
 /*
-  object-fit: contain과 같은 방식으로
-  원본 비율을 유지
-*/
-
-if (
-drawWidth / drawHeight >
-originalRatio
-) {
-
-drawWidth =
-drawHeight *
-originalRatio;
-
-}
-else {
-
-drawHeight =
-drawWidth /
-originalRatio;
-
-}
-
-
-/*
-  이미지가 박스 중앙에 오도록
+  실제 이미지 위치
 */
 
 const drawX =
-x +
-(width - drawWidth) /
-2;
-
+boxX +
+offsetX *
+uniformScale;
 
 const drawY =
-y +
-(height - drawHeight) /
-2;
+boxY +
+offsetY *
+uniformScale;
 
 
 /*
-  원본 이미지를 직접 그리기
+  ★ 실제 저장 크기
+*/
+
+const drawWidth =
+displayedImageWidth *
+uniformScale;
+
+const drawHeight =
+displayedImageHeight *
+uniformScale;
+
+
+/*
+  ★★★ 핵심 ★★★
+
+  화면의 90px 이미지를 확대하지 않고
+  원본 이미지 픽셀에서 직접 그림.
+
+  그리고 캔버스 자체가 3배 해상도라서
+  최종 PNG도 훨씬 선명함.
 */
 
 ctx.drawImage(
 image,
+0,
+0,
+naturalWidth,
+naturalHeight,
 drawX,
 drawY,
 drawWidth,
 drawHeight
 );
+
+
+/*
+  createImageBitmap으로 읽은 경우
+  메모리 정리
+*/
+
+if (
+typeof image.close === "function" &&
+image !== actor.originalImage
+) {
+
+image.close();
+
+}
 
 
 }
@@ -2682,7 +2697,7 @@ ctx.restore();
 
 
 /* =================================================
-   캐릭터 영역 테두리
+   스테이지 테두리
 ================================================= */
 
 ctx.save();
@@ -2701,7 +2716,6 @@ stageOutputHeight,
 ctx.strokeStyle =
 "#ddd";
 
-
 ctx.lineWidth =
 2;
 
@@ -2713,7 +2727,7 @@ ctx.restore();
 
 
 /* =================================================
-   PNG
+   PNG 생성
 ================================================= */
 
 const blob =
@@ -2746,7 +2760,7 @@ new Error(
 
 
 /* =================================================
-   iOS 공유
+   파일
 ================================================= */
 
 const file =
@@ -2758,6 +2772,10 @@ type: "image/png"
 }
 );
 
+
+/* =================================================
+   iPhone 공유
+================================================= */
 
 if (
 navigator.share &&
@@ -2876,7 +2894,7 @@ oldText;
 
 
 /* =================================================
-   자동 움직임 시작
+   시작
 ================================================= */
 
 requestAnimationFrame(
