@@ -236,10 +236,6 @@ h1{
   animation:actorSleep 2.2s ease-in-out infinite alternate;
 }
 
-.actor.jumping{
-  animation:actorJump .7s ease-in-out;
-}
-
 .actor.idle{
   animation:actorIdle 1.8s ease-in-out infinite alternate;
 }
@@ -253,12 +249,6 @@ h1{
     transform:translateY(5px) scaleY(.96);
     opacity:.72;
   }
-}
-
-@keyframes actorJump{
-  0%{transform:translateY(0)}
-  45%{transform:translateY(-28px)}
-  100%{transform:translateY(0)}
 }
 
 @keyframes actorIdle{
@@ -1960,6 +1950,8 @@ e=>{
 
         behaviorToken:0,
 
+        jumpToken:0,
+
         inventory:[],
 
         petCount:0,
@@ -2241,6 +2233,17 @@ function clearActorBehavior(actor){
 
   actor.behaviorToken++;
 
+  actor.jumpToken++;
+
+  actor.element.style.transform="";
+
+  accessories
+  .filter(a=>a.owner===actor)
+  .forEach(a=>{
+    a.element.style.transform=
+      `rotate(${a.rotation||0}deg)`;
+  });
+
 }
 
 
@@ -2325,6 +2328,124 @@ function scheduleActorBehavior(
 }
 
 
+/*
+  점프
+  캐릭터와 붙어 있는 악세서리가
+  같은 높이로 함께 움직임.
+*/
+
+function animateActorJump(actor){
+
+  const token=
+    ++actor.jumpToken;
+
+  const duration=700;
+
+  const start=
+    performance.now();
+
+  actor.element.classList.add(
+    "jumping"
+  );
+
+  function frame(now){
+
+    if(
+      !actors.includes(actor)||
+      token!==actor.jumpToken
+    )return;
+
+
+    const progress=
+      Math.min(
+        1,
+        (now-start)/duration
+      );
+
+
+    /*
+      0 → 위로 → 다시 원래 위치
+      캐릭터와 악세서리에 동일한 값 적용
+    */
+
+    const jumpY=
+      -28*
+      Math.sin(
+        Math.PI*progress
+      );
+
+
+    actor.element.style.transform=
+      `translateY(${jumpY}px)`;
+
+
+    accessories
+    .filter(a=>a.owner===actor)
+    .forEach(a=>{
+
+      /*
+        악세서리의 회전은 그대로 두고
+        점프 높이만 추가
+      */
+
+      a.element.style.transform=
+        `rotate(${a.rotation||0}deg) translateY(${jumpY}px)`;
+
+    });
+
+
+    if(progress<1){
+
+      requestAnimationFrame(
+        frame
+      );
+
+    }else{
+
+      actor.element.style.transform="";
+
+      accessories
+      .filter(a=>a.owner===actor)
+      .forEach(a=>{
+
+        a.element.style.transform=
+          `rotate(${a.rotation||0}deg)`;
+
+      });
+
+      actor.element.classList.remove(
+        "jumping"
+      );
+
+
+      if(
+        actors.includes(actor)&&
+        actor.moving&&
+        !actor.sleeping&&
+        !actor.dragging&&
+        token===actor.jumpToken
+      ){
+
+        scheduleActorBehavior(
+          actor,
+          9000,
+          15000
+        );
+
+      }
+
+    }
+
+  }
+
+
+  requestAnimationFrame(
+    frame
+  );
+
+}
+
+
 function doActorAction(
   actor,
   action
@@ -2339,12 +2460,20 @@ function doActorAction(
 
   actor.element.classList.remove(
     "sleeping",
-    "jumping",
     "idle"
   );
 
 
   if(action==="walk"){
+
+    actor.element.style.transform="";
+
+    accessories
+    .filter(a=>a.owner===actor)
+    .forEach(a=>{
+      a.element.style.transform=
+        `rotate(${a.rotation||0}deg)`;
+    });
 
     scheduleActorBehavior(
       actor,
@@ -2358,6 +2487,15 @@ function doActorAction(
 
 
   if(action==="idle"){
+
+    actor.element.style.transform="";
+
+    accessories
+    .filter(a=>a.owner===actor)
+    .forEach(a=>{
+      a.element.style.transform=
+        `rotate(${a.rotation||0}deg)`;
+    });
 
     actor.element.classList.add(
       "idle"
@@ -2397,33 +2535,11 @@ function doActorAction(
 
   if(action==="jump"){
 
-    actor.element.classList.add(
-      "jumping"
+    actor.element.classList.remove(
+      "idle"
     );
 
-
-    setTimeout(()=>{
-
-      if(
-        actors.includes(actor)&&
-        actor.moving&&
-        !actor.sleeping&&
-        !actor.dragging
-      ){
-
-        actor.element.classList.remove(
-          "jumping"
-        );
-
-        scheduleActorBehavior(
-          actor,
-          9000,
-          15000
-        );
-
-      }
-
-    },700);
+    animateActorJump(actor);
 
     return;
 
@@ -2431,6 +2547,15 @@ function doActorAction(
 
 
   if(action==="sleep"){
+
+    actor.element.style.transform="";
+
+    accessories
+    .filter(a=>a.owner===actor)
+    .forEach(a=>{
+      a.element.style.transform=
+        `rotate(${a.rotation||0}deg)`;
+    });
 
     actor.sleeping=true;
     actor.moving=false;
@@ -2472,6 +2597,8 @@ function startActorBehavior(actor){
     "idle"
   );
 
+  actor.element.style.transform="";
+
   updateCharacterButtons(actor);
 
   scheduleActorBehavior(
@@ -2512,6 +2639,15 @@ function resumeActor(actor){
     "idle"
   );
 
+  actor.element.style.transform="";
+
+  accessories
+  .filter(a=>a.owner===actor)
+  .forEach(a=>{
+    a.element.style.transform=
+      `rotate(${a.rotation||0}deg)`;
+  });
+
   updateCharacterButtons(actor);
 
   scheduleActorBehavior(
@@ -2533,6 +2669,15 @@ function wakeActor(actor){
   actor.element.classList.remove(
     "sleeping"
   );
+
+  actor.element.style.transform="";
+
+  accessories
+  .filter(a=>a.owner===actor)
+  .forEach(a=>{
+    a.element.style.transform=
+      `rotate(${a.rotation||0}deg)`;
+  });
 
   updateCharacterButtons(actor);
 
@@ -2818,7 +2963,7 @@ e=>{
   reader.onload=()=>{
 
     const original=
-    new Image();
+      new Image();
 
     original.onload=()=>{
 
@@ -3170,7 +3315,7 @@ e=>{
   reader.onload=()=>{
 
     const original=
-    new Image();
+      new Image();
 
     original.onload=()=>{
 
@@ -4489,11 +4634,6 @@ async()=>{
       );
 
 
-    /*
-      날짜 표시 영역
-      작게 표시하기 위한 높이
-    */
-
     const dateH=34;
 
 
@@ -4895,10 +5035,7 @@ async()=>{
     }
 
 
-    /*
-      날짜 / 요일 / 시간
-      그림 바로 아래에 작게 표시
-    */
+    /* 날짜 / 요일 / 시간 */
 
     const dateY=
       stageY+
@@ -4924,11 +5061,6 @@ async()=>{
 
     ctx.textAlign="left";
 
-
-    /*
-      iPhone에서는 공유 시트를 통해
-      사진 앱에 바로 저장 가능.
-    */
 
     const blob=
       await new Promise(resolve=>{
@@ -4956,11 +5088,6 @@ async()=>{
       );
 
 
-    /*
-      iOS Safari / 홈 화면 웹앱에서
-      공유 가능한 경우 공유 시트를 띄움.
-    */
-
     if(
       navigator.share&&
       navigator.canShare&&
@@ -4976,11 +5103,6 @@ async()=>{
       });
 
     }else{
-
-      /*
-        공유 기능을 지원하지 않는 환경에서는
-        기존처럼 이미지 저장으로 대체.
-      */
 
       const link=
         document.createElement("a");
@@ -5006,11 +5128,6 @@ async()=>{
     }
 
   }catch(error){
-
-    /*
-      사용자가 공유창을 직접 닫은 경우
-      오류 알림을 띄우지 않음.
-    */
 
     if(
       error.name!=="AbortError"
