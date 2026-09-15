@@ -398,14 +398,23 @@ input[type="range"]{flex:1}
 
 .pet-heart{
   position:absolute;
+  right:18px;
+  top:18px;
   font-size:24px;
   pointer-events:none;
   animation:petHeart .7s ease-out forwards;
+  z-index:90;
 }
 
 @keyframes petHeart{
-  from{opacity:1;transform:translateY(0) scale(.8)}
-  to{opacity:0;transform:translateY(-45px) scale(1.2)}
+  from{
+    opacity:1;
+    transform:translateY(0) scale(.8);
+  }
+  to{
+    opacity:0;
+    transform:translateY(-45px) scale(1.2);
+  }
 }
 
 /* 선물 */
@@ -1404,6 +1413,15 @@ function hideObjectControls(){
 }
 
 function selectActor(actor){
+
+  /* 이미 선택된 캐릭터를 다시 누르면 선택 해제 */
+  if(selectedActor===actor){
+    clearSelections();
+    return;
+  }
+
+  stopPetting();
+
   selectedActor=actor;
   selectedAccessory=null;
   selectedFurniture=null;
@@ -1487,6 +1505,8 @@ function selectGift(g){
 }
 
 function clearSelections(){
+  stopPetting();
+
   selectedActor=null;
   selectedAccessory=null;
   selectedFurniture=null;
@@ -1590,7 +1610,12 @@ function setupActorDrag(actor){
 
     actor.element.setPointerCapture(e.pointerId);
 
-    if(selectedActor!==actor)selectActor(actor);
+    if(selectedActor!==actor){
+      selectActor(actor);
+    }else{
+      /* 이미 선택된 캐릭터를 다시 누르면 선택 해제 */
+      clearSelections();
+    }
   });
 
   actor.element.addEventListener("pointermove",e=>{
@@ -1600,6 +1625,17 @@ function setupActorDrag(actor){
     const dy=e.clientY-sy;
 
     if(Math.abs(dx)>5||Math.abs(dy)>5){
+
+      /* 드래그 중 선택 해제되지 않도록 다시 선택 */
+      if(selectedActor!==actor){
+        selectedActor=actor;
+        actor.element.classList.add("selected");
+        characterStatus.textContent=
+          `${actor.name||"캐릭터"} 선택됨`;
+        characterSize.value=actor.size;
+        renderInventory(actor);
+      }
+
       dragging=true;
 
       actor.x=ox+dx;
@@ -1755,7 +1791,11 @@ accessoryFile.addEventListener("change",e=>{
 
 function updateAccessoryPosition(a){
 
-  if(a.owner&&!a.locked){
+  /*
+    고정 여부와 관계없이 항상 주인 캐릭터를 따라감.
+    locked는 악세서리 드래그만 막는 용도.
+  */
+  if(a.owner){
     a.x=a.owner.x+a.relativeX;
     a.y=a.owner.y+a.relativeY;
   }
@@ -1856,9 +1896,16 @@ accessoryLock.addEventListener("click",()=>{
   a.locked=!a.locked;
 
   if(a.locked){
-    a.element.classList.remove("selected");
-    selectedAccessory=null;
-    accessoryControl.classList.add("hidden");
+    /*
+      고정해도 선택 상태는 유지.
+      캐릭터에 붙은 상태로 계속 따라감.
+    */
+    a.element.classList.add("selected");
+    accessoryControl.classList.remove("hidden");
+
+    accessoryLock.textContent=
+      "🔓 악세서리 고정 해제";
+
   }else{
     selectAccessory(a);
   }
@@ -2079,8 +2126,10 @@ function renderPettingView(actor){
 
   if(!actor)return;
 
+  stopPetting();
+
   pettingStage
-  .querySelectorAll(".petting-actor,.petting-accessory")
+  .querySelectorAll(".petting-actor,.petting-accessory,.pet-heart")
   .forEach(el=>el.remove());
 
   const stageW=pettingStage.clientWidth;
@@ -2149,7 +2198,7 @@ let pettingActive=false;
 let pettingTimer=null;
 let petPointerId=null;
 
-function petOnce(clientX,clientY){
+function petOnce(){
 
   if(!selectedActor)return;
 
@@ -2167,13 +2216,15 @@ function petOnce(clientX,clientY){
   heart.className="pet-heart";
   heart.textContent="♡";
 
-  const rect=pettingStage.getBoundingClientRect();
+  /* 하트를 오른쪽 상단에 표시 */
+  const offset=
+    Math.random()*45;
 
-  heart.style.left=
-    clientX-rect.left+"px";
+  heart.style.right=
+    (18+offset)+"px";
 
   heart.style.top=
-    clientY-rect.top+"px";
+    (18+Math.random()*15)+"px";
 
   pettingStage.appendChild(heart);
 
@@ -2192,7 +2243,7 @@ function startPetting(e){
 
   pettingStage.setPointerCapture(e.pointerId);
 
-  petOnce(e.clientX,e.clientY);
+  petOnce();
 
   if(pettingTimer)
     clearInterval(pettingTimer);
@@ -2206,12 +2257,7 @@ function startPetting(e){
 
     if(!actor)return;
 
-    const rect=pettingStage.getBoundingClientRect();
-
-    petOnce(
-      rect.left+rect.width/2,
-      rect.top+rect.height/2
-    );
+    petOnce();
 
   },180);
 }
@@ -2588,6 +2634,8 @@ deleteCharacter.addEventListener("click",()=>{
 
   const actor=selectedActor;
 
+  stopPetting();
+
   accessories
   .filter(a=>a.owner===actor)
   .forEach(a=>{
@@ -2952,8 +3000,7 @@ function drawCoverImage(ctx,img,x,y,w,h){
     img,
     x+(w-nw)/2,
     y+(h-nh)/2,
-    nw,
-    nh
+    nw,nh
   );
 }
 
@@ -2974,8 +3021,7 @@ function drawContain(ctx,img,x,y,w,h){
     img,
     x+(w-nw)/2,
     y+(h-nh)/2,
-    nw,
-    nh
+    nw,nh
   );
 }
 
@@ -3012,6 +3058,8 @@ function drawRotatedContain(
 
 document.getElementById("clearButton")
 .addEventListener("click",()=>{
+
+  stopPetting();
 
   actors.forEach(actor=>{
 
@@ -3065,8 +3113,6 @@ document.getElementById("clearButton")
 
   pettingBox.classList.remove("show");
   petButton.textContent="🖐 쓰다듬기";
-
-  stopPetting();
 
   inventoryList.innerHTML=
     `<div class="inventory-empty">
